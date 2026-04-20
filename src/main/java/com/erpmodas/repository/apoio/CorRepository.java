@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface CorRepository extends JpaRepository<Cor, Long> {
 
     Optional<Cor> findByNome(String nome);
-    List<Cor> findByNomeContainingIgnoreCaseAsc(String nome);
+    List<Cor> findByNomeContainingIgnoreCaseOrderByNomeAsc(String nome);
 }

@@ -51,6 +51,7 @@ public class Produto {
     @Column(name = "imagem", length = 400)
     private String imagem;
 
+    // mover para o service
     @Transient
     public Double getMargemLucro() {
         if(precoCusto == null || precoVenda == null){

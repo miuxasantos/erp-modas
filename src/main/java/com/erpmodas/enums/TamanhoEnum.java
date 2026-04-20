@@ -35,4 +35,10 @@ public enum TamanhoEnum {
     TamanhoEnum(String descricao) {
         this.descricao = descricao;
     }
+
+    public String getSku() {
+        return this.descricao
+                .replaceAll("[^a-zA-Z0-9]", "") // remove acentos/símbolos
+                .toUpperCase();
+    }
 }

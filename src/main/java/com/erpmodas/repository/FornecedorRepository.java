@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> {
 
     Optional<Fornecedor> findFornecedorById(Long fornecedorId);
-    List<Fornecedor> findFornecedorByNome(String nome);
+    Optional<Fornecedor> findFornecedorByNome(String nome);
     List<Fornecedor> findByAssessoria(String assessoria);
-    List<Fornecedor> findByContato(String contato);
+    Optional<Fornecedor> findByContato(String contato);
 }

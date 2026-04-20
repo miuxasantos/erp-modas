@@ -47,6 +47,8 @@ public class VariacaoProduto {
     @JoinColumn(name = "id_tamanho", nullable = false)
     private Tamanho tamanho;
 
+    // mover para o service
+
     @PrePersist
     @PreUpdate
     public void gerarSku() {
@@ -59,9 +61,7 @@ public class VariacaoProduto {
                 .replaceAll("\\s+", "-")
                 .toUpperCase();
 
-        String tamanhoSku = tamanho.getTamanho()
-                .replaceAll("\\s+", "")
-                .toUpperCase();
+        String tamanhoSku = tamanho.getTamanho().getSku();
 
         this.sku = produto.getCodigo() + "-" + corSku + "-" + tamanhoSku;
     }

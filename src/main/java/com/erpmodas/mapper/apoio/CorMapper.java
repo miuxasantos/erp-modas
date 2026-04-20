@@ -2,8 +2,10 @@ package com.erpmodas.mapper.apoio;
 
 import com.erpmodas.dto.apoio.CorDTO;
 import com.erpmodas.model.entidades.apoio.Cor;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface CorMapper {
@@ -13,5 +15,6 @@ public interface CorMapper {
 
     java.util.List<CorDTO> toDTOList(java.util.List<Cor> lista);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDTO(CorDTO dto, @MappingTarget Cor entity);
 }
