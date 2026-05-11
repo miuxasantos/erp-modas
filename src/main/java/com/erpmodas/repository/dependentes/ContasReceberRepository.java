@@ -21,8 +21,8 @@ public interface ContasReceberRepository extends JpaRepository<ContasReceber, Lo
     List<ContasReceber> findByDataVencimentoBefore(LocalDate hoje);
     List<ContasReceber> findByDataVencimentoBeforeAndDataRecebimentoIsNull(LocalDate hoje);
     List<ContasReceber> findByVendaId(Long vendaId);
-    List<ContasReceber> findByClienteId(Long clienteId);
-    List<ContasReceber> findByFormaPagamento(FormaPagamento formaPagamento);
+    List<ContasReceber> findByVendaClienteId(Long clienteId);
+    List<ContasReceber> findByVendaFormaPagamento(FormaPagamento formaPagamento);
     List<ContasReceber> findByStatusConta(StatusConta statusConta);
-    List<ContasReceber> findByClienteIdAndDataLancamento(Long id_cliente, LocalDate dataLancamento);
+    List<ContasReceber> findByVendaClienteIdAndDataLancamento(Long id_cliente, LocalDate dataLancamento);
 }

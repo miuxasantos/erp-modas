@@ -37,6 +37,10 @@ public class Venda {
     private String observacoes;
     @Column(name = "forma_pagamento", nullable = false)
     private FormaPagamento formaPagamento;
+    @Column(name = "numero_parcelas", nullable = false)
+    private Integer numeroParcelas;
+    @Column(name = "valor_total", nullable = false)
+    private BigDecimal valorTotal;
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ContasReceber> contasReceber = new ArrayList<>();
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -47,10 +51,10 @@ public class Venda {
     @ToString.Include
     private Double desconto;
 
-    @Transient
-    public BigDecimal getValorTotal() {
-        return itensVenda.stream().map(ItemVenda::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
+    //@Transient
+    //public BigDecimal getValorTotal() {
+    //    return itensVenda.stream().map(ItemVenda::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    //}
 
     @Transient
     public BigDecimal getValorTotalComDesconto() {

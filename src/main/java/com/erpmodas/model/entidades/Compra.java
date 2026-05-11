@@ -37,15 +37,20 @@ public class Compra {
     private String observacoes;
     @Column(name = "forma_pagamento", nullable = false)
     private FormaPagamento formaPagamento;
+    @Column(name = "numero_parcelas")
+    @ToString.Include
+    private Integer numeroParcelas;
+    @Column(name = "valor_total", nullable = false)
+    private BigDecimal valorTotal;
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ContasPagar> contasPagar = new ArrayList<>();
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemCompra> itensCompra = new ArrayList<>();
 
-    @Transient
-    public BigDecimal getValorTotal() {
-       return itensCompra.stream().map(ItemCompra::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
+    //@Transient
+    //public BigDecimal getValorTotal() {
+    //   return itensCompra.stream().map(ItemCompra::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    //}
 
     public void adicionarItem(ItemCompra itemCompra) {
             itemCompra.setCompra(this);

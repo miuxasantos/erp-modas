@@ -38,6 +38,11 @@ public class FornecedorService {
     }
 
     @Transactional
+    public Fornecedor buscarEntidadePorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Fornecedor não encontrado."));
+    }
+
+    @Transactional
     public FornecedorDTO atualizar(Long id, FornecedorDTO dto) {
         Fornecedor entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Fornecedor não encontrado."));
         validarNomeDuplicado(dto.getNome(), dto.getId());

@@ -16,5 +16,6 @@ public interface CategoriaMapper {
 
     java.util.List<CategoriaDTO> toDTOList(java.util.List<Categoria> lista);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDTO(CategoriaDTO dto, @MappingTarget Categoria entity);
 }

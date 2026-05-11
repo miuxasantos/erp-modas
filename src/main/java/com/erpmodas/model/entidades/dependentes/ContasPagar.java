@@ -34,18 +34,14 @@ public class ContasPagar {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_compra", nullable = false)
     private Compra compra;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_fornecedor", nullable = false)
-    private Fornecedor fornecedor;
     @Column(name = "valor", nullable = false, precision = 10, scale = 2)
     @ToString.Include
     private BigDecimal valor;
-    @Column(name = "numero_parcelas")
+    @Column(name = "numero_parcela")
     @ToString.Include
-    private Integer numeroParcelas;
-    @Column(name = "forma_pagamento")
-    @ToString.Include
-    private FormaPagamento formaPagamento;
+    private Integer numeroParcela;
+    @Column(name = "total_parcelas")
+    private Integer totalParcelas;
     @Column(name = "observacoes", length = 400)
     private String observacoes;
     @Column(name = "status_conta")
@@ -64,5 +60,15 @@ public class ContasPagar {
         }
 
         return dataVencimento.isBefore(LocalDate.now());
+    }
+
+    @Transient
+    public FormaPagamento getFormaPagamento() {
+        return compra != null ? compra.getFormaPagamento() : null;
+    }
+
+    @Transient
+    public Fornecedor getFornecedor() {
+        return compra != null ? compra.getFornecedor() : null;
     }
 }

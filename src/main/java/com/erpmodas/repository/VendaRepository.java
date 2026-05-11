@@ -4,16 +4,22 @@ import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.model.entidades.Venda;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface VendaRepository extends JpaRepository<Venda, Long> {
     List<Venda> findByClienteId(Long clienteId);
     List<Venda> findByDataVendaBetween(LocalDate inicio, LocalDate fim);
     List<Venda> findByFormaPagamento(FormaPagamento formaPagamento);
     List<Venda> findTop10ByOrderByDataVendaDesc();
+    Optional<Venda> findVendaById(Long id);
+
+    @Query("SELECT v FROM Venda v LEFT JOIN FETCH v.itensVenda WHERE v.id = :id")
+    Optional<Venda> findByIdWithItens(@Param("id") Long id);
 
     @Query("""
     SELECT SUM(i.subTotal)

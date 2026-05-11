@@ -1,5 +1,6 @@
 package com.erpmodas.repository;
 
+import com.erpmodas.enums.StatusCaixa;
 import com.erpmodas.model.entidades.Caixa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,7 @@ public interface CaixaRepository extends JpaRepository<Caixa, Long> {
     Optional<Caixa> findByDataAbertura(LocalDate dataAbertura);
     Optional<Caixa> findByDataFechamento(LocalDate dataFechamento);
     Optional<Caixa> findTop1ByOrderByDataAberturaDesc();
+    Optional<Caixa> findByDataAberturaAndStatusCaixa(LocalDate dataAbertura, StatusCaixa statusCaixa);
     List<Caixa> findAllByOrderByDataFechamentoDesc();
     List<Caixa> findByDataAberturaBetween(LocalDate inicio, LocalDate fim);
     List<Caixa> findBySaldoAberturaGreaterThan(BigDecimal valor);

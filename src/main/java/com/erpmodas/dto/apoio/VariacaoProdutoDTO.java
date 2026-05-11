@@ -1,5 +1,6 @@
 package com.erpmodas.dto.apoio;
 
+import com.erpmodas.dto.produto.ProdutoDTO;
 import com.erpmodas.model.entidades.Produto;
 import com.erpmodas.model.entidades.apoio.Cor;
 import com.erpmodas.model.entidades.apoio.Tamanho;
@@ -16,10 +17,10 @@ public class VariacaoProdutoDTO {
     private Long id;
     private String sku;
     private Integer estoque;
-    private Produto produto;
+    private ProdutoDTO produto;
     private BigDecimal precoCusto;
     private BigDecimal precoVenda;
     private String imagemEsp;
-    private Cor cor;
-    private Tamanho tamanho;
+    private CorDTO cor;
+    private TamanhoDTO tamanho;
 }

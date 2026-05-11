@@ -18,7 +18,7 @@ public class SessionToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-    @Column(name = "token", nullable = false)
+    @Column(name = "token", nullable = false, unique = true, length = 512)
     @ToString.Include
     private String token;
     @ManyToOne(fetch = FetchType.LAZY)

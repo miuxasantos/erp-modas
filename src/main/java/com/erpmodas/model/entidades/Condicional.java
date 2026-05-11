@@ -31,6 +31,8 @@ public class Condicional {
     @Column(name = "periodo", nullable = false)
     @ToString.Include
     private Integer periodo;
+    @Column(name = "data_final")
+    private LocalDate dataFinal;
     @OneToMany(mappedBy = "condicional", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemCondicional> itensCondicional = new ArrayList<>();
 

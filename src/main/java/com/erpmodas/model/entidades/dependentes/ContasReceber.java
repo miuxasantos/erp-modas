@@ -4,6 +4,7 @@ import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.enums.StatusCaixa;
 import com.erpmodas.enums.StatusConta;
 import com.erpmodas.model.entidades.Cliente;
+import com.erpmodas.model.entidades.Fornecedor;
 import com.erpmodas.model.entidades.Venda;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,18 +35,14 @@ public class ContasReceber {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_venda", nullable = false)
     private Venda venda;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cliente", nullable = false)
-    private Cliente cliente;
     @Column(name = "valor", nullable = false, precision = 10, scale = 2)
     @ToString.Include
     private BigDecimal valor;
-    @Column(name = "numero_oarcelas")
+    @Column(name = "numero_parcela")
     @ToString.Include
-    private Integer numeroParcelas;
-    @Column(name = "forma_pagamento")
-    @ToString.Include
-    private FormaPagamento formaPagamento;
+    private Integer numeroParcela;
+    @Column(name = "total_parcelas")
+    private Integer totalParcelas;
     @Column(name = "observacoes", length = 400)
     private String observacoes;
     @Column(name = "status_conta")
@@ -64,5 +61,15 @@ public class ContasReceber {
         }
 
         return dataVencimento.isBefore(LocalDate.now());
+    }
+
+    @Transient
+    public FormaPagamento getFormaPagamento() {
+        return venda != null ? venda.getFormaPagamento() : null;
+    }
+
+    @Transient
+    public Cliente getCliente() {
+        return venda != null ? venda.getCliente() : null;
     }
 }

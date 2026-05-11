@@ -42,6 +42,8 @@ public class Caixa {
     @OneToMany(mappedBy = "caixa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MovimentacoesCaixa> movimentacoesCaixa = new ArrayList<>();
 
+    // mudar pro service
+
     @Transient
     public BigDecimal getTotalEntradas() {
         return movimentacoesCaixa.stream()
@@ -59,7 +61,7 @@ public class Caixa {
     }
 
     @Transient
-    public BigDecimal saldoTotal() {
+    public BigDecimal getSaldoTotal() {
         BigDecimal entradas = getTotalEntradas();
         BigDecimal saidas = getTotalSaidas();
 

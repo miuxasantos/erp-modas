@@ -1,5 +1,6 @@
 package com.erpmodas.model.entidades.dependentes;
 
+import com.erpmodas.enums.OrigemMov;
 import com.erpmodas.enums.TipoMovCaixa;
 import com.erpmodas.model.entidades.Caixa;
 import com.erpmodas.model.entidades.Compra;
@@ -37,8 +38,10 @@ public class MovimentacoesCaixa {
     private BigDecimal valor;
     @Column(name = "descricao")
     private String descricao;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Venda venda;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Compra compra;
+    @Column(name = "origem")
+    @Enumerated(EnumType.STRING)
+    private OrigemMov origemMov;
+    @Column(name = "origem_id")
+    private Long origemId;
+
 }

@@ -37,6 +37,10 @@ public class VariacaoProdutoService {
         return mapper.toDTO(variacaoProduto);
     }
 
+    public VariacaoProduto buscarEntidadePorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Variação do produto não encontrada."));
+    }
+
     @Transactional
     public VariacaoProdutoDTO atualizar(Long id, VariacaoProdutoDTO dto) {
         VariacaoProduto entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Variação do produto não encontrado."));

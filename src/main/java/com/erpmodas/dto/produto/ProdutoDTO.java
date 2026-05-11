@@ -1,5 +1,7 @@
 package com.erpmodas.dto.produto;
 
+import com.erpmodas.dto.categoria.CategoriaDTO;
+import com.erpmodas.dto.compra.CompraDTO;
 import com.erpmodas.model.entidades.Categoria;
 import com.erpmodas.model.entidades.Compra;
 import lombok.AllArgsConstructor;
@@ -22,10 +24,9 @@ public class ProdutoDTO {
     private BigDecimal precoVenda;
     private LocalDate dataInclusao;
     private LocalDate dataDesativacao;
-    private Compra compra;
+    private CompraDTO compra;
     private String tecido;
     private String marca;
-    //trocar categoria e compra para long id
-    private Categoria categoria;
+    private CategoriaDTO categoria;
     private String imagem;
 }

@@ -38,6 +38,11 @@ public class ClienteService {
     }
 
     @Transactional
+    public Cliente buscarEntidadePorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
+    }
+
+    @Transactional
     public ClienteDTO atualizar(Long id, ClienteDTO dto) {
         Cliente entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
         validarNomeDuplicado(dto.getNome(), dto.getId());

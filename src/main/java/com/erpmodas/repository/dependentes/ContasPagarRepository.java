@@ -22,8 +22,8 @@ public interface ContasPagarRepository extends JpaRepository<ContasPagar, Long> 
     List<ContasPagar> findByDataVencimentoBeforeAndDataPagamentoIsNull(LocalDate hoje);
     List<ContasPagar> findByStatusConta(StatusConta statusConta);
     List<ContasPagar> findByCompraId(Long compraId);
-    List<ContasPagar> findByFornecedorId(Long fornecedorId);
-    List<ContasPagar> findByFormaPagamento(FormaPagamento formaPagamento);
-    List<ContasPagar> findByFornecedorIdAndDataLancamento(Long id_fornecedor, LocalDate dataLancamento);
+    List<ContasPagar> findByCompraFornecedorId(Long fornecedorId);
+    List<ContasPagar> findByCompraFormaPagamento(FormaPagamento formaPagamento);
+    List<ContasPagar> findByCompraFornecedorIdAndDataLancamento(Long id_fornecedor, LocalDate dataLancamento);
 
 }

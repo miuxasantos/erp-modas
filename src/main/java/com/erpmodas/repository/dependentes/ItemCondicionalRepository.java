@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ItemCondicionalRepository extends JpaRepository<ItemCondicional, Long> {
     List<ItemCondicional> findByVariacaoProdutoId(Long variacaoProdutoId);
+    List<ItemCondicional> findByCondicionalId(Long id);
 }
