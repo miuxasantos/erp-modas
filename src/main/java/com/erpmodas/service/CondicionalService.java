@@ -38,9 +38,9 @@ public class CondicionalService {
         validarCondicional(dto);
 
         Condicional condicional = mapper.toEntity(dto);
-        condicional.setCliente(clienteService.buscarEntidadePorId(dto.getClienteId()));
+        condicional.setCliente(clienteService.buscarEntidadePorId(dto.getCliente().getId()));
 
-        processar(condicional, dto.getItens());
+        processar(condicional, dto.getItensCondicional());
 
         Condicional salvo = repository.save(condicional);
         return mapper.toDTO(salvo);
@@ -84,7 +84,7 @@ public class CondicionalService {
         List<ItemCondicional> itensProcessados = new ArrayList<>();
 
         for (ItemCondicionalDTO itemCondicionalDTO : itensDTO) {
-            VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(itemCondicionalDTO.getVariacaoProdutoId());
+            VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(itemCondicionalDTO.getVariacaoProduto().getId());
 
             ItemCondicional item = itemCondicionalService.criarItemEntidade(itemCondicionalDTO);
             item.setCondicional(condicional);
@@ -97,11 +97,11 @@ public class CondicionalService {
     }
 
     private void validarCondicional(CondicionalDTO dto) {
-        if (dto.getClienteId() == null) {
+        if (dto.getCliente().getId() == null) {
             throw new RuntimeException("Cliente é obrigatório");
         }
 
-        if (dto.getItens() == null || dto.getItens().isEmpty()) {
+        if (dto.getItensCondicional() == null || dto.getItensCondicional().isEmpty()) {
             throw new RuntimeException("Deve haver ao menos um item na condicional.");
         }
 

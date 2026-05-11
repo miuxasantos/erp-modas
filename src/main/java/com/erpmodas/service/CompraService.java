@@ -39,9 +39,9 @@ public class CompraService {
         validarCompra(dto);
 
         Compra compra = mapper.toEntity(dto);
-        compra.setFornecedor(fornecedorService.buscarEntidadePorId(dto.getFornecedorId()));
+        compra.setFornecedor(fornecedorService.buscarEntidadePorId(dto.getFornecedor().getId()));
 
-        processarECalcular(compra, dto.getItens());
+        processarECalcular(compra, dto.getItensCompra());
 
         Compra salvo = repository.save(compra);
 
@@ -91,7 +91,7 @@ public class CompraService {
         List<ItemCompra> itensProcessados = new ArrayList<>();
 
         for (ItemCompraDTO itemCompraDTO : itensDTO) {
-            VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(itemCompraDTO.getVariacaoProdutoId());
+            VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(itemCompraDTO.getVariacaoProduto().getId());
 
             ItemCompra item = itemCompraService.criarItemEntidade(itemCompraDTO);
             item.setCompra(compra);
@@ -110,11 +110,11 @@ public class CompraService {
     }
 
     private void validarCompra(CompraDTO dto) {
-        if (dto.getFornecedorId() == null) {
+        if (dto.getFornecedor().getId() == null) {
             throw new RuntimeException("Fornecedor é obrigatório");
         }
 
-        if (dto.getItens() == null || dto.getItens().isEmpty()) {
+        if (dto.getItensCompra() == null || dto.getItensCompra().isEmpty()) {
             throw new RuntimeException("Deve haver ao menos um item na compra.");
         }
 

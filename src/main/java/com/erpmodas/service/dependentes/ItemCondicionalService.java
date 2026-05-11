@@ -22,7 +22,7 @@ public class ItemCondicionalService {
 
     @Transactional
     public ItemCondicionalDTO criar(ItemCondicionalDTO dto) {
-        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
+        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProduto().getId());
 
         ItemCondicional item = mapper.toEntity(dto);
         item.setVariacaoProduto(variacaoProduto);
@@ -34,7 +34,7 @@ public class ItemCondicionalService {
 
     @Transactional
     public ItemCondicional criarItemEntidade(ItemCondicionalDTO dto) {
-        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
+        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProduto().getId());
 
         ItemCondicional itemCondicional = mapper.toEntity(dto);
         itemCondicional.setVariacaoProduto(variacaoProduto);
