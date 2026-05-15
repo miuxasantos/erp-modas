@@ -38,9 +38,6 @@ public class Produto {
     private LocalDate dataInclusao;
     @Column(name = "data_desativacao")
     private LocalDate dataDesativacao;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_compra", nullable = false)
-    private Compra compra;
     @Column(name = "tecido")
     private String tecido;
     @Column(name = "marca")

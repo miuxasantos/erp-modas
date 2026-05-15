@@ -24,7 +24,6 @@ public class ProdutoDTO {
     private BigDecimal precoVenda;
     private LocalDate dataInclusao;
     private LocalDate dataDesativacao;
-    private CompraDTO compra;
     private String tecido;
     private String marca;
     private CategoriaDTO categoria;
