@@ -40,7 +40,7 @@ public class UsuarioService {
     @Transactional
     public UsuarioDTO atualizar(Long id, UsuarioDTO dto) {
         Usuario entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-        validarNomeDuplicado(dto.getNome(), dto.getId());
+        validarNomeDuplicado(dto.getNome(), id);
 
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(repository.save(entity));

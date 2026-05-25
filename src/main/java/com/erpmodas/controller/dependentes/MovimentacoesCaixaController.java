@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/caixas/{caixaId}/movimentacoes")
+@RequestMapping("/movimentacoes-caixa")
 @RequiredArgsConstructor
 public class MovimentacoesCaixaController {
 
     private final MovimentacoesCaixaService movimentacoesCaixaService;
 
-    @PostMapping
+    @PostMapping("/caixa/{caixaId}")
     public ResponseEntity<MovimentacoesCaixaDTO> criar(
             @PathVariable Long caixaId,
             @RequestBody MovimentacoesCaixaDTO dto) {
@@ -23,7 +23,7 @@ public class MovimentacoesCaixaController {
         return ResponseEntity.status(201).body(movimentacoesCaixaService.criar(caixaId, dto));
     }
 
-    @GetMapping
+    @GetMapping("/caixa/{caixaId}")
     public ResponseEntity<List<MovimentacoesCaixaDTO>> listar(@PathVariable Long caixaId) {
 
         return ResponseEntity.ok(movimentacoesCaixaService.listarPorCaixa(caixaId));

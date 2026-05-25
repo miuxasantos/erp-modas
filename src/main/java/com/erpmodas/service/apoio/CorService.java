@@ -3,6 +3,7 @@ package com.erpmodas.service.apoio;
 import com.erpmodas.dto.apoio.CorDTO;
 import com.erpmodas.mapper.apoio.CorMapper;
 import com.erpmodas.model.entidades.apoio.Cor;
+import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import com.erpmodas.repository.apoio.CorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,10 +38,14 @@ public class CorService {
         return mapper.toDTO(cor);
     }
 
+    public Cor buscarEntidadePorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Cor não encontrada."));
+    }
+
     @Transactional
     public CorDTO atualizar(Long id, CorDTO dto) {
         Cor entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Cor não encontrada."));
-        validarNomeDuplicado(dto.getNome(), dto.getId());
+        validarNomeDuplicado(dto.getNome(), id);
 
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(repository.save(entity));

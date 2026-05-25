@@ -1,6 +1,8 @@
 package com.erpmodas.controller;
 
-import com.erpmodas.dto.caixa.CaixaDTO;
+import com.erpmodas.dto.caixa.CaixaResponseDTO;
+import com.erpmodas.mapper.CaixaMapper;
+import com.erpmodas.model.entidades.Caixa;
 import com.erpmodas.service.CaixaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,24 +16,30 @@ import java.util.List;
 public class CaixaController {
 
     private final CaixaService service;
+    private final CaixaMapper caixaMapper;
 
     @GetMapping
-    public ResponseEntity<List<CaixaDTO>> listar() {
+    public ResponseEntity<List<CaixaResponseDTO>> listar() {
         return ResponseEntity.ok(service.listar());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CaixaDTO> buscarPorId(@PathVariable Long id) {
+    @GetMapping("/{id:\\d+}")
+    public ResponseEntity<CaixaResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
+    @GetMapping("/atual")
+    public ResponseEntity<CaixaResponseDTO> atual() {
+        return ResponseEntity.ok(service.buscarCaixaAtual());
+    }
+
     @PostMapping
-    public ResponseEntity<CaixaDTO> salvar(@RequestBody CaixaDTO dto) {
+    public ResponseEntity<CaixaResponseDTO> salvar(@RequestBody CaixaResponseDTO dto) {
         return ResponseEntity.status(201).body(service.salvar(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CaixaDTO> atualizar(@PathVariable Long id, @RequestBody CaixaDTO dto) {
+    public ResponseEntity<CaixaResponseDTO> atualizar(@PathVariable Long id, @RequestBody CaixaResponseDTO dto) {
         return ResponseEntity.ok(service.atualizar(id, dto));
     }
 
@@ -40,5 +48,18 @@ public class CaixaController {
         service.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/abrir")
+    public ResponseEntity<CaixaResponseDTO> abrir() {
+        Caixa caixa = service.buscarOuCriarCaixaDoDia();
+        CaixaResponseDTO dto = caixaMapper.toDTO(caixa);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("{id}/fechar")
+    public ResponseEntity<CaixaResponseDTO> fechar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.fecharCaixaDoDia(id));
+    }
+
 
 }

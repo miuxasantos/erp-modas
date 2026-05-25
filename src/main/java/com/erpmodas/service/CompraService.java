@@ -39,7 +39,7 @@ public class CompraService {
         validarCompra(dto);
 
         Compra compra = mapper.toEntity(dto);
-        compra.setFornecedor(fornecedorService.buscarEntidadePorId(dto.getFornecedor().getId()));
+        compra.setFornecedor(fornecedorService.buscarEntidadePorId(dto.getFornecedorId()));
 
         processarECalcular(compra, dto.getItensCompra());
 
@@ -91,18 +91,15 @@ public class CompraService {
         List<ItemCompra> itensProcessados = new ArrayList<>();
 
         for (ItemCompraDTO itemCompraDTO : itensDTO) {
-            VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(itemCompraDTO.getVariacaoProduto().getId());
+            Long variacaoId = itemCompraDTO.getVariacaoProdutoId();
 
             ItemCompra item = itemCompraService.criarItemEntidade(itemCompraDTO);
             item.setCompra(compra);
-            item.setVariacaoProduto(variacaoProduto);
 
-            BigDecimal subTotal = item.getSubTotal();
-            valorTotal = valorTotal.add(subTotal);
-
-            variacaoProduto.setEstoque(variacaoProduto.getEstoque() + itemCompraDTO.getQuantidade());
+            variacaoProdutoService.incrementarEstoque(variacaoId, itemCompraDTO.getQuantidade());
 
             itensProcessados.add(item);
+            valorTotal = valorTotal.add(item.getSubTotal());
         }
 
         compra.setItensCompra(itensProcessados);
@@ -110,7 +107,7 @@ public class CompraService {
     }
 
     private void validarCompra(CompraDTO dto) {
-        if (dto.getFornecedor().getId() == null) {
+        if (dto.getFornecedorId() == null) {
             throw new RuntimeException("Fornecedor é obrigatório");
         }
 

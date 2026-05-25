@@ -39,7 +39,7 @@ public class VendaService {
         validarVenda(dto);
 
         Venda venda = mapper.toEntity(dto);
-        venda.setCliente(clienteService.buscarEntidadePorId(dto.getCliente().getId()));
+        venda.setCliente(clienteService.buscarEntidadePorId(dto.getClienteId()));
 
         processarECalcular(venda, dto.getItensVenda());
 
@@ -89,18 +89,15 @@ public class VendaService {
         List<ItemVenda> itensProcessados = new ArrayList<>();
 
         for (ItemVendaDTO itemVendaDTO : itensDTO) {
-            VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(itemVendaDTO.getVariacaoProduto().getId());
+            Long variacaoId = itemVendaDTO.getVariacaoProdutoId();
 
             ItemVenda item = itemVendaService.criarItemEntidade(itemVendaDTO);
             item.setVenda(venda);
-            item.setVariacaoProduto(variacaoProduto);
 
-            BigDecimal subTotal = item.getSubTotal();
-            valorTotal = valorTotal.add(subTotal);
-
-            variacaoProduto.setEstoque(variacaoProduto.getEstoque() - itemVendaDTO.getQuantidade());
+            variacaoProdutoService.decrementarEstoque(variacaoId, itemVendaDTO.getQuantidade());
 
             itensProcessados.add(item);
+            valorTotal = valorTotal.add(item.getSubTotal());
         }
 
         venda.setItensVenda(itensProcessados);
@@ -108,7 +105,7 @@ public class VendaService {
     }
 
     private void validarVenda(VendaDTO dto) {
-        if (dto.getCliente().getId() == null) {
+        if (dto.getClienteId() == null) {
             throw new RuntimeException("Cliente é obrigatório");
         }
 

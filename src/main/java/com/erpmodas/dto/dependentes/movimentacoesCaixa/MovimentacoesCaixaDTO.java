@@ -1,6 +1,5 @@
 package com.erpmodas.dto.dependentes.movimentacoesCaixa;
 
-import com.erpmodas.dto.caixa.CaixaDTO;
 import com.erpmodas.enums.OrigemMov;
 import com.erpmodas.enums.TipoMovCaixa;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,6 @@ import java.time.LocalDate;
 public class MovimentacoesCaixaDTO {
 
     private Long id;
-    private CaixaDTO caixa;
     private LocalDate data;
     private TipoMovCaixa tipoMovCaixa;
     private BigDecimal valor;

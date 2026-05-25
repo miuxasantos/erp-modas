@@ -17,10 +17,10 @@ public class VariacaoProdutoDTO {
     private Long id;
     private String sku;
     private Integer estoque;
-    private ProdutoDTO produto;
+    private Long produtoId;
     private BigDecimal precoCusto;
     private BigDecimal precoVenda;
     private String imagemEsp;
-    private CorDTO cor;
-    private TamanhoDTO tamanho;
+    private Long corId;
+    private Long tamanhoId;
 }

@@ -8,10 +8,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface MovimentacoesCaixaMapper {
 
-    @Mapping(source = "caixa.id", target = "caixaId")
     MovimentacoesCaixaDTO toDTO(MovimentacoesCaixa entity);
 
-    @Mapping(target = "caixa", ignore = true)
     MovimentacoesCaixa toEntity(MovimentacoesCaixaDTO dto);
 
     java.util.List<MovimentacoesCaixaDTO> toDTOList(java.util.List<MovimentacoesCaixa> lista);

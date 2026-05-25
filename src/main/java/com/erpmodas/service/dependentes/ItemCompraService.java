@@ -23,7 +23,7 @@ public class ItemCompraService {
 
     @Transactional
     public ItemCompraDTO criar(ItemCompraDTO dto) {
-        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProduto().getId());
+        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemCompra item = mapper.toEntity(dto);
         item.setVariacaoProduto(variacaoProduto);
@@ -37,7 +37,7 @@ public class ItemCompraService {
 
     @Transactional
     public ItemCompra criarItemEntidade(ItemCompraDTO dto) {
-        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProduto().getId());
+        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemCompra itemCompra = mapper.toEntity(dto);
         itemCompra.setVariacaoProduto(variacaoProduto);

@@ -85,9 +85,4 @@ public class Venda {
 
         return total.multiply(porcentagem);
     }
-
-    public void adicionarItem(ItemVenda itemVenda) {
-        itemVenda.setVenda(this);
-        itensVenda.add(itemVenda);
-    }
 }

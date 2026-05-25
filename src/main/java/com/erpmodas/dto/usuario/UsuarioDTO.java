@@ -15,6 +15,7 @@ public class UsuarioDTO {
     private String nome;
     private String email;
     private Boolean status;
+    private String senha;
     private LocalDateTime ultimoAcesso;
     private Cargo cargo;
 }

@@ -1,7 +1,6 @@
 package com.erpmodas.dto.dependentes.itemVenda;
 
 import com.erpmodas.dto.apoio.VariacaoProdutoDTO;
-import com.erpmodas.dto.venda.VendaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ItemVendaDTO {
     private Long id;
-    private VendaDTO venda;
+    private Long variacaoProdutoId;
     private VariacaoProdutoDTO variacaoProduto;
     private BigDecimal valorUnit;
     private Integer quantidade;

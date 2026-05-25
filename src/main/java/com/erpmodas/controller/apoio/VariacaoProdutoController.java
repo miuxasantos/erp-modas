@@ -9,38 +9,39 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/variacoes")
+@RequestMapping("/produtos/{produtoId}/variacoes")
 @RequiredArgsConstructor
 public class VariacaoProdutoController {
 
     private final VariacaoProdutoService variacaoProdutoService;
 
     @GetMapping
-    public ResponseEntity<List<VariacaoProdutoDTO>> listar() {
-        List<VariacaoProdutoDTO> lista = variacaoProdutoService.listar();
+    public ResponseEntity<List<VariacaoProdutoDTO>> listar(@PathVariable Long produtoId) {
+        List<VariacaoProdutoDTO> lista = variacaoProdutoService.listarPorProduto(produtoId);
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VariacaoProdutoDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<VariacaoProdutoDTO> buscarPorId(@PathVariable Long produtoId, @PathVariable Long id) {
         VariacaoProdutoDTO variacaoProduto = variacaoProdutoService.buscarPorId(id);
         return ResponseEntity.ok(variacaoProduto);
     }
 
     @PostMapping
-    public ResponseEntity<VariacaoProdutoDTO> salvar(@RequestBody VariacaoProdutoDTO dto) {
+    public ResponseEntity<VariacaoProdutoDTO> salvar(@PathVariable Long produtoId, @RequestBody VariacaoProdutoDTO dto) {
+        dto.setProdutoId(produtoId);
         VariacaoProdutoDTO salvo = variacaoProdutoService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VariacaoProdutoDTO> atualizar(@PathVariable Long id, @RequestBody VariacaoProdutoDTO dto) {
+    public ResponseEntity<VariacaoProdutoDTO> atualizar(@PathVariable Long produtoId, @PathVariable Long id, @RequestBody VariacaoProdutoDTO dto) {
         VariacaoProdutoDTO atualizado = variacaoProdutoService.atualizar(id, dto);
         return ResponseEntity.ok(atualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long produtoId, @PathVariable Long id) {
         variacaoProdutoService.deletar(id);
         return ResponseEntity.noContent().build();
     }

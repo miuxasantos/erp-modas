@@ -5,6 +5,7 @@ import com.erpmodas.enums.StatusCaixa;
 import com.erpmodas.enums.StatusConta;
 import com.erpmodas.model.entidades.Compra;
 import com.erpmodas.model.entidades.Fornecedor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,9 +32,6 @@ public class ContasPagar {
     private LocalDate dataVencimento;
     @Column(name = "data_pagamento")
     private LocalDate dataPagamento;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_compra", nullable = false)
-    private Compra compra;
     @Column(name = "valor", nullable = false, precision = 10, scale = 2)
     @ToString.Include
     private BigDecimal valor;
@@ -47,6 +45,9 @@ public class ContasPagar {
     @Column(name = "status_conta")
     @ToString.Include
     private StatusConta statusConta;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "compra_id")
+    private Compra compra;
 
     @Transient
     public boolean estaVencida() {
@@ -60,15 +61,5 @@ public class ContasPagar {
         }
 
         return dataVencimento.isBefore(LocalDate.now());
-    }
-
-    @Transient
-    public FormaPagamento getFormaPagamento() {
-        return compra != null ? compra.getFormaPagamento() : null;
-    }
-
-    @Transient
-    public Fornecedor getFornecedor() {
-        return compra != null ? compra.getFornecedor() : null;
     }
 }

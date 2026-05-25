@@ -1,6 +1,7 @@
 package com.erpmodas.controller.dependentes;
 
 import com.erpmodas.dto.dependentes.contasPagar.ContasPagarDTO;
+import com.erpmodas.dto.dependentes.contasPagar.DataPagamentoDTO;
 import com.erpmodas.service.dependentes.ContasPagarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -59,8 +60,8 @@ public class ContasPagarController {
     }
 
     @PutMapping("/{id}/pagar")
-    public ResponseEntity<ContasPagarDTO> pagar(@PathVariable Long id, @RequestBody LocalDate dataPagamento) {
-        ContasPagarDTO entity = contasPagarService.marcarComoPago(id, dataPagamento);
+    public ResponseEntity<ContasPagarDTO> pagar(@PathVariable Long id, @RequestBody DataPagamentoDTO dto) {
+        ContasPagarDTO entity = contasPagarService.marcarComoPago(id, dto.getDataPagamento());
         return ResponseEntity.ok(entity);
     }
 

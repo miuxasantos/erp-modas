@@ -33,7 +33,15 @@ public class ContasPagarService {
 
     @Transactional
     public List<ContasPagarDTO> listar() {
-        return mapper.toDTOList(repository.findAll());
+        List<ContasPagar> lista = repository.findAll();
+
+        lista.forEach(cp -> {
+            System.out.println("ContasPagar id: " + cp.getId());
+            System.out.println("Compra: " + cp.getCompra());
+            System.out.println("Fornecedor: " + (cp.getCompra() != null ? cp.getCompra().getFornecedor() : "null"));
+            System.out.println("Nome: " + (cp.getCompra() != null && cp.getCompra().getFornecedor() != null ? cp.getCompra().getFornecedor().getNome() : "null"));
+        });
+        return mapper.toDTOList(lista);
     }
 
     @Transactional
@@ -168,8 +176,6 @@ public class ContasPagarService {
 
         return contas;
     }
-
-
 
     @Transactional
     public void deletarPorCompra(Compra compra) {

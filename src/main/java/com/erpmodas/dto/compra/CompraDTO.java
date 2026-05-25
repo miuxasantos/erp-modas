@@ -19,6 +19,7 @@ public class CompraDTO {
 
     private Long id;
     private FornecedorDTO fornecedor;
+    private Long fornecedorId;
     private String lote;
     private LocalDate dataChegada;
     private String observacoes;

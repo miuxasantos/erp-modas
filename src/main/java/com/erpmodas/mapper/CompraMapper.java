@@ -7,13 +7,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface CompraMapper {
 
-    @Mapping(source = "fornecedor.id", target = "fornecedorId")
-    @Mapping(source = "itensCompra", target = "itens")
     CompraDTO toDTO(Compra entity);
 
-    @Mapping(target = "fornecedor", ignore = true)
-    @Mapping(target = "itensCompra", ignore = true)
-    @Mapping(target = "contasPagar", ignore = true)
     Compra toEntity(CompraDTO dto);
 
     java.util.List<CompraDTO> toDTOList(java.util.List<Compra> lista);

@@ -1,7 +1,5 @@
 package com.erpmodas.dto.dependentes.contasPagar;
 
-import com.erpmodas.dto.compra.CompraDTO;
-import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.enums.StatusConta;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,10 +14,10 @@ import java.time.LocalDate;
 public class ContasPagarDTO {
 
     private Long id;
+    private String fornecedorNome;
     private LocalDate dataLancamento;
     private LocalDate dataVencimento;
     private LocalDate dataPagamento;
-    private CompraDTO compra;
     private BigDecimal valor;
     private Integer numeroParcela;
     private Integer totalParcelas;

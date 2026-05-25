@@ -3,11 +3,13 @@ package com.erpmodas.service;
 import com.erpmodas.dto.produto.ProdutoDTO;
 import com.erpmodas.mapper.ProdutoMapper;
 import com.erpmodas.model.entidades.Produto;
+import com.erpmodas.model.entidades.apoio.Cor;
 import com.erpmodas.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,12 +18,15 @@ public class ProdutoService {
 
     private final ProdutoRepository repository;
     private final ProdutoMapper mapper;
+    private final CategoriaService categoriaService;
 
     @Transactional
     public ProdutoDTO salvar(ProdutoDTO dto) {
         validarNomeDuplicado(dto.getNome(), null);
 
         Produto entity =  mapper.toEntity(dto);
+        entity.setCategoria(categoriaService.buscarEntidadePorId(dto.getCategoriaId()));
+        entity.setDataInclusao(LocalDate.now());
         Produto salvo = repository.save(entity);
         return mapper.toDTO(salvo);
     }
@@ -38,9 +43,14 @@ public class ProdutoService {
     }
 
     @Transactional
+    public Produto buscarEntidadePorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+    }
+
+    @Transactional
     public ProdutoDTO atualizar(Long id, ProdutoDTO dto) {
         Produto entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
-        validarNomeDuplicado(dto.getNome(), dto.getId());
+        validarNomeDuplicado(dto.getNome(), id);
 
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(repository.save(entity));

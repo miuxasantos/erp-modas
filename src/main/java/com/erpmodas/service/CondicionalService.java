@@ -38,7 +38,7 @@ public class CondicionalService {
         validarCondicional(dto);
 
         Condicional condicional = mapper.toEntity(dto);
-        condicional.setCliente(clienteService.buscarEntidadePorId(dto.getCliente().getId()));
+        condicional.setCliente(clienteService.buscarEntidadePorId(dto.getClienteId()));
 
         processar(condicional, dto.getItensCondicional());
 
@@ -84,20 +84,20 @@ public class CondicionalService {
         List<ItemCondicional> itensProcessados = new ArrayList<>();
 
         for (ItemCondicionalDTO itemCondicionalDTO : itensDTO) {
-            VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(itemCondicionalDTO.getVariacaoProduto().getId());
+            Long variacaoId = itemCondicionalDTO.getVariacaoProdutoId();
 
             ItemCondicional item = itemCondicionalService.criarItemEntidade(itemCondicionalDTO);
             item.setCondicional(condicional);
-            item.setVariacaoProduto(variacaoProduto);
 
-            variacaoProduto.setEstoque(variacaoProduto.getEstoque() - itemCondicionalDTO.getQuantidade());
+            variacaoProdutoService.decrementarEstoque(variacaoId, itemCondicionalDTO.getQuantidade());
+
             itensProcessados.add(item);
         }
         condicional.setItensCondicional(itensProcessados);
     }
 
     private void validarCondicional(CondicionalDTO dto) {
-        if (dto.getCliente().getId() == null) {
+        if (dto.getClienteId() == null) {
             throw new RuntimeException("Cliente é obrigatório");
         }
 

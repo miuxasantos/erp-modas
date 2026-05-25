@@ -20,8 +20,5 @@ public interface VariacaoProdutoMapper {
     java.util.List<VariacaoProdutoDTO> toDTOList(java.util.List<VariacaoProduto> lista);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "produto", ignore = true)
-    @Mapping(target = "cor", ignore = true)
-    @Mapping(target = "tamanho", ignore = true)
     void updateEntityFromDTO(VariacaoProdutoDTO dto, @MappingTarget VariacaoProduto entity);
 }

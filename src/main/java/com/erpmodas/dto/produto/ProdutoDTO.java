@@ -26,6 +26,6 @@ public class ProdutoDTO {
     private LocalDate dataDesativacao;
     private String tecido;
     private String marca;
-    private CategoriaDTO categoria;
+    private Long categoriaId;
     private String imagem;
 }

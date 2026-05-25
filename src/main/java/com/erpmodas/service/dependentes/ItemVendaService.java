@@ -23,7 +23,7 @@ public class ItemVendaService {
 
     @Transactional
     public ItemVendaDTO criar(ItemVendaDTO dto) {
-        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProduto().getId());
+        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemVenda item = mapper.toEntity(dto);
         item.setVariacaoProduto(variacaoProduto);
@@ -37,7 +37,7 @@ public class ItemVendaService {
 
     @Transactional
     public ItemVenda criarItemEntidade(ItemVendaDTO dto) {
-        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProduto().getId());
+        VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemVenda itemVenda = mapper.toEntity(dto);
         itemVenda.setVariacaoProduto(variacaoProduto);
@@ -45,12 +45,14 @@ public class ItemVendaService {
         return itemVenda;
     }
 
+    @Transactional
     public ItemVendaDTO buscarPorId(Long id) {
         ItemVenda item = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item da venda não encontrado."));
         return mapper.toDTO(item);
     }
 
+    @Transactional
     public ItemVendaDTO atualizar(Long id, ItemVendaDTO dto) {
         ItemVenda entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item da venda não encontrado."));

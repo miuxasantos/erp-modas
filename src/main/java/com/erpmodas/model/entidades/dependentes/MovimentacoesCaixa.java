@@ -3,8 +3,7 @@ package com.erpmodas.model.entidades.dependentes;
 import com.erpmodas.enums.OrigemMov;
 import com.erpmodas.enums.TipoMovCaixa;
 import com.erpmodas.model.entidades.Caixa;
-import com.erpmodas.model.entidades.Compra;
-import com.erpmodas.model.entidades.Venda;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,9 +23,6 @@ public class MovimentacoesCaixa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_caixa")
-    private Caixa caixa;
     @Column(name = "data", nullable = false)
     private LocalDate data = LocalDate.now();
     @Enumerated(EnumType.STRING)
@@ -43,5 +39,9 @@ public class MovimentacoesCaixa {
     private OrigemMov origemMov;
     @Column(name = "origem_id")
     private Long origemId;
+    @ManyToOne
+    @JoinColumn(name = "caixa_id")
+    @JsonIgnore
+    private Caixa caixa;
 
 }

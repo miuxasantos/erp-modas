@@ -1,8 +1,6 @@
 package com.erpmodas.controller.especial;
 
-import com.erpmodas.dto.apoio.CorDTO;
 import com.erpmodas.dto.especial.AuditoriaDTO;
-import com.erpmodas.service.apoio.CorService;
 import com.erpmodas.service.especial.AuditoriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -18,6 +18,7 @@ import java.util.List;
 public class VendaDTO {
     private Long id;
     private ClienteDTO cliente;
+    private Long clienteId;
     private LocalDate dataVenda;
     private String observacoes;
     private FormaPagamento formaPagamento;

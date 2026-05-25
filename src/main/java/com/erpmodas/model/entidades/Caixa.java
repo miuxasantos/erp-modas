@@ -26,20 +26,20 @@ public class Caixa {
     @Column(name = "data_abertura", nullable = false)
     @ToString.Include
     private LocalDate dataAbertura = LocalDate.now();
-    @Column(name = "data_fechamento", nullable = false)
+    @Column(name = "data_fechamento")
     @ToString.Include
-    private LocalDate dataFechamento = LocalDate.now();
+    private LocalDate dataFechamento;
     @Column(name = "saldo_abertura", nullable = false, precision = 10, scale = 2)
     @ToString.Include
     private BigDecimal saldoAbertura;
-    @Column(name = "saldo_fechamento", nullable = false, precision = 10, scale = 2)
+    @Column(name = "saldo_fechamento", precision = 10, scale = 2)
     @ToString.Include
     private BigDecimal saldoFechamento;
-    @Column(name = "status_caixa", nullable = false)
+    @Column(name = "status_caixa")
     @ToString.Include
     private StatusCaixa statusCaixa;
 
-    @OneToMany(mappedBy = "caixa", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "caixa", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // voltar para lazy
     private List<MovimentacoesCaixa> movimentacoesCaixa = new ArrayList<>();
 
     // mudar pro service

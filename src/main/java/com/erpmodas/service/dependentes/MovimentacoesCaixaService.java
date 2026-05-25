@@ -36,8 +36,6 @@ public class MovimentacoesCaixaService {
         }
 
         MovimentacoesCaixa entity = mapper.toEntity(dto);
-        entity.setCaixa(caixa);
-
         return mapper.toDTO(repository.save(entity));
     }
 

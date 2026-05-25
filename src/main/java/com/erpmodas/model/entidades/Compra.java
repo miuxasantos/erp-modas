@@ -24,7 +24,7 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_fornecedor", nullable = false)
     private Fornecedor fornecedor;
     @Column(name = "lote", nullable = false)
@@ -51,9 +51,4 @@ public class Compra {
     //public BigDecimal getValorTotal() {
     //   return itensCompra.stream().map(ItemCompra::getSubTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     //}
-
-    public void adicionarItem(ItemCompra itemCompra) {
-            itemCompra.setCompra(this);
-            itensCompra.add(itemCompra);
-    }
 }

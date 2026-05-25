@@ -15,6 +15,7 @@ import java.util.List;
 public class CondicionalDTO {
     private Long id;
     private ClienteDTO cliente;
+    private Long clienteId;
     private LocalDate dataInicio;
     private Integer periodo;
     private LocalDate dataFinal;

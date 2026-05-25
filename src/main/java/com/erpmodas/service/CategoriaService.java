@@ -3,6 +3,7 @@ package com.erpmodas.service;
 import com.erpmodas.dto.categoria.CategoriaDTO;
 import com.erpmodas.mapper.CategoriaMapper;
 import com.erpmodas.model.entidades.Categoria;
+import com.erpmodas.model.entidades.Fornecedor;
 import com.erpmodas.repository.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,9 +39,14 @@ public class CategoriaService {
     }
 
     @Transactional
+    public Categoria buscarEntidadePorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
+    }
+
+    @Transactional
     public CategoriaDTO atualizar(Long id, CategoriaDTO dto) {
         Categoria entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
-        validarNomeDuplicado(dto.getNome(), dto.getId());
+        validarNomeDuplicado(dto.getNome(), id);
 
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(repository.save(entity));

@@ -1,11 +1,8 @@
 package com.erpmodas.model.entidades.dependentes;
 
-import com.erpmodas.enums.FormaPagamento;
-import com.erpmodas.enums.StatusCaixa;
 import com.erpmodas.enums.StatusConta;
-import com.erpmodas.model.entidades.Cliente;
-import com.erpmodas.model.entidades.Fornecedor;
 import com.erpmodas.model.entidades.Venda;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,9 +29,6 @@ public class ContasReceber {
     private LocalDate dataVencimento;
     @Column(name = "data_recebimento")
     private LocalDate dataRecebimento;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_venda", nullable = false)
-    private Venda venda;
     @Column(name = "valor", nullable = false, precision = 10, scale = 2)
     @ToString.Include
     private BigDecimal valor;
@@ -48,6 +42,10 @@ public class ContasReceber {
     @Column(name = "status_conta")
     @ToString.Include
     private StatusConta statusConta;
+    @ManyToOne
+    @JoinColumn(name = "venda_id")
+    @JsonIgnore
+    private Venda venda;
 
     @Transient
     public boolean estaVencida() {
@@ -61,15 +59,5 @@ public class ContasReceber {
         }
 
         return dataVencimento.isBefore(LocalDate.now());
-    }
-
-    @Transient
-    public FormaPagamento getFormaPagamento() {
-        return venda != null ? venda.getFormaPagamento() : null;
-    }
-
-    @Transient
-    public Cliente getCliente() {
-        return venda != null ? venda.getCliente() : null;
     }
 }

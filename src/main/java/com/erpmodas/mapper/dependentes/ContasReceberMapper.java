@@ -8,10 +8,9 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface ContasReceberMapper {
 
-    @Mapping(source = "venda.id", target = "vendaId")
+    @Mapping(source = "venda.cliente.nome", target = "clienteNome")
     ContasReceberDTO toDTO(ContasReceber entity);
 
-    @Mapping(target = "venda", ignore = true)
     ContasReceber toEntity(ContasReceberDTO dto);
 
     java.util.List<ContasReceberDTO> toDTOList(java.util.List<ContasReceber> lista);

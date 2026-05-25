@@ -1,8 +1,8 @@
 package com.erpmodas.service;
 
-import com.erpmodas.dto.caixa.CaixaDTO;
+import com.erpmodas.dto.caixa.CaixaResponseDTO;
+import com.erpmodas.enums.OrigemMov;
 import com.erpmodas.enums.StatusCaixa;
-import com.erpmodas.enums.StatusConta;
 import com.erpmodas.enums.TipoMovCaixa;
 import com.erpmodas.mapper.CaixaMapper;
 import com.erpmodas.model.entidades.Caixa;
@@ -31,25 +31,32 @@ public class CaixaService {
     private final MovimentacoesCaixaRepository movimentacoesCaixaRepository;
 
     @Transactional
-    public CaixaDTO salvar(CaixaDTO dto) {
+    public CaixaResponseDTO salvar(CaixaResponseDTO dto) {
         Caixa entity =  mapper.toEntity(dto);
         Caixa salvo = repository.save(entity);
         return toDTOComCalculos(salvo);
     }
 
     @Transactional(readOnly = true)
-    public List<CaixaDTO> listar() {
+    public List<CaixaResponseDTO> listar() {
         return mapper.toDTOList(repository.findAll());
     }
 
     @Transactional(readOnly = true)
-    public CaixaDTO buscarPorId(Long id) {
+    public CaixaResponseDTO buscarPorId(Long id) {
         Caixa caixa = repository.findById(id).orElseThrow(() -> new RuntimeException("Caixa não encontrado."));
         return toDTOComCalculos(caixa);
     }
 
+    @Transactional(readOnly = true)
+    public CaixaResponseDTO buscarCaixaAtual() {
+        Caixa caixa = repository.findByDataAberturaAndStatusCaixa(LocalDate.now(), StatusCaixa.ABERTO)
+                .orElseThrow(() -> new RuntimeException("Caixa não encontrado."));
+        return toDTOComCalculos(caixa);
+    }
+
     @Transactional
-    public CaixaDTO atualizar(Long id, CaixaDTO dto) {
+    public CaixaResponseDTO atualizar(Long id, CaixaResponseDTO dto) {
         Caixa entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Caixa não encontrado."));
 
         mapper.updateEntityFromDTO(dto, entity);
@@ -76,8 +83,9 @@ public class CaixaService {
         }
 
         MovimentacoesCaixa mov = new MovimentacoesCaixa();
-        mov.setCaixa(caixa);
         mov.setTipoMovCaixa(TipoMovCaixa.SAIDA);
+        mov.setCaixa(caixa);
+        mov.setOrigemMov(OrigemMov.COMPRA);
         mov.setOrigemId(conta.getId());
         mov.setValor(conta.getValor());
         mov.setDescricao(montarDescricaoPagar(conta));
@@ -93,8 +101,9 @@ public class CaixaService {
         }
 
         MovimentacoesCaixa mov = new MovimentacoesCaixa();
-        mov.setCaixa(caixa);
         mov.setTipoMovCaixa(TipoMovCaixa.ENTRADA);
+        mov.setCaixa(caixa);
+        mov.setOrigemMov(OrigemMov.VENDA);
         mov.setOrigemId(conta.getId());
         mov.setValor(conta.getValor());
         mov.setDescricao(montarDescricaoReceber(conta));
@@ -121,13 +130,12 @@ public class CaixaService {
     }
 
     @Transactional
-    public CaixaDTO fecharCaixaDoDia() {
+    public CaixaResponseDTO fecharCaixaDoDia(Long id) {
         LocalDate hoje = LocalDate.now();
 
-        Caixa caixa = repository.findByDataAberturaAndStatusCaixa(hoje, StatusCaixa.ABERTO)
+        Caixa caixa = repository.findByIdAndStatusCaixa(id, StatusCaixa.ABERTO)
                 .orElseThrow(() -> new RuntimeException("Não há nenhum caixa aberto na data de hoje."));
-
-        CaixaDTO toDTOComCalc = toDTOComCalculos(caixa);
+        CaixaResponseDTO toDTOComCalc = toDTOComCalculos(caixa);
 
         caixa.setStatusCaixa(StatusCaixa.FECHADO);
         caixa.setDataFechamento(hoje);
@@ -138,32 +146,30 @@ public class CaixaService {
     }
 
     @Transactional
-    public BigDecimal consultarSaldoAtual() {
+    public BigDecimal consultarSaldoAtual(CaixaResponseDTO dto) {
         Caixa caixa = buscarOuCriarCaixaDoDia();
-        CaixaDTO dto = toDTOComCalculos(caixa);
+        toDTOComCalculos(caixa);
         return dto.getSaldoTotal();
     }
 
     private String montarDescricaoPagar(ContasPagar conta) {
         if (conta.getNumeroParcela() != null && conta.getTotalParcelas() != null) {
             return String.format("Pagamento da parcela ", conta.getNumeroParcela(),
-                    conta.getTotalParcelas(),
-                    conta.getCompra().getFornecedor());
+                    conta.getTotalParcelas());
         }
-        return String.format("Pagamento à vista", conta.getCompra().getFornecedor());
+        return "Pagamento à vista";
     }
 
     private String montarDescricaoReceber(ContasReceber conta) {
         if (conta.getNumeroParcela() != null && conta.getTotalParcelas() != null) {
-            return String.format("Pagamento da parcela ", conta.getNumeroParcela(),
-                    conta.getTotalParcelas(),
-                    conta.getVenda().getCliente());
+            return String.format("Pagamento da parcela %d / %d", conta.getNumeroParcela(),
+                    conta.getTotalParcelas());
         }
-        return String.format("Pagamento à vista", conta.getVenda().getCliente());
+        return "Pagamento à vista";
     }
 
-    private CaixaDTO toDTOComCalculos(Caixa caixa) {
-        CaixaDTO dto = mapper.toDTO(caixa);
+    private CaixaResponseDTO toDTOComCalculos(Caixa caixa) {
+        CaixaResponseDTO dto = mapper.toDTO(caixa);
 
         List<MovimentacoesCaixa> movs = movimentacoesCaixaRepository.findByCaixaId(caixa.getId());
 

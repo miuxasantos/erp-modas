@@ -2,6 +2,7 @@ package com.erpmodas.controller.dependentes;
 
 import com.erpmodas.dto.dependentes.contasPagar.ContasPagarDTO;
 import com.erpmodas.dto.dependentes.contasReceber.ContasReceberDTO;
+import com.erpmodas.dto.dependentes.contasReceber.DataRecebimentoDTO;
 import com.erpmodas.service.dependentes.ContasPagarService;
 import com.erpmodas.service.dependentes.ContasReceberService;
 import lombok.RequiredArgsConstructor;
@@ -60,9 +61,9 @@ public class ContasReceberController {
         return ResponseEntity.ok(entity);
     }
 
-    @PutMapping("/{id}/pagar")
-    public ResponseEntity<ContasReceberDTO> pagar(@PathVariable Long id, @RequestBody LocalDate dataPagamento) {
-        ContasReceberDTO entity = contasReceberService.marcarComoPago(id, dataPagamento);
+    @PutMapping("/{id}/receber")
+    public ResponseEntity<ContasReceberDTO> receber(@PathVariable Long id, @RequestBody DataRecebimentoDTO dto) {
+        ContasReceberDTO entity = contasReceberService.marcarComoPago(id, dto.getDataRecebimento());
         return ResponseEntity.ok(entity);
     }
 

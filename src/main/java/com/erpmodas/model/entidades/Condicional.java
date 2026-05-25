@@ -71,9 +71,4 @@ public class Condicional {
                 .map(ItemCondicional::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
-    public void adicionarItem(ItemCondicional itemCondicional) {
-        itemCondicional.setCondicional(this);
-        itensCondicional.add(itemCondicional);
-    }
 }

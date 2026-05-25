@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface TamanhoRepository extends JpaRepository<Tamanho, Long> {
 
     Optional<Tamanho> findByTamanho(TamanhoEnum tamanho);
+    boolean existsByTamanho(TamanhoEnum tamanhoEnum);
 
     List<Tamanho> findAllByOrderByTamanhoAsc();
 }

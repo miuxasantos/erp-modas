@@ -2,6 +2,7 @@ package com.erpmodas.model.entidades.dependentes;
 
 import com.erpmodas.model.entidades.Condicional;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
@@ -30,11 +31,10 @@ public class ItemCondicional {
     @Min(1)
     @Column(name = "quantidade", nullable = false)
     private Integer quantidade;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_condicional", nullable = false)
-    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "condicional_id")
+    @JsonIgnore
     private Condicional condicional;
-
     @Transient
     public BigDecimal getValorUnitario(){
         return variacaoProduto.precoVendaFinal();

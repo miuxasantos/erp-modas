@@ -15,6 +15,7 @@ public interface CaixaRepository extends JpaRepository<Caixa, Long> {
     Optional<Caixa> findByDataFechamento(LocalDate dataFechamento);
     Optional<Caixa> findTop1ByOrderByDataAberturaDesc();
     Optional<Caixa> findByDataAberturaAndStatusCaixa(LocalDate dataAbertura, StatusCaixa statusCaixa);
+    Optional<Caixa> findByIdAndStatusCaixa(Long id, StatusCaixa statusCaixa);
     List<Caixa> findAllByOrderByDataFechamentoDesc();
     List<Caixa> findByDataAberturaBetween(LocalDate inicio, LocalDate fim);
     List<Caixa> findBySaldoAberturaGreaterThan(BigDecimal valor);

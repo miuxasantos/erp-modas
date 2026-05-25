@@ -4,6 +4,7 @@ import com.erpmodas.dto.apoio.TamanhoDTO;
 import com.erpmodas.enums.TamanhoEnum;
 import com.erpmodas.mapper.apoio.TamanhoMapper;
 import com.erpmodas.model.entidades.apoio.Tamanho;
+import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import com.erpmodas.repository.apoio.TamanhoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,10 @@ public class TamanhoService {
     public TamanhoDTO buscarPorId(Long id) {
         Tamanho Tamanho = repository.findById(id).orElseThrow(() -> new RuntimeException("Tamanho não encontrado."));
         return mapper.toDTO(Tamanho);
+    }
+
+    public Tamanho buscarEntidadePorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Tamanho não encontrado."));
     }
 
     @Transactional

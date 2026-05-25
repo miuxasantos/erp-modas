@@ -9,11 +9,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProdutoMapper {
 
-    @Mapping(source = "compra.id", target = "compraId")
     @Mapping(source = "categoria.id", target = "categoriaId")
     ProdutoDTO toDTO(Produto entity);
 
-    @Mapping(target = "compra", ignore = true)
     @Mapping(target = "categoria", ignore = true)
     Produto toEntity(ProdutoDTO dto);
 

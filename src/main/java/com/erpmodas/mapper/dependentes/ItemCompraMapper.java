@@ -7,12 +7,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface ItemCompraMapper {
 
-    @Mapping(source = "compra.id", target = "compraId")
-    @Mapping(source = "variacaoProduto.id", target = "variacaoProdutoId")
     ItemCompraDTO toDTO(ItemCompra entity);
 
-    @Mapping(target = "compra", ignore = true)
-    @Mapping(target = "variacaoProduto", ignore = true)
     ItemCompra toEntity(ItemCompraDTO dto);
 
     java.util.List<ItemCompraDTO> toDTOList(java.util.List<ItemCompra> lista);

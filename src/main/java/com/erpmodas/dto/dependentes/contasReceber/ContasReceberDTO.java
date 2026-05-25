@@ -1,6 +1,5 @@
 package com.erpmodas.dto.dependentes.contasReceber;
 
-import com.erpmodas.dto.venda.VendaDTO;
 import com.erpmodas.enums.StatusConta;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,10 +13,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ContasReceberDTO {
     private Long id;
+    private String clienteNome;
     private LocalDate dataLancamento;
     private LocalDate dataVencimento;
     private LocalDate dataRecebimento;
-    private VendaDTO venda;
     private BigDecimal valor;
     private Integer numeroParcela;
     private Integer totalParcelas;

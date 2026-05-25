@@ -2,6 +2,7 @@ package com.erpmodas.model.entidades.dependentes;
 
 import com.erpmodas.model.entidades.Compra;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -25,10 +26,6 @@ public class ItemCompra {
     @EqualsAndHashCode.Include
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_compra", nullable = false)
-    @ToString.Exclude
-    private Compra compra;
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_variacao_produto", nullable = false)
     @ToString.Exclude
     private VariacaoProduto variacaoProduto;
@@ -40,6 +37,10 @@ public class ItemCompra {
     private Integer quantidade;
     @Column(name = "sub_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal subTotal;
+    @ManyToOne
+    @JoinColumn(name = "compra_id")
+    @JsonIgnore
+    private Compra compra;
 
     @PrePersist
     @PreUpdate

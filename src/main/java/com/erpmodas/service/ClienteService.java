@@ -45,7 +45,7 @@ public class ClienteService {
     @Transactional
     public ClienteDTO atualizar(Long id, ClienteDTO dto) {
         Cliente entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
-        validarNomeDuplicado(dto.getNome(), dto.getId());
+        validarNomeDuplicado(dto.getNome(), id);
 
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(repository.save(entity));

@@ -45,7 +45,7 @@ public class FornecedorService {
     @Transactional
     public FornecedorDTO atualizar(Long id, FornecedorDTO dto) {
         Fornecedor entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Fornecedor não encontrado."));
-        validarNomeDuplicado(dto.getNome(), dto.getId());
+        validarNomeDuplicado(dto.getNome(), id);
 
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(repository.save(entity));
