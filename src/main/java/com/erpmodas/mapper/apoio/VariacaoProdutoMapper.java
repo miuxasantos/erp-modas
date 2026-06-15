@@ -1,24 +1,27 @@
 package com.erpmodas.mapper.apoio;
 
-import com.erpmodas.dto.apoio.VariacaoProdutoDTO;
+import com.erpmodas.dto.apoio.variacaoProdutoDto.VariacaoProdutoResponseDTO;
+import com.erpmodas.mapper.ProdutoMapper;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ProdutoMapper.class, CorMapper.class, TamanhoMapper.class})
 public interface VariacaoProdutoMapper {
 
-    @Mapping(source = "produto.id", target = "produtoId")
-    @Mapping(source = "cor.id", target = "corId")
-    @Mapping(source = "tamanho.id", target = "tamanhoId")
-    VariacaoProdutoDTO toDTO(VariacaoProduto entity);
+    VariacaoProdutoResponseDTO toDTO(VariacaoProduto entity);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "produto", ignore = true)
     @Mapping(target = "cor", ignore = true)
     @Mapping(target = "tamanho", ignore = true)
-    VariacaoProduto toEntity(VariacaoProdutoDTO dto);
+    VariacaoProduto toEntity(VariacaoProdutoResponseDTO dto);
 
-    java.util.List<VariacaoProdutoDTO> toDTOList(java.util.List<VariacaoProduto> lista);
+    java.util.List<VariacaoProdutoResponseDTO> toDTOList(java.util.List<VariacaoProduto> lista);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDTO(VariacaoProdutoDTO dto, @MappingTarget VariacaoProduto entity);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "produto", ignore = true)
+    @Mapping(target = "cor", ignore = true)
+    @Mapping(target = "tamanho", ignore = true)
+    void updateEntityFromDTO(VariacaoProdutoResponseDTO dto, @MappingTarget VariacaoProduto entity);
 }

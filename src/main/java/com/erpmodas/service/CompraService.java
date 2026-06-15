@@ -1,12 +1,11 @@
 package com.erpmodas.service;
 
-import com.erpmodas.dto.compra.CompraDTO;
-import com.erpmodas.dto.dependentes.itemCompra.ItemCompraDTO;
+import com.erpmodas.dto.compra.CompraResponseDTO;
+import com.erpmodas.dto.dependentes.itemCompra.ItemCompraResponseDTO;
 import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.mapper.CompraMapper;
 import com.erpmodas.mapper.dependentes.ItemCompraMapper;
 import com.erpmodas.model.entidades.Compra;
-import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import com.erpmodas.model.entidades.dependentes.ItemCompra;
 import com.erpmodas.repository.CompraRepository;
 import com.erpmodas.service.apoio.VariacaoProdutoService;
@@ -34,7 +33,7 @@ public class CompraService {
     private final ItemCompraMapper itemCompraMapper;
 
     @Transactional
-    public CompraDTO salvar(CompraDTO dto) {
+    public CompraResponseDTO salvar(CompraResponseDTO dto) {
 
         validarCompra(dto);
 
@@ -51,18 +50,18 @@ public class CompraService {
     }
 
     @Transactional(readOnly = true)
-    public List<CompraDTO> listar() {
+    public List<CompraResponseDTO> listar() {
         return mapper.toDTOList(repository.findAll());
     }
 
     @Transactional(readOnly = true)
-    public CompraDTO buscarPorId(Long id) {
+    public CompraResponseDTO buscarPorId(Long id) {
         Compra compra = repository.findById(id).orElseThrow(() -> new RuntimeException("Compra não encontrada."));
         return mapper.toDTO(compra);
     }
 
     @Transactional(readOnly = true)
-    public List<ItemCompraDTO> listarItensDaCompra(Long compraId) {
+    public List<ItemCompraResponseDTO> listarItensDaCompra(Long compraId) {
         Compra compra = repository.findByIdWithItens(compraId).orElseThrow(() -> new RuntimeException("Compra não encontrada."));
         return compra.getItensCompra().stream()
                 .map(itemCompraMapper::toDTO)
@@ -70,7 +69,7 @@ public class CompraService {
     }
 
     @Transactional
-    public CompraDTO atualizar(Long id, CompraDTO dto) {
+    public CompraResponseDTO atualizar(Long id, CompraResponseDTO dto) {
         Compra entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Compra não encontrada."));
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(entity);
@@ -85,18 +84,18 @@ public class CompraService {
         repository.delete(entity);
     }
 
-    private void processarECalcular(Compra compra, List<ItemCompraDTO> itensDTO) {
+    private void processarECalcular(Compra compra, List<ItemCompraResponseDTO> itensDTO) {
 
         BigDecimal valorTotal = BigDecimal.ZERO;
         List<ItemCompra> itensProcessados = new ArrayList<>();
 
-        for (ItemCompraDTO itemCompraDTO : itensDTO) {
-            Long variacaoId = itemCompraDTO.getVariacaoProdutoId();
+        for (ItemCompraResponseDTO itemCompraResponseDTO : itensDTO) {
+            Long variacaoId = itemCompraResponseDTO.getVariacaoProdutoId();
 
-            ItemCompra item = itemCompraService.criarItemEntidade(itemCompraDTO);
+            ItemCompra item = itemCompraService.criarItemEntidade(itemCompraResponseDTO);
             item.setCompra(compra);
 
-            variacaoProdutoService.incrementarEstoque(variacaoId, itemCompraDTO.getQuantidade());
+            variacaoProdutoService.incrementarEstoque(variacaoId, itemCompraResponseDTO.getQuantidade());
 
             itensProcessados.add(item);
             valorTotal = valorTotal.add(item.getSubTotal());
@@ -106,7 +105,7 @@ public class CompraService {
         compra.setValorTotal(valorTotal);
     }
 
-    private void validarCompra(CompraDTO dto) {
+    private void validarCompra(CompraResponseDTO dto) {
         if (dto.getFornecedorId() == null) {
             throw new RuntimeException("Fornecedor é obrigatório");
         }

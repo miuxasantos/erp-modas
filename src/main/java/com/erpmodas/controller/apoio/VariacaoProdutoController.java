@@ -1,6 +1,6 @@
 package com.erpmodas.controller.apoio;
 
-import com.erpmodas.dto.apoio.VariacaoProdutoDTO;
+import com.erpmodas.dto.apoio.variacaoProdutoDto.VariacaoProdutoResponseDTO;
 import com.erpmodas.service.apoio.VariacaoProdutoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,27 +16,27 @@ public class VariacaoProdutoController {
     private final VariacaoProdutoService variacaoProdutoService;
 
     @GetMapping
-    public ResponseEntity<List<VariacaoProdutoDTO>> listar(@PathVariable Long produtoId) {
-        List<VariacaoProdutoDTO> lista = variacaoProdutoService.listarPorProduto(produtoId);
+    public ResponseEntity<List<VariacaoProdutoResponseDTO>> listar(@PathVariable Long produtoId) {
+        List<VariacaoProdutoResponseDTO> lista = variacaoProdutoService.listarPorProduto(produtoId);
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VariacaoProdutoDTO> buscarPorId(@PathVariable Long produtoId, @PathVariable Long id) {
-        VariacaoProdutoDTO variacaoProduto = variacaoProdutoService.buscarPorId(id);
+    public ResponseEntity<VariacaoProdutoResponseDTO> buscarPorId(@PathVariable Long produtoId, @PathVariable Long id) {
+        VariacaoProdutoResponseDTO variacaoProduto = variacaoProdutoService.buscarPorId(id);
         return ResponseEntity.ok(variacaoProduto);
     }
 
     @PostMapping
-    public ResponseEntity<VariacaoProdutoDTO> salvar(@PathVariable Long produtoId, @RequestBody VariacaoProdutoDTO dto) {
+    public ResponseEntity<VariacaoProdutoResponseDTO> salvar(@PathVariable Long produtoId, @RequestBody VariacaoProdutoResponseDTO dto) {
         dto.setProdutoId(produtoId);
-        VariacaoProdutoDTO salvo = variacaoProdutoService.salvar(dto);
+        VariacaoProdutoResponseDTO salvo = variacaoProdutoService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VariacaoProdutoDTO> atualizar(@PathVariable Long produtoId, @PathVariable Long id, @RequestBody VariacaoProdutoDTO dto) {
-        VariacaoProdutoDTO atualizado = variacaoProdutoService.atualizar(id, dto);
+    public ResponseEntity<VariacaoProdutoResponseDTO> atualizar(@PathVariable Long produtoId, @PathVariable Long id, @RequestBody VariacaoProdutoResponseDTO dto) {
+        VariacaoProdutoResponseDTO atualizado = variacaoProdutoService.atualizar(id, dto);
         return ResponseEntity.ok(atualizado);
     }
 

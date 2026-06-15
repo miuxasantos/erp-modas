@@ -1,12 +1,11 @@
 package com.erpmodas.service;
 
-import com.erpmodas.dto.dependentes.itemVenda.ItemVendaDTO;
-import com.erpmodas.dto.venda.VendaDTO;
+import com.erpmodas.dto.dependentes.itemVenda.ItemVendaResponseDTO;
+import com.erpmodas.dto.venda.VendaResponseDTO;
 import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.mapper.VendaMapper;
 import com.erpmodas.mapper.dependentes.ItemVendaMapper;
 import com.erpmodas.model.entidades.Venda;
-import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import com.erpmodas.model.entidades.dependentes.ItemVenda;
 import com.erpmodas.repository.VendaRepository;
 import com.erpmodas.service.apoio.VariacaoProdutoService;
@@ -34,7 +33,7 @@ public class VendaService {
     private final ItemVendaMapper itemVendaMapper;
 
     @Transactional
-    public VendaDTO salvar(VendaDTO dto) {
+    public VendaResponseDTO salvar(VendaResponseDTO dto) {
 
         validarVenda(dto);
 
@@ -49,18 +48,18 @@ public class VendaService {
     }
 
     @Transactional(readOnly = true)
-    public List<VendaDTO> listar() {
+    public List<VendaResponseDTO> listar() {
         return mapper.toDTOList(repository.findAll());
     }
 
     @Transactional(readOnly = true)
-    public VendaDTO buscarPorId(Long id) {
+    public VendaResponseDTO buscarPorId(Long id) {
         Venda venda = repository.findById(id).orElseThrow(() -> new RuntimeException("Venda não encontrada."));
         return mapper.toDTO(venda);
     }
 
     @Transactional(readOnly = true)
-    public List<ItemVendaDTO> listarItensDaVenda(Long vendaId) {
+    public List<ItemVendaResponseDTO> listarItensDaVenda(Long vendaId) {
         Venda venda = repository.findByIdWithItens(vendaId).orElseThrow(() -> new RuntimeException("Venda não encontrada."));
         return venda.getItensVenda().stream()
                 .map(itemVendaMapper::toDTO)
@@ -68,7 +67,7 @@ public class VendaService {
     }
 
     @Transactional
-    public VendaDTO atualizar(Long id, VendaDTO dto) {
+    public VendaResponseDTO atualizar(Long id, VendaResponseDTO dto) {
         Venda entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Venda não encontrada."));
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(entity);
@@ -83,18 +82,18 @@ public class VendaService {
         repository.delete(entity);
     }
 
-    private void processarECalcular(Venda venda, List<ItemVendaDTO> itensDTO) {
+    private void processarECalcular(Venda venda, List<ItemVendaResponseDTO> itensDTO) {
 
         BigDecimal valorTotal = BigDecimal.ZERO;
         List<ItemVenda> itensProcessados = new ArrayList<>();
 
-        for (ItemVendaDTO itemVendaDTO : itensDTO) {
-            Long variacaoId = itemVendaDTO.getVariacaoProdutoId();
+        for (ItemVendaResponseDTO itemVendaResponseDTO : itensDTO) {
+            Long variacaoId = itemVendaResponseDTO.getVariacaoProdutoId();
 
-            ItemVenda item = itemVendaService.criarItemEntidade(itemVendaDTO);
+            ItemVenda item = itemVendaService.criarItemEntidade(itemVendaResponseDTO);
             item.setVenda(venda);
 
-            variacaoProdutoService.decrementarEstoque(variacaoId, itemVendaDTO.getQuantidade());
+            variacaoProdutoService.decrementarEstoque(variacaoId, itemVendaResponseDTO.getQuantidade());
 
             itensProcessados.add(item);
             valorTotal = valorTotal.add(item.getSubTotal());
@@ -104,7 +103,7 @@ public class VendaService {
         venda.setValorTotal(valorTotal);
     }
 
-    private void validarVenda(VendaDTO dto) {
+    private void validarVenda(VendaResponseDTO dto) {
         if (dto.getClienteId() == null) {
             throw new RuntimeException("Cliente é obrigatório");
         }

@@ -1,6 +1,6 @@
 package com.erpmodas.service.dependentes;
 
-import com.erpmodas.dto.dependentes.itemCompra.ItemCompraDTO;
+import com.erpmodas.dto.dependentes.itemCompra.ItemCompraResponseDTO;
 import com.erpmodas.mapper.dependentes.ItemCompraMapper;
 import com.erpmodas.model.entidades.Compra;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
@@ -22,7 +22,7 @@ public class ItemCompraService {
     private final VariacaoProdutoService variacaoProdutoService;
 
     @Transactional
-    public ItemCompraDTO criar(ItemCompraDTO dto) {
+    public ItemCompraResponseDTO criar(ItemCompraResponseDTO dto) {
         VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemCompra item = mapper.toEntity(dto);
@@ -36,7 +36,7 @@ public class ItemCompraService {
     }
 
     @Transactional
-    public ItemCompra criarItemEntidade(ItemCompraDTO dto) {
+    public ItemCompra criarItemEntidade(ItemCompraResponseDTO dto) {
         VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemCompra itemCompra = mapper.toEntity(dto);
@@ -45,13 +45,13 @@ public class ItemCompraService {
         return itemCompra;
     }
 
-    public ItemCompraDTO buscarPorId(Long id) {
+    public ItemCompraResponseDTO buscarPorId(Long id) {
         ItemCompra item = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item da compra não encontrado."));
         return mapper.toDTO(item);
     }
 
-    public ItemCompraDTO atualizar(Long id, ItemCompraDTO dto) {
+    public ItemCompraResponseDTO atualizar(Long id, ItemCompraResponseDTO dto) {
         ItemCompra entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item da compra não encontrado."));
         mapper.updateEntityFromDTO(dto, entity);

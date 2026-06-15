@@ -1,6 +1,6 @@
 package com.erpmodas.service.dependentes;
 
-import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalDTO;
+import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalResponseDTO;
 import com.erpmodas.mapper.dependentes.ItemCondicionalMapper;
 import com.erpmodas.model.entidades.Condicional;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
@@ -21,7 +21,7 @@ public class ItemCondicionalService {
     private final VariacaoProdutoService variacaoProdutoService;
 
     @Transactional
-    public ItemCondicionalDTO criar(ItemCondicionalDTO dto) {
+    public ItemCondicionalResponseDTO criar(ItemCondicionalResponseDTO dto) {
         VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemCondicional item = mapper.toEntity(dto);
@@ -33,7 +33,7 @@ public class ItemCondicionalService {
     }
 
     @Transactional
-    public ItemCondicional criarItemEntidade(ItemCondicionalDTO dto) {
+    public ItemCondicional criarItemEntidade(ItemCondicionalResponseDTO dto) {
         VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemCondicional itemCondicional = mapper.toEntity(dto);
@@ -41,13 +41,13 @@ public class ItemCondicionalService {
         return itemCondicional;
     }
 
-    public ItemCondicionalDTO buscarPorId(Long id) {
+    public ItemCondicionalResponseDTO buscarPorId(Long id) {
         ItemCondicional item = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item da condicional não encontrado."));
         return mapper.toDTO(item);
     }
 
-    public ItemCondicionalDTO atualizar(Long id, ItemCondicionalDTO dto) {
+    public ItemCondicionalResponseDTO atualizar(Long id, ItemCondicionalResponseDTO dto) {
         ItemCondicional entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item da condicional não encontrado."));
         mapper.updateEntityFromDTO(dto, entity);

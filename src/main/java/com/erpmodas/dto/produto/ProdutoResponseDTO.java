@@ -1,9 +1,6 @@
 package com.erpmodas.dto.produto;
 
 import com.erpmodas.dto.categoria.CategoriaDTO;
-import com.erpmodas.dto.compra.CompraDTO;
-import com.erpmodas.model.entidades.Categoria;
-import com.erpmodas.model.entidades.Compra;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +11,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProdutoDTO {
+public class ProdutoResponseDTO {
     private Long id;
     private String nome;
     private Integer codigo;
@@ -26,6 +23,6 @@ public class ProdutoDTO {
     private LocalDate dataDesativacao;
     private String tecido;
     private String marca;
-    private Long categoriaId;
+    private CategoriaDTO categoria;
     private String imagem;
 }

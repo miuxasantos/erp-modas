@@ -41,7 +41,6 @@ public class MovimentacoesCaixa {
     private Long origemId;
     @ManyToOne
     @JoinColumn(name = "caixa_id")
-    @JsonIgnore
     private Caixa caixa;
 
 }

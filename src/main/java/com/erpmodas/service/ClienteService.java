@@ -1,6 +1,6 @@
 package com.erpmodas.service;
 
-import com.erpmodas.dto.cliente.ClienteDTO;
+import com.erpmodas.dto.cliente.ClienteResponseDTO;
 import com.erpmodas.mapper.ClienteMapper;
 import com.erpmodas.model.entidades.Cliente;
 import com.erpmodas.repository.ClienteRepository;
@@ -18,7 +18,7 @@ public class ClienteService {
     private final ClienteMapper mapper;
 
     @Transactional
-    public ClienteDTO salvar(ClienteDTO dto) {
+    public ClienteResponseDTO salvar(ClienteResponseDTO dto) {
         validarNomeDuplicado(dto.getNome(), null);
 
         Cliente entity =  mapper.toEntity(dto);
@@ -27,12 +27,12 @@ public class ClienteService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClienteDTO> listar() {
+    public List<ClienteResponseDTO> listar() {
         return mapper.toDTOList(repository.findAll());
     }
 
     @Transactional(readOnly = true)
-    public ClienteDTO buscarPorId(Long id) {
+    public ClienteResponseDTO buscarPorId(Long id) {
         Cliente cliente = repository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
         return mapper.toDTO(cliente);
     }
@@ -43,7 +43,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteDTO atualizar(Long id, ClienteDTO dto) {
+    public ClienteResponseDTO atualizar(Long id, ClienteResponseDTO dto) {
         Cliente entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
         validarNomeDuplicado(dto.getNome(), id);
 

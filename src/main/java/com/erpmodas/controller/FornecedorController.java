@@ -1,6 +1,6 @@
 package com.erpmodas.controller;
 
-import com.erpmodas.dto.fornecedor.FornecedorDTO;
+import com.erpmodas.dto.fornecedor.FornecedorResponseDTO;
 import com.erpmodas.service.FornecedorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,26 +16,26 @@ public class FornecedorController {
     private final FornecedorService fornecedorService;
 
     @GetMapping
-    public ResponseEntity<List<FornecedorDTO>> listar() {
-        List<FornecedorDTO> lista = fornecedorService.listar();
+    public ResponseEntity<List<FornecedorResponseDTO>> listar() {
+        List<FornecedorResponseDTO> lista = fornecedorService.listar();
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FornecedorDTO> buscarPorId(@PathVariable Long id) {
-        FornecedorDTO fornecedor = fornecedorService.buscarPorId(id);
+    public ResponseEntity<FornecedorResponseDTO> buscarPorId(@PathVariable Long id) {
+        FornecedorResponseDTO fornecedor = fornecedorService.buscarPorId(id);
         return ResponseEntity.ok(fornecedor);
     }
 
     @PostMapping
-    public ResponseEntity<FornecedorDTO> salvar(@RequestBody FornecedorDTO dto) {
-        FornecedorDTO salvo = fornecedorService.salvar(dto);
+    public ResponseEntity<FornecedorResponseDTO> salvar(@RequestBody FornecedorResponseDTO dto) {
+        FornecedorResponseDTO salvo = fornecedorService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FornecedorDTO> atualizar(@PathVariable Long id, @RequestBody FornecedorDTO dto) {
-        FornecedorDTO atualizado = fornecedorService.atualizar(id, dto);
+    public ResponseEntity<FornecedorResponseDTO> atualizar(@PathVariable Long id, @RequestBody FornecedorResponseDTO dto) {
+        FornecedorResponseDTO atualizado = fornecedorService.atualizar(id, dto);
         return ResponseEntity.ok(atualizado);
     }
 

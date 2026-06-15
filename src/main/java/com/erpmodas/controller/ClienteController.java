@@ -1,6 +1,6 @@
 package com.erpmodas.controller;
 
-import com.erpmodas.dto.cliente.ClienteDTO;
+import com.erpmodas.dto.cliente.ClienteResponseDTO;
 import com.erpmodas.service.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,26 +16,26 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     @GetMapping
-    public ResponseEntity<List<ClienteDTO>> listar() {
-        List<ClienteDTO> lista = clienteService.listar();
+    public ResponseEntity<List<ClienteResponseDTO>> listar() {
+        List<ClienteResponseDTO> lista = clienteService.listar();
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
-        ClienteDTO cliente = clienteService.buscarPorId(id);
+    public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long id) {
+        ClienteResponseDTO cliente = clienteService.buscarPorId(id);
         return ResponseEntity.ok(cliente);
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> salvar(@RequestBody ClienteDTO dto) {
-        ClienteDTO salvo = clienteService.salvar(dto);
+    public ResponseEntity<ClienteResponseDTO> salvar(@RequestBody ClienteResponseDTO dto) {
+        ClienteResponseDTO salvo = clienteService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> atualizar(@PathVariable Long id, @RequestBody ClienteDTO dto) {
-        ClienteDTO atualizado = clienteService.atualizar(id, dto);
+    public ResponseEntity<ClienteResponseDTO> atualizar(@PathVariable Long id, @RequestBody ClienteResponseDTO dto) {
+        ClienteResponseDTO atualizado = clienteService.atualizar(id, dto);
         return ResponseEntity.ok(atualizado);
     }
 

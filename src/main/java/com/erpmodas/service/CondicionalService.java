@@ -1,22 +1,18 @@
 package com.erpmodas.service;
 
-import com.erpmodas.dto.condicional.CondicionalDTO;
-import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalDTO;
-import com.erpmodas.enums.FormaPagamento;
+import com.erpmodas.dto.condicional.CondicionalResponseDTO;
+import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalResponseDTO;
 import com.erpmodas.mapper.CondicionalMapper;
 import com.erpmodas.mapper.dependentes.ItemCondicionalMapper;
 import com.erpmodas.model.entidades.Condicional;
-import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import com.erpmodas.model.entidades.dependentes.ItemCondicional;
 import com.erpmodas.repository.CondicionalRepository;
 import com.erpmodas.service.apoio.VariacaoProdutoService;
-import com.erpmodas.service.dependentes.ContasReceberService;
 import com.erpmodas.service.dependentes.ItemCondicionalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +29,7 @@ public class CondicionalService {
     private final ItemCondicionalMapper itemCondicionalMapper;
 
     @Transactional
-    public CondicionalDTO salvar(CondicionalDTO dto) {
+    public CondicionalResponseDTO salvar(CondicionalResponseDTO dto) {
 
         validarCondicional(dto);
 
@@ -47,18 +43,18 @@ public class CondicionalService {
     }
 
     @Transactional(readOnly = true)
-    public List<CondicionalDTO> listar() {
+    public List<CondicionalResponseDTO> listar() {
         return mapper.toDTOList(repository.findAll());
     }
 
     @Transactional(readOnly = true)
-    public CondicionalDTO buscarPorId(Long id) {
+    public CondicionalResponseDTO buscarPorId(Long id) {
         Condicional condicional = repository.findById(id).orElseThrow(() -> new RuntimeException("Condicional não encontrada."));
         return mapper.toDTO(condicional);
     }
 
     @Transactional(readOnly = true)
-    public List<ItemCondicionalDTO> listarItensDaCondicional(Long condicionalId) {
+    public List<ItemCondicionalResponseDTO> listarItensDaCondicional(Long condicionalId) {
         Condicional condicional = repository.findByIdWithItens(condicionalId).orElseThrow(() -> new RuntimeException("Condicional não encontrada."));
         return condicional.getItensCondicional().stream()
                 .map(itemCondicionalMapper::toDTO)
@@ -66,7 +62,7 @@ public class CondicionalService {
     }
 
     @Transactional
-    public CondicionalDTO atualizar(Long id, CondicionalDTO dto) {
+    public CondicionalResponseDTO atualizar(Long id, CondicionalResponseDTO dto) {
         Condicional entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Condicional não encontrada."));
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(entity);
@@ -80,23 +76,23 @@ public class CondicionalService {
         repository.delete(entity);
     }
 
-    private void processar(Condicional condicional, List<ItemCondicionalDTO> itensDTO) {
+    private void processar(Condicional condicional, List<ItemCondicionalResponseDTO> itensDTO) {
         List<ItemCondicional> itensProcessados = new ArrayList<>();
 
-        for (ItemCondicionalDTO itemCondicionalDTO : itensDTO) {
-            Long variacaoId = itemCondicionalDTO.getVariacaoProdutoId();
+        for (ItemCondicionalResponseDTO itemCondicionalResponseDTO : itensDTO) {
+            Long variacaoId = itemCondicionalResponseDTO.getVariacaoProdutoId();
 
-            ItemCondicional item = itemCondicionalService.criarItemEntidade(itemCondicionalDTO);
+            ItemCondicional item = itemCondicionalService.criarItemEntidade(itemCondicionalResponseDTO);
             item.setCondicional(condicional);
 
-            variacaoProdutoService.decrementarEstoque(variacaoId, itemCondicionalDTO.getQuantidade());
+            variacaoProdutoService.decrementarEstoque(variacaoId, itemCondicionalResponseDTO.getQuantidade());
 
             itensProcessados.add(item);
         }
         condicional.setItensCondicional(itensProcessados);
     }
 
-    private void validarCondicional(CondicionalDTO dto) {
+    private void validarCondicional(CondicionalResponseDTO dto) {
         if (dto.getClienteId() == null) {
             throw new RuntimeException("Cliente é obrigatório");
         }

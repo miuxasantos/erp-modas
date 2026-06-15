@@ -1,6 +1,5 @@
-package com.erpmodas.dto.apoio;
+package com.erpmodas.dto.apoio.variacaoProdutoDto;
 
-import com.erpmodas.dto.produto.ProdutoDTO;
 import com.erpmodas.model.entidades.Produto;
 import com.erpmodas.model.entidades.apoio.Cor;
 import com.erpmodas.model.entidades.apoio.Tamanho;
@@ -11,10 +10,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class VariacaoProdutoDTO {
-    private Long id;
+@NoArgsConstructor
+public class VariacaoProdutoReqDTO {
     private String sku;
     private Integer estoque;
     private Long produtoId;

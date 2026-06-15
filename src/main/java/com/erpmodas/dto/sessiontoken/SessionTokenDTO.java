@@ -1,6 +1,6 @@
 package com.erpmodas.dto.sessiontoken;
 
-import com.erpmodas.dto.usuario.UsuarioDTO;
+import com.erpmodas.dto.usuario.UsuarioResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class SessionTokenDTO {
     private Long id;
     private String token;
-    private UsuarioDTO usuario;
+    private UsuarioResponseDTO usuario;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataExp;
     private Boolean ativo;

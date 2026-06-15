@@ -1,7 +1,7 @@
 package com.erpmodas.controller;
 
-import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalDTO;
-import com.erpmodas.dto.condicional.CondicionalDTO;
+import com.erpmodas.dto.condicional.CondicionalResponseDTO;
+import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalResponseDTO;
 import com.erpmodas.service.CondicionalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ public class CondicionalController {
     private final CondicionalService condicionalService;
 
     @PostMapping
-    public ResponseEntity<CondicionalDTO> criar(@Valid @RequestBody CondicionalDTO dto) {
-        CondicionalDTO criacao = condicionalService.salvar(dto);
+    public ResponseEntity<CondicionalResponseDTO> criar(@Valid @RequestBody CondicionalResponseDTO dto) {
+        CondicionalResponseDTO criacao = condicionalService.salvar(dto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -33,24 +33,24 @@ public class CondicionalController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CondicionalDTO>> listar() {
+    public ResponseEntity<List<CondicionalResponseDTO>> listar() {
         return ResponseEntity.ok(condicionalService.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CondicionalDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<CondicionalResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(condicionalService.buscarPorId(id));
     }
 
     @GetMapping("/{id}/itens")
-    public ResponseEntity<List<ItemCondicionalDTO>> listarItens(@PathVariable Long id) {
+    public ResponseEntity<List<ItemCondicionalResponseDTO>> listarItens(@PathVariable Long id) {
         return ResponseEntity.ok(condicionalService.listarItensDaCondicional(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CondicionalDTO> atualizar(
+    public ResponseEntity<CondicionalResponseDTO> atualizar(
             @PathVariable Long id,
-            @Valid @RequestBody CondicionalDTO dto) {
+            @Valid @RequestBody CondicionalResponseDTO dto) {
         return ResponseEntity.ok(condicionalService.atualizar(id, dto));
     }
 

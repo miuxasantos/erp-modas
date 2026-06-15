@@ -39,7 +39,6 @@ public class ItemCompra {
     private BigDecimal subTotal;
     @ManyToOne
     @JoinColumn(name = "compra_id")
-    @JsonIgnore
     private Compra compra;
 
     @PrePersist

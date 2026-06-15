@@ -1,20 +1,25 @@
 package com.erpmodas.mapper;
 
-import com.erpmodas.dto.compra.CompraDTO;
-import com.erpmodas.dto.condicional.CondicionalDTO;
-import com.erpmodas.model.entidades.Compra;
+import com.erpmodas.dto.condicional.CondicionalResponseDTO;
+import com.erpmodas.mapper.dependentes.ItemCondicionalMapper;
 import com.erpmodas.model.entidades.Condicional;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ClienteMapper.class, ItemCondicionalMapper.class})
 public interface CondicionalMapper {
 
-    CondicionalDTO toDTO(Condicional entity);
+    CondicionalResponseDTO toDTO(Condicional entity);
 
-    Condicional toEntity(CondicionalDTO dto);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "cliente", ignore = true)
+    @Mapping(target = "itensCondicional", ignore = true)
+    Condicional toEntity(CondicionalResponseDTO dto);
 
-    java.util.List<CondicionalDTO> toDTOList(java.util.List<Condicional> lista);
+    java.util.List<CondicionalResponseDTO> toDTOList(java.util.List<Condicional> lista);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDTO(CondicionalDTO dto, @MappingTarget Condicional entity);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "cliente", ignore = true)
+    @Mapping(target = "itensCondicional", ignore = true)
+    void updateEntityFromDTO(CondicionalResponseDTO dto, @MappingTarget Condicional entity);
 }

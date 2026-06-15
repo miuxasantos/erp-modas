@@ -33,7 +33,6 @@ public class ItemCondicional {
     private Integer quantidade;
     @ManyToOne
     @JoinColumn(name = "condicional_id")
-    @JsonIgnore
     private Condicional condicional;
     @Transient
     public BigDecimal getValorUnitario(){

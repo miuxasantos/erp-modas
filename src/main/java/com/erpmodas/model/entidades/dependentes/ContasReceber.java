@@ -44,7 +44,6 @@ public class ContasReceber {
     private StatusConta statusConta;
     @ManyToOne
     @JoinColumn(name = "venda_id")
-    @JsonIgnore
     private Venda venda;
 
     @Transient

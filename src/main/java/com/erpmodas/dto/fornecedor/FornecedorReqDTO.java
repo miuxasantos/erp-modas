@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FornecedorDTO {
-    private Long id;
+public class FornecedorReqDTO {
     private String nome;
     private String contato;
     private String assessoria;

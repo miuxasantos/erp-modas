@@ -1,7 +1,7 @@
 package com.erpmodas.controller;
 
-import com.erpmodas.dto.compra.CompraDTO;
-import com.erpmodas.dto.dependentes.itemCompra.ItemCompraDTO;
+import com.erpmodas.dto.compra.CompraResponseDTO;
+import com.erpmodas.dto.dependentes.itemCompra.ItemCompraResponseDTO;
 import com.erpmodas.service.CompraService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ public class CompraController {
     private final CompraService compraService;
 
     @PostMapping
-    public ResponseEntity<CompraDTO> criar(@Valid @RequestBody CompraDTO dto) {
-        CompraDTO criacao = compraService.salvar(dto);
+    public ResponseEntity<CompraResponseDTO> criar(@Valid @RequestBody CompraResponseDTO dto) {
+        CompraResponseDTO criacao = compraService.salvar(dto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -33,24 +33,24 @@ public class CompraController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CompraDTO>> listar() {
+    public ResponseEntity<List<CompraResponseDTO>> listar() {
         return ResponseEntity.ok(compraService.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CompraDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<CompraResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(compraService.buscarPorId(id));
     }
 
     @GetMapping("/{id}/itens")
-    public ResponseEntity<List<ItemCompraDTO>> listarItens(@PathVariable Long id) {
+    public ResponseEntity<List<ItemCompraResponseDTO>> listarItens(@PathVariable Long id) {
         return ResponseEntity.ok(compraService.listarItensDaCompra(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CompraDTO> atualizar(
+    public ResponseEntity<CompraResponseDTO> atualizar(
             @PathVariable Long id,
-            @Valid @RequestBody CompraDTO dto) {
+            @Valid @RequestBody CompraResponseDTO dto) {
         return ResponseEntity.ok(compraService.atualizar(id, dto));
     }
 

@@ -1,6 +1,6 @@
 package com.erpmodas.controller;
 
-import com.erpmodas.dto.produto.ProdutoDTO;
+import com.erpmodas.dto.produto.ProdutoResponseDTO;
 import com.erpmodas.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,26 +16,26 @@ public class ProdutoController {
     private final ProdutoService produtoService;
 
     @GetMapping
-    public ResponseEntity<List<ProdutoDTO>> listar() {
-        List<ProdutoDTO> lista = produtoService.listar();
+    public ResponseEntity<List<ProdutoResponseDTO>> listar() {
+        List<ProdutoResponseDTO> lista = produtoService.listar();
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> buscarPorId(@PathVariable Long id) {
-        ProdutoDTO produto = produtoService.buscarPorId(id);
+    public ResponseEntity<ProdutoResponseDTO> buscarPorId(@PathVariable Long id) {
+        ProdutoResponseDTO produto = produtoService.buscarPorId(id);
         return ResponseEntity.ok(produto);
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoDTO> salvar(@RequestBody ProdutoDTO dto) {
-        ProdutoDTO salvo = produtoService.salvar(dto);
+    public ResponseEntity<ProdutoResponseDTO> salvar(@RequestBody ProdutoResponseDTO dto) {
+        ProdutoResponseDTO salvo = produtoService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoDTO dto) {
-        ProdutoDTO atualizado = produtoService.atualizar(id, dto);
+    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoResponseDTO dto) {
+        ProdutoResponseDTO atualizado = produtoService.atualizar(id, dto);
         return ResponseEntity.ok(atualizado);
     }
 

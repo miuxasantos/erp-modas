@@ -1,7 +1,7 @@
 package com.erpmodas.service.apoio;
 
+import com.erpmodas.dto.apoio.variacaoProdutoDto.VariacaoProdutoResponseDTO;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
-import com.erpmodas.dto.apoio.VariacaoProdutoDTO;
 import com.erpmodas.mapper.apoio.VariacaoProdutoMapper;
 import com.erpmodas.repository.apoio.VariacaoProdutoRepository;
 import com.erpmodas.service.ProdutoService;
@@ -22,7 +22,7 @@ public class VariacaoProdutoService {
     private final TamanhoService tamanhoService;
 
     @Transactional
-    public VariacaoProdutoDTO salvar(VariacaoProdutoDTO dto) {
+    public VariacaoProdutoResponseDTO salvar(VariacaoProdutoResponseDTO dto) {
         validarNomeDuplicado(dto.getSku(), null);
 
         VariacaoProduto entity =  mapper.toEntity(dto);
@@ -34,17 +34,17 @@ public class VariacaoProdutoService {
     }
 
     @Transactional(readOnly = true)
-    public List<VariacaoProdutoDTO> listar() {
+    public List<VariacaoProdutoResponseDTO> listar() {
         return mapper.toDTOList(repository.findAll());
     }
 
     @Transactional(readOnly = true)
-    public List<VariacaoProdutoDTO> listarPorProduto(Long produtoId) {
+    public List<VariacaoProdutoResponseDTO> listarPorProduto(Long produtoId) {
         return mapper.toDTOList(repository.findByProdutoId(produtoId));
     }
 
     @Transactional(readOnly = true)
-    public VariacaoProdutoDTO buscarPorId(Long id) {
+    public VariacaoProdutoResponseDTO buscarPorId(Long id) {
         VariacaoProduto variacaoProduto = repository.findById(id).orElseThrow(() -> new RuntimeException("Variação do produto não encontrado."));
         return mapper.toDTO(variacaoProduto);
     }
@@ -55,7 +55,7 @@ public class VariacaoProdutoService {
     }
 
     @Transactional
-    public VariacaoProdutoDTO atualizar(Long id, VariacaoProdutoDTO dto) {
+    public VariacaoProdutoResponseDTO atualizar(Long id, VariacaoProdutoResponseDTO dto) {
         VariacaoProduto entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Variação do produto não encontrado."));
         validarNomeDuplicado(dto.getSku(), id);
 

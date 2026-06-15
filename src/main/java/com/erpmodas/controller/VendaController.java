@@ -1,7 +1,7 @@
 package com.erpmodas.controller;
 
-import com.erpmodas.dto.venda.VendaDTO;
-import com.erpmodas.dto.dependentes.itemVenda.ItemVendaDTO;
+import com.erpmodas.dto.dependentes.itemVenda.ItemVendaResponseDTO;
+import com.erpmodas.dto.venda.VendaResponseDTO;
 import com.erpmodas.service.VendaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ public class VendaController {
     private final VendaService vendaService;
 
     @PostMapping
-    public ResponseEntity<VendaDTO> criar(@Valid @RequestBody VendaDTO dto) {
-        VendaDTO criacao = vendaService.salvar(dto);
+    public ResponseEntity<VendaResponseDTO> criar(@Valid @RequestBody VendaResponseDTO dto) {
+        VendaResponseDTO criacao = vendaService.salvar(dto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -33,24 +33,24 @@ public class VendaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VendaDTO>> listar() {
+    public ResponseEntity<List<VendaResponseDTO>> listar() {
         return ResponseEntity.ok(vendaService.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VendaDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<VendaResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(vendaService.buscarPorId(id));
     }
 
     @GetMapping("/{id}/itens")
-    public ResponseEntity<List<ItemVendaDTO>> listarItens(@PathVariable Long id) {
+    public ResponseEntity<List<ItemVendaResponseDTO>> listarItens(@PathVariable Long id) {
         return ResponseEntity.ok(vendaService.listarItensDaVenda(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VendaDTO> atualizar(
+    public ResponseEntity<VendaResponseDTO> atualizar(
             @PathVariable Long id,
-            @Valid @RequestBody VendaDTO dto) {
+            @Valid @RequestBody VendaResponseDTO dto) {
         return ResponseEntity.ok(vendaService.atualizar(id, dto));
     }
 

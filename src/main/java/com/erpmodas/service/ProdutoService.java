@@ -1,9 +1,8 @@
 package com.erpmodas.service;
 
-import com.erpmodas.dto.produto.ProdutoDTO;
+import com.erpmodas.dto.produto.ProdutoResponseDTO;
 import com.erpmodas.mapper.ProdutoMapper;
 import com.erpmodas.model.entidades.Produto;
-import com.erpmodas.model.entidades.apoio.Cor;
 import com.erpmodas.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class ProdutoService {
     private final CategoriaService categoriaService;
 
     @Transactional
-    public ProdutoDTO salvar(ProdutoDTO dto) {
+    public ProdutoResponseDTO salvar(ProdutoResponseDTO dto) {
         validarNomeDuplicado(dto.getNome(), null);
 
         Produto entity =  mapper.toEntity(dto);
@@ -32,12 +31,12 @@ public class ProdutoService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProdutoDTO> listar() {
+    public List<ProdutoResponseDTO> listar() {
         return mapper.toDTOList(repository.findAll());
     }
 
     @Transactional(readOnly = true)
-    public ProdutoDTO buscarPorId(Long id) {
+    public ProdutoResponseDTO buscarPorId(Long id) {
         Produto produto = repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
         return mapper.toDTO(produto);
     }
@@ -48,7 +47,7 @@ public class ProdutoService {
     }
 
     @Transactional
-    public ProdutoDTO atualizar(Long id, ProdutoDTO dto) {
+    public ProdutoResponseDTO atualizar(Long id, ProdutoResponseDTO dto) {
         Produto entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
         validarNomeDuplicado(dto.getNome(), id);
 

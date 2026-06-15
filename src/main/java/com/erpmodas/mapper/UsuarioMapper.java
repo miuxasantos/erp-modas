@@ -1,20 +1,19 @@
 package com.erpmodas.mapper;
 
-import com.erpmodas.dto.usuario.UsuarioDTO;
+import com.erpmodas.dto.usuario.UsuarioResponseDTO;
 import com.erpmodas.model.entidades.Usuario;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
-    UsuarioDTO toDTO(Usuario usuario);
+    UsuarioResponseDTO toDTO(Usuario usuario);
 
-    Usuario toEntity(UsuarioDTO dto);
+    @Mapping(target = "id", ignore = true)
+    Usuario toEntity(UsuarioResponseDTO dto);
 
-    java.util.List<UsuarioDTO> toDTOList(java.util.List<Usuario> lista);
+    java.util.List<UsuarioResponseDTO> toDTOList(java.util.List<Usuario> lista);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDTO(UsuarioDTO dto, @MappingTarget Usuario entity);
+    @Mapping(target = "id", ignore = true)
+    void updateEntityFromDTO(UsuarioResponseDTO dto, @MappingTarget Usuario entity);
 }
