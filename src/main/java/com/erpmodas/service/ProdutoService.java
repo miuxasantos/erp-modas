@@ -1,6 +1,8 @@
 package com.erpmodas.service;
 
+import com.erpmodas.dto.produto.ProdutoReqDTO;
 import com.erpmodas.dto.produto.ProdutoResponseDTO;
+import com.erpmodas.dto.produto.ProdutoUpdateDTO;
 import com.erpmodas.mapper.ProdutoMapper;
 import com.erpmodas.model.entidades.Produto;
 import com.erpmodas.repository.ProdutoRepository;
@@ -20,7 +22,7 @@ public class ProdutoService {
     private final CategoriaService categoriaService;
 
     @Transactional
-    public ProdutoResponseDTO salvar(ProdutoResponseDTO dto) {
+    public ProdutoResponseDTO salvar(ProdutoReqDTO dto) {
         validarNomeDuplicado(dto.getNome(), null);
 
         Produto entity =  mapper.toEntity(dto);
@@ -47,7 +49,7 @@ public class ProdutoService {
     }
 
     @Transactional
-    public ProdutoResponseDTO atualizar(Long id, ProdutoResponseDTO dto) {
+    public ProdutoResponseDTO atualizar(Long id, ProdutoUpdateDTO dto) {
         Produto entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
         validarNomeDuplicado(dto.getNome(), id);
 

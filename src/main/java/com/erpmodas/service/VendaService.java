@@ -1,7 +1,10 @@
 package com.erpmodas.service;
 
+import com.erpmodas.dto.dependentes.itemVenda.ItemVendaReqDTO;
 import com.erpmodas.dto.dependentes.itemVenda.ItemVendaResponseDTO;
+import com.erpmodas.dto.venda.VendaReqDTO;
 import com.erpmodas.dto.venda.VendaResponseDTO;
+import com.erpmodas.dto.venda.VendaUpdateDTO;
 import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.mapper.VendaMapper;
 import com.erpmodas.mapper.dependentes.ItemVendaMapper;
@@ -33,7 +36,7 @@ public class VendaService {
     private final ItemVendaMapper itemVendaMapper;
 
     @Transactional
-    public VendaResponseDTO salvar(VendaResponseDTO dto) {
+    public VendaResponseDTO salvar(VendaReqDTO dto) {
 
         validarVenda(dto);
 
@@ -67,7 +70,7 @@ public class VendaService {
     }
 
     @Transactional
-    public VendaResponseDTO atualizar(Long id, VendaResponseDTO dto) {
+    public VendaResponseDTO atualizar(Long id, VendaUpdateDTO dto) {
         Venda entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Venda não encontrada."));
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(entity);
@@ -82,18 +85,18 @@ public class VendaService {
         repository.delete(entity);
     }
 
-    private void processarECalcular(Venda venda, List<ItemVendaResponseDTO> itensDTO) {
+    private void processarECalcular(Venda venda, List<ItemVendaReqDTO> itensDTO) {
 
         BigDecimal valorTotal = BigDecimal.ZERO;
         List<ItemVenda> itensProcessados = new ArrayList<>();
 
-        for (ItemVendaResponseDTO itemVendaResponseDTO : itensDTO) {
-            Long variacaoId = itemVendaResponseDTO.getVariacaoProdutoId();
+        for (ItemVendaReqDTO itemVendaReqDTO : itensDTO) {
+            Long variacaoId = itemVendaReqDTO.getVariacaoProdutoId();
 
-            ItemVenda item = itemVendaService.criarItemEntidade(itemVendaResponseDTO);
+            ItemVenda item = itemVendaService.criarItemEntidade(itemVendaReqDTO);
             item.setVenda(venda);
 
-            variacaoProdutoService.decrementarEstoque(variacaoId, itemVendaResponseDTO.getQuantidade());
+            variacaoProdutoService.decrementarEstoque(variacaoId, itemVendaReqDTO.getQuantidade());
 
             itensProcessados.add(item);
             valorTotal = valorTotal.add(item.getSubTotal());
@@ -103,23 +106,7 @@ public class VendaService {
         venda.setValorTotal(valorTotal);
     }
 
-    private void validarVenda(VendaResponseDTO dto) {
-        if (dto.getClienteId() == null) {
-            throw new RuntimeException("Cliente é obrigatório");
-        }
-
-        if (dto.getItensVenda() == null || dto.getItensVenda().isEmpty()) {
-            throw new RuntimeException("Deve haver ao menos um item na venda.");
-        }
-
-        if (dto.getFormaPagamento() == null) {
-            throw new RuntimeException("Forma de pagamento é obrigatória");
-        }
-
-        if (dto.getDataVenda() == null) {
-            throw new RuntimeException("A data da venda é obrigatória.");
-        }
-
+    private void validarVenda(VendaReqDTO dto) {
         if(dto.getFormaPagamento() == FormaPagamento.CARTAO_CREDITO) {
             if(dto.getNumeroParcelas() == null || dto.getNumeroParcelas() <= 1) {
                 throw new RuntimeException("Vendas parceladas devem ter mais de 1 parcela.");

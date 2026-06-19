@@ -1,6 +1,8 @@
 package com.erpmodas.controller;
 
+import com.erpmodas.dto.compra.CompraReqDTO;
 import com.erpmodas.dto.compra.CompraResponseDTO;
+import com.erpmodas.dto.compra.CompraUpdateDTO;
 import com.erpmodas.dto.dependentes.itemCompra.ItemCompraResponseDTO;
 import com.erpmodas.service.CompraService;
 import jakarta.validation.Valid;
@@ -20,7 +22,7 @@ public class CompraController {
     private final CompraService compraService;
 
     @PostMapping
-    public ResponseEntity<CompraResponseDTO> criar(@Valid @RequestBody CompraResponseDTO dto) {
+    public ResponseEntity<CompraResponseDTO> criar(@Valid @RequestBody CompraReqDTO dto) {
         CompraResponseDTO criacao = compraService.salvar(dto);
 
         URI location = ServletUriComponentsBuilder
@@ -50,7 +52,7 @@ public class CompraController {
     @PutMapping("/{id}")
     public ResponseEntity<CompraResponseDTO> atualizar(
             @PathVariable Long id,
-            @Valid @RequestBody CompraResponseDTO dto) {
+            @Valid @RequestBody CompraUpdateDTO dto) {
         return ResponseEntity.ok(compraService.atualizar(id, dto));
     }
 

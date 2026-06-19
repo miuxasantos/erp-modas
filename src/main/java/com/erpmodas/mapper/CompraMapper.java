@@ -1,6 +1,8 @@
 package com.erpmodas.mapper;
 
+import com.erpmodas.dto.compra.CompraReqDTO;
 import com.erpmodas.dto.compra.CompraResponseDTO;
+import com.erpmodas.dto.compra.CompraUpdateDTO;
 import com.erpmodas.mapper.dependentes.ItemCompraMapper;
 import com.erpmodas.model.entidades.Compra;
 import org.mapstruct.*;
@@ -15,7 +17,7 @@ public interface CompraMapper {
     @Mapping(target = "itensCompra", ignore = true)
     @Mapping(target = "contasPagar", ignore = true)
     @Mapping(target = "valorTotal", ignore = true)
-    Compra toEntity(CompraResponseDTO dto);
+    Compra toEntity(CompraReqDTO dto);
 
     java.util.List<CompraResponseDTO> toDTOList(java.util.List<Compra> lista);
 
@@ -25,5 +27,5 @@ public interface CompraMapper {
     @Mapping(target = "itensCompra", ignore = true)
     @Mapping(target = "contasPagar", ignore = true)
     @Mapping(target = "valorTotal", ignore = true)
-    void updateEntityFromDTO(CompraResponseDTO dto, @MappingTarget Compra entity);
+    void updateEntityFromDTO(CompraUpdateDTO dto, @MappingTarget Compra entity);
 }

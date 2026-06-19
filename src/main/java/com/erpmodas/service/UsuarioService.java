@@ -1,6 +1,8 @@
 package com.erpmodas.service;
 
+import com.erpmodas.dto.usuario.UsuarioReqDTO;
 import com.erpmodas.dto.usuario.UsuarioResponseDTO;
+import com.erpmodas.dto.usuario.UsuarioUpdateDTO;
 import com.erpmodas.mapper.UsuarioMapper;
 import com.erpmodas.model.entidades.Usuario;
 import com.erpmodas.repository.UsuarioRepository;
@@ -18,7 +20,7 @@ public class UsuarioService {
     private final UsuarioMapper mapper;
 
     @Transactional
-    public UsuarioResponseDTO salvar(UsuarioResponseDTO dto) {
+    public UsuarioResponseDTO salvar(UsuarioReqDTO dto) {
         validarNomeDuplicado(dto.getNome(), null);
 
         Usuario entity =  mapper.toEntity(dto);
@@ -38,7 +40,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public UsuarioResponseDTO atualizar(Long id, UsuarioResponseDTO dto) {
+    public UsuarioResponseDTO atualizar(Long id, UsuarioUpdateDTO dto) {
         Usuario entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
         validarNomeDuplicado(dto.getNome(), id);
 

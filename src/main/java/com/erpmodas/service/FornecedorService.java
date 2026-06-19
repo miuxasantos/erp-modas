@@ -1,6 +1,8 @@
 package com.erpmodas.service;
 
+import com.erpmodas.dto.fornecedor.FornecedorReqDTO;
 import com.erpmodas.dto.fornecedor.FornecedorResponseDTO;
+import com.erpmodas.dto.fornecedor.FornecedorUpdateDTO;
 import com.erpmodas.mapper.FornecedorMapper;
 import com.erpmodas.model.entidades.Fornecedor;
 import com.erpmodas.repository.FornecedorRepository;
@@ -18,7 +20,7 @@ public class FornecedorService {
     private final FornecedorMapper mapper;
 
     @Transactional
-    public FornecedorResponseDTO salvar(FornecedorResponseDTO dto) {
+    public FornecedorResponseDTO salvar(FornecedorReqDTO dto) {
         validarNomeDuplicado(dto.getNome(), null);
 
         Fornecedor entity =  mapper.toEntity(dto);
@@ -43,7 +45,7 @@ public class FornecedorService {
     }
 
     @Transactional
-    public FornecedorResponseDTO atualizar(Long id, FornecedorResponseDTO dto) {
+    public FornecedorResponseDTO atualizar(Long id, FornecedorUpdateDTO dto) {
         Fornecedor entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Fornecedor não encontrado."));
         validarNomeDuplicado(dto.getNome(), id);
 

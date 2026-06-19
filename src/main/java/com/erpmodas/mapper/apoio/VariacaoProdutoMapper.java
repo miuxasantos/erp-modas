@@ -1,6 +1,8 @@
 package com.erpmodas.mapper.apoio;
 
+import com.erpmodas.dto.apoio.variacaoProdutoDto.VariacaoProdutoReqDTO;
 import com.erpmodas.dto.apoio.variacaoProdutoDto.VariacaoProdutoResponseDTO;
+import com.erpmodas.dto.apoio.variacaoProdutoDto.VariacaoProdutoUpdateDTO;
 import com.erpmodas.mapper.ProdutoMapper;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import org.mapstruct.*;
@@ -14,7 +16,7 @@ public interface VariacaoProdutoMapper {
     @Mapping(target = "produto", ignore = true)
     @Mapping(target = "cor", ignore = true)
     @Mapping(target = "tamanho", ignore = true)
-    VariacaoProduto toEntity(VariacaoProdutoResponseDTO dto);
+    VariacaoProduto toEntity(VariacaoProdutoReqDTO dto);
 
     java.util.List<VariacaoProdutoResponseDTO> toDTOList(java.util.List<VariacaoProduto> lista);
 
@@ -23,5 +25,5 @@ public interface VariacaoProdutoMapper {
     @Mapping(target = "produto", ignore = true)
     @Mapping(target = "cor", ignore = true)
     @Mapping(target = "tamanho", ignore = true)
-    void updateEntityFromDTO(VariacaoProdutoResponseDTO dto, @MappingTarget VariacaoProduto entity);
+    void updateEntityFromDTO(VariacaoProdutoUpdateDTO dto, @MappingTarget VariacaoProduto entity);
 }

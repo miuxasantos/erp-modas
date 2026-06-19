@@ -1,7 +1,9 @@
 package com.erpmodas.mapper;
 
 
+import com.erpmodas.dto.venda.VendaReqDTO;
 import com.erpmodas.dto.venda.VendaResponseDTO;
+import com.erpmodas.dto.venda.VendaUpdateDTO;
 import com.erpmodas.mapper.dependentes.ItemVendaMapper;
 import com.erpmodas.model.entidades.Venda;
 import org.mapstruct.*;
@@ -16,7 +18,7 @@ public interface VendaMapper {
     @Mapping(target = "itensVenda", ignore = true)
     @Mapping(target = "contasReceber", ignore = true)
     @Mapping(target = "valorTotal", ignore = true)
-    Venda toEntity(VendaResponseDTO dto);
+    Venda toEntity(VendaReqDTO dto);
 
     java.util.List<VendaResponseDTO> toDTOList(java.util.List<Venda> lista);
 
@@ -26,5 +28,5 @@ public interface VendaMapper {
     @Mapping(target = "itensVenda", ignore = true)
     @Mapping(target = "contasReceber", ignore = true)
     @Mapping(target = "valorTotal", ignore = true)
-    void updateEntityFromDTO(VendaResponseDTO dto, @MappingTarget Venda entity);
+    void updateEntityFromDTO(VendaUpdateDTO dto, @MappingTarget Venda entity);
 }

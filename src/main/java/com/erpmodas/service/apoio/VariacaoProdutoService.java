@@ -1,6 +1,8 @@
 package com.erpmodas.service.apoio;
 
+import com.erpmodas.dto.apoio.variacaoProdutoDto.VariacaoProdutoReqDTO;
 import com.erpmodas.dto.apoio.variacaoProdutoDto.VariacaoProdutoResponseDTO;
+import com.erpmodas.dto.apoio.variacaoProdutoDto.VariacaoProdutoUpdateDTO;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import com.erpmodas.mapper.apoio.VariacaoProdutoMapper;
 import com.erpmodas.repository.apoio.VariacaoProdutoRepository;
@@ -22,7 +24,7 @@ public class VariacaoProdutoService {
     private final TamanhoService tamanhoService;
 
     @Transactional
-    public VariacaoProdutoResponseDTO salvar(VariacaoProdutoResponseDTO dto) {
+    public VariacaoProdutoResponseDTO salvar(VariacaoProdutoReqDTO dto) {
         validarNomeDuplicado(dto.getSku(), null);
 
         VariacaoProduto entity =  mapper.toEntity(dto);
@@ -55,7 +57,7 @@ public class VariacaoProdutoService {
     }
 
     @Transactional
-    public VariacaoProdutoResponseDTO atualizar(Long id, VariacaoProdutoResponseDTO dto) {
+    public VariacaoProdutoResponseDTO atualizar(Long id, VariacaoProdutoUpdateDTO dto) {
         VariacaoProduto entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Variação do produto não encontrado."));
         validarNomeDuplicado(dto.getSku(), id);
 
@@ -89,7 +91,7 @@ public class VariacaoProdutoService {
         }
 
         variacao.setEstoque(variacao.getEstoque() - quantidade);
-        repository.save(variacao);   // ← persistência garantida
+        repository.save(variacao);
     }
 
     @Transactional

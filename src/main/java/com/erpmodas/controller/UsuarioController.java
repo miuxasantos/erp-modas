@@ -1,6 +1,8 @@
 package com.erpmodas.controller;
 
+import com.erpmodas.dto.usuario.UsuarioReqDTO;
 import com.erpmodas.dto.usuario.UsuarioResponseDTO;
+import com.erpmodas.dto.usuario.UsuarioUpdateDTO;
 import com.erpmodas.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +30,13 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> salvar(@RequestBody UsuarioResponseDTO dto) {
+    public ResponseEntity<UsuarioResponseDTO> salvar(@RequestBody UsuarioReqDTO dto) {
         UsuarioResponseDTO salvo = usuarioService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioResponseDTO dto) {
+    public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioUpdateDTO dto) {
         UsuarioResponseDTO atualizado = usuarioService.atualizar(id, dto);
         return ResponseEntity.ok(atualizado);
     }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemCondicionalResponseDTO {
+    private Long id;
     private VariacaoProdutoResponseDTO variacaoProduto;
     private Integer quantidade;
 }

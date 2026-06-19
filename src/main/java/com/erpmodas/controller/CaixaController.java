@@ -1,6 +1,8 @@
 package com.erpmodas.controller;
 
+import com.erpmodas.dto.caixa.CaixaReqDTO;
 import com.erpmodas.dto.caixa.CaixaResponseDTO;
+import com.erpmodas.dto.caixa.CaixaUpdateDTO;
 import com.erpmodas.mapper.CaixaMapper;
 import com.erpmodas.model.entidades.Caixa;
 import com.erpmodas.service.CaixaService;
@@ -34,12 +36,12 @@ public class CaixaController {
     }
 
     @PostMapping
-    public ResponseEntity<CaixaResponseDTO> salvar(@RequestBody CaixaResponseDTO dto) {
+    public ResponseEntity<CaixaResponseDTO> salvar(@RequestBody CaixaReqDTO dto) {
         return ResponseEntity.status(201).body(service.salvar(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CaixaResponseDTO> atualizar(@PathVariable Long id, @RequestBody CaixaResponseDTO dto) {
+    public ResponseEntity<CaixaResponseDTO> atualizar(@PathVariable Long id, @RequestBody CaixaUpdateDTO dto) {
         return ResponseEntity.ok(service.atualizar(id, dto));
     }
 

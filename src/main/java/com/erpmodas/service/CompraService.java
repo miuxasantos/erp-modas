@@ -1,6 +1,9 @@
 package com.erpmodas.service;
 
+import com.erpmodas.dto.compra.CompraReqDTO;
 import com.erpmodas.dto.compra.CompraResponseDTO;
+import com.erpmodas.dto.compra.CompraUpdateDTO;
+import com.erpmodas.dto.dependentes.itemCompra.ItemCompraReqDTO;
 import com.erpmodas.dto.dependentes.itemCompra.ItemCompraResponseDTO;
 import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.mapper.CompraMapper;
@@ -33,7 +36,7 @@ public class CompraService {
     private final ItemCompraMapper itemCompraMapper;
 
     @Transactional
-    public CompraResponseDTO salvar(CompraResponseDTO dto) {
+    public CompraResponseDTO salvar(CompraReqDTO dto) {
 
         validarCompra(dto);
 
@@ -69,7 +72,7 @@ public class CompraService {
     }
 
     @Transactional
-    public CompraResponseDTO atualizar(Long id, CompraResponseDTO dto) {
+    public CompraResponseDTO atualizar(Long id, CompraUpdateDTO dto) {
         Compra entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Compra não encontrada."));
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(entity);
@@ -84,18 +87,18 @@ public class CompraService {
         repository.delete(entity);
     }
 
-    private void processarECalcular(Compra compra, List<ItemCompraResponseDTO> itensDTO) {
+    private void processarECalcular(Compra compra, List<ItemCompraReqDTO> itensDTO) {
 
         BigDecimal valorTotal = BigDecimal.ZERO;
         List<ItemCompra> itensProcessados = new ArrayList<>();
 
-        for (ItemCompraResponseDTO itemCompraResponseDTO : itensDTO) {
-            Long variacaoId = itemCompraResponseDTO.getVariacaoProdutoId();
+        for (ItemCompraReqDTO itemCompraReqDTO : itensDTO) {
+            Long variacaoId = itemCompraReqDTO.getVariacaoProdutoId();
 
-            ItemCompra item = itemCompraService.criarItemEntidade(itemCompraResponseDTO);
+            ItemCompra item = itemCompraService.criarItemEntidade(itemCompraReqDTO);
             item.setCompra(compra);
 
-            variacaoProdutoService.incrementarEstoque(variacaoId, itemCompraResponseDTO.getQuantidade());
+            variacaoProdutoService.incrementarEstoque(variacaoId, itemCompraReqDTO.getQuantidade());
 
             itensProcessados.add(item);
             valorTotal = valorTotal.add(item.getSubTotal());
@@ -105,23 +108,7 @@ public class CompraService {
         compra.setValorTotal(valorTotal);
     }
 
-    private void validarCompra(CompraResponseDTO dto) {
-        if (dto.getFornecedorId() == null) {
-            throw new RuntimeException("Fornecedor é obrigatório");
-        }
-
-        if (dto.getItensCompra() == null || dto.getItensCompra().isEmpty()) {
-            throw new RuntimeException("Deve haver ao menos um item na compra.");
-        }
-
-        if (dto.getFormaPagamento() == null) {
-            throw new RuntimeException("Forma de pagamento é obrigatória");
-        }
-
-        if (dto.getDataChegada() == null) {
-            throw new RuntimeException("A data de chegada é obrigatória.");
-        }
-
+    private void validarCompra(CompraReqDTO dto) {
         if(dto.getFormaPagamento() == FormaPagamento.CARTAO_CREDITO) {
             if(dto.getNumeroParcelas() == null || dto.getNumeroParcelas() <= 1) {
                 throw new RuntimeException("Compras parceladas devem ter mais de 1 parcela.");

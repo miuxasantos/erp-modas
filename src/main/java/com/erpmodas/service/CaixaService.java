@@ -1,6 +1,8 @@
 package com.erpmodas.service;
 
+import com.erpmodas.dto.caixa.CaixaReqDTO;
 import com.erpmodas.dto.caixa.CaixaResponseDTO;
+import com.erpmodas.dto.caixa.CaixaUpdateDTO;
 import com.erpmodas.enums.OrigemMov;
 import com.erpmodas.enums.StatusCaixa;
 import com.erpmodas.enums.TipoMovCaixa;
@@ -31,7 +33,7 @@ public class CaixaService {
     private final MovimentacoesCaixaRepository movimentacoesCaixaRepository;
 
     @Transactional
-    public CaixaResponseDTO salvar(CaixaResponseDTO dto) {
+    public CaixaResponseDTO salvar(CaixaReqDTO dto) {
         Caixa entity =  mapper.toEntity(dto);
         Caixa salvo = repository.save(entity);
         return toDTOComCalculos(salvo);
@@ -56,7 +58,7 @@ public class CaixaService {
     }
 
     @Transactional
-    public CaixaResponseDTO atualizar(Long id, CaixaResponseDTO dto) {
+    public CaixaResponseDTO atualizar(Long id, CaixaUpdateDTO dto) {
         Caixa entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Caixa não encontrado."));
 
         mapper.updateEntityFromDTO(dto, entity);
@@ -146,7 +148,7 @@ public class CaixaService {
     }
 
     @Transactional
-    public BigDecimal consultarSaldoAtual(CaixaResponseDTO dto) {
+    public BigDecimal consultarSaldoAtual(CaixaReqDTO dto) {
         Caixa caixa = buscarOuCriarCaixaDoDia();
         toDTOComCalculos(caixa);
         return dto.getSaldoTotal();

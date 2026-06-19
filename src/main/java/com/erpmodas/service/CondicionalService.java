@@ -1,7 +1,10 @@
 package com.erpmodas.service;
 
+import com.erpmodas.dto.condicional.CondicionalReqDTO;
 import com.erpmodas.dto.condicional.CondicionalResponseDTO;
+import com.erpmodas.dto.condicional.CondicionalUpdateDTO;
 import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalResponseDTO;
+import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalReqDTO;
 import com.erpmodas.mapper.CondicionalMapper;
 import com.erpmodas.mapper.dependentes.ItemCondicionalMapper;
 import com.erpmodas.model.entidades.Condicional;
@@ -29,7 +32,7 @@ public class CondicionalService {
     private final ItemCondicionalMapper itemCondicionalMapper;
 
     @Transactional
-    public CondicionalResponseDTO salvar(CondicionalResponseDTO dto) {
+    public CondicionalResponseDTO salvar(CondicionalReqDTO dto) {
 
         validarCondicional(dto);
 
@@ -62,7 +65,7 @@ public class CondicionalService {
     }
 
     @Transactional
-    public CondicionalResponseDTO atualizar(Long id, CondicionalResponseDTO dto) {
+    public CondicionalResponseDTO atualizar(Long id, CondicionalUpdateDTO dto) {
         Condicional entity = repository.findById(id).orElseThrow(() -> new RuntimeException("Condicional não encontrada."));
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(entity);
@@ -76,23 +79,23 @@ public class CondicionalService {
         repository.delete(entity);
     }
 
-    private void processar(Condicional condicional, List<ItemCondicionalResponseDTO> itensDTO) {
+    private void processar(Condicional condicional, List<ItemCondicionalReqDTO> itensDTO) {
         List<ItemCondicional> itensProcessados = new ArrayList<>();
 
-        for (ItemCondicionalResponseDTO itemCondicionalResponseDTO : itensDTO) {
-            Long variacaoId = itemCondicionalResponseDTO.getVariacaoProdutoId();
+        for (ItemCondicionalReqDTO itemCondicionalReqDTO : itensDTO) {
+            Long variacaoId = itemCondicionalReqDTO.getVariacaoProdutoId();
 
-            ItemCondicional item = itemCondicionalService.criarItemEntidade(itemCondicionalResponseDTO);
+            ItemCondicional item = itemCondicionalService.criarItemEntidade(itemCondicionalReqDTO);
             item.setCondicional(condicional);
 
-            variacaoProdutoService.decrementarEstoque(variacaoId, itemCondicionalResponseDTO.getQuantidade());
+            variacaoProdutoService.decrementarEstoque(variacaoId, itemCondicionalReqDTO.getQuantidade());
 
             itensProcessados.add(item);
         }
         condicional.setItensCondicional(itensProcessados);
     }
 
-    private void validarCondicional(CondicionalResponseDTO dto) {
+    private void validarCondicional(CondicionalReqDTO dto) {
         if (dto.getClienteId() == null) {
             throw new RuntimeException("Cliente é obrigatório");
         }

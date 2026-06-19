@@ -1,6 +1,8 @@
 package com.erpmodas.controller;
 
+import com.erpmodas.dto.fornecedor.FornecedorReqDTO;
 import com.erpmodas.dto.fornecedor.FornecedorResponseDTO;
+import com.erpmodas.dto.fornecedor.FornecedorUpdateDTO;
 import com.erpmodas.service.FornecedorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +30,13 @@ public class FornecedorController {
     }
 
     @PostMapping
-    public ResponseEntity<FornecedorResponseDTO> salvar(@RequestBody FornecedorResponseDTO dto) {
+    public ResponseEntity<FornecedorResponseDTO> salvar(@RequestBody FornecedorReqDTO dto) {
         FornecedorResponseDTO salvo = fornecedorService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FornecedorResponseDTO> atualizar(@PathVariable Long id, @RequestBody FornecedorResponseDTO dto) {
+    public ResponseEntity<FornecedorResponseDTO> atualizar(@PathVariable Long id, @RequestBody FornecedorUpdateDTO dto) {
         FornecedorResponseDTO atualizado = fornecedorService.atualizar(id, dto);
         return ResponseEntity.ok(atualizado);
     }

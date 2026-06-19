@@ -1,7 +1,9 @@
 package com.erpmodas.controller;
 
 import com.erpmodas.dto.dependentes.itemVenda.ItemVendaResponseDTO;
+import com.erpmodas.dto.venda.VendaReqDTO;
 import com.erpmodas.dto.venda.VendaResponseDTO;
+import com.erpmodas.dto.venda.VendaUpdateDTO;
 import com.erpmodas.service.VendaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class VendaController {
     private final VendaService vendaService;
 
     @PostMapping
-    public ResponseEntity<VendaResponseDTO> criar(@Valid @RequestBody VendaResponseDTO dto) {
+    public ResponseEntity<VendaResponseDTO> criar(@Valid @RequestBody VendaReqDTO dto) {
         VendaResponseDTO criacao = vendaService.salvar(dto);
 
         URI location = ServletUriComponentsBuilder
@@ -50,7 +52,7 @@ public class VendaController {
     @PutMapping("/{id}")
     public ResponseEntity<VendaResponseDTO> atualizar(
             @PathVariable Long id,
-            @Valid @RequestBody VendaResponseDTO dto) {
+            @Valid @RequestBody VendaUpdateDTO dto) {
         return ResponseEntity.ok(vendaService.atualizar(id, dto));
     }
 

@@ -1,6 +1,8 @@
 package com.erpmodas.controller;
 
+import com.erpmodas.dto.condicional.CondicionalReqDTO;
 import com.erpmodas.dto.condicional.CondicionalResponseDTO;
+import com.erpmodas.dto.condicional.CondicionalUpdateDTO;
 import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalResponseDTO;
 import com.erpmodas.service.CondicionalService;
 import jakarta.validation.Valid;
@@ -20,7 +22,7 @@ public class CondicionalController {
     private final CondicionalService condicionalService;
 
     @PostMapping
-    public ResponseEntity<CondicionalResponseDTO> criar(@Valid @RequestBody CondicionalResponseDTO dto) {
+    public ResponseEntity<CondicionalResponseDTO> criar(@Valid @RequestBody CondicionalReqDTO dto) {
         CondicionalResponseDTO criacao = condicionalService.salvar(dto);
 
         URI location = ServletUriComponentsBuilder
@@ -50,7 +52,7 @@ public class CondicionalController {
     @PutMapping("/{id}")
     public ResponseEntity<CondicionalResponseDTO> atualizar(
             @PathVariable Long id,
-            @Valid @RequestBody CondicionalResponseDTO dto) {
+            @Valid @RequestBody CondicionalUpdateDTO dto) {
         return ResponseEntity.ok(condicionalService.atualizar(id, dto));
     }
 
