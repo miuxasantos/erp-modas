@@ -12,9 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CondicionalUpdateDTO {
-    private Long clienteId;
-    private LocalDate dataInicio;
     private Integer periodo;
     private LocalDate dataFinal;
-    private List<ItemCondicionalResponseDTO> itensCondicional;
 }

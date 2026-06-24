@@ -15,13 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompraUpdateDTO {
-    private Long fornecedorId;
     private String lote;
-    private LocalDate dataChegada;
     private String observacoes;
-    private FormaPagamento formaPagamento;
-    private Integer numeroParcelas;
-    private BigDecimal valorTotal;
-    private List<ItemCompraResponseDTO> itensCompra;
-    private List<ContasPagarDTO> contasPagarDTO;
 }

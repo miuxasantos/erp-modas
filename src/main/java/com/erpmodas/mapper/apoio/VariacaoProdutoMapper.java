@@ -25,5 +25,6 @@ public interface VariacaoProdutoMapper {
     @Mapping(target = "produto", ignore = true)
     @Mapping(target = "cor", ignore = true)
     @Mapping(target = "tamanho", ignore = true)
+    @Mapping(target = "estoque", ignore = true)
     void updateEntityFromDTO(VariacaoProdutoUpdateDTO dto, @MappingTarget VariacaoProduto entity);
 }

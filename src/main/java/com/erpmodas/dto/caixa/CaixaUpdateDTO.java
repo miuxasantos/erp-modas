@@ -14,13 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CaixaUpdateDTO {
-    private LocalDate dataAbertura;
     private LocalDate dataFechamento;
-    private BigDecimal saldoAbertura;
-    private BigDecimal saldoFechamento;
     private StatusCaixa statusCaixa;
-    private List<MovimentacoesCaixaDTO> movimentacoes;
-    private BigDecimal totalEntradas;
-    private BigDecimal totalSaidas;
-    private BigDecimal saldoTotal;
 }

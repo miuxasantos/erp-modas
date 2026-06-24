@@ -27,5 +27,8 @@ public interface CompraMapper {
     @Mapping(target = "itensCompra", ignore = true)
     @Mapping(target = "contasPagar", ignore = true)
     @Mapping(target = "valorTotal", ignore = true)
+    @Mapping(target = "dataChegada", ignore = true)
+    @Mapping(target = "formaPagamento", ignore = true)
+    @Mapping(target = "numeroParcelas", ignore = true)
     void updateEntityFromDTO(CompraUpdateDTO dto, @MappingTarget Compra entity);
 }

@@ -16,13 +16,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VendaUpdateDTO {
-    private Long clienteId;
-    private LocalDate dataVenda;
     private String observacoes;
-    private FormaPagamento formaPagamento;
-    private List<ItemVendaResponseDTO> itensVenda;
-    private List<ContasReceberDTO> contasReceber;
-    private Integer numeroParcelas;
-    private BigDecimal valorTotal;
-    private Double desconto;
 }

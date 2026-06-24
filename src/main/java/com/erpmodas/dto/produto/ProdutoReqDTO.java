@@ -25,7 +25,6 @@ public class ProdutoReqDTO {
     private BigDecimal precoVenda;
     @NotNull
     private LocalDate dataInclusao;
-    private LocalDate dataDesativacao;
     private String tecido;
     private String marca;
     @NotNull

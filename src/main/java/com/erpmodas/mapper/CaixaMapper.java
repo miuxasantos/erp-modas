@@ -24,5 +24,11 @@ public interface CaixaMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "movimentacoesCaixa", ignore = true)
+    @Mapping(target = "dataAbertura", ignore = true)
+    @Mapping(target = "saldoAbertura", ignore = true)
+    @Mapping(target = "saldoFechamento", ignore = true)
+    @Mapping(target = "totalEntradas", ignore = true)
+    @Mapping(target = "totalSaidas", ignore = true)
+    @Mapping(target = "saldoTotal", ignore = true)
     void updateEntityFromDTO(CaixaUpdateDTO dto, @MappingTarget Caixa entity);
 }

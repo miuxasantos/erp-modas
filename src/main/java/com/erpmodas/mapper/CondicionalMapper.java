@@ -23,5 +23,6 @@ public interface CondicionalMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "cliente", ignore = true)
     @Mapping(target = "itensCondicional", ignore = true)
+    @Mapping(target = "dataInicio", ignore = true)
     void updateEntityFromDTO(CondicionalUpdateDTO dto, @MappingTarget Condicional entity);
 }

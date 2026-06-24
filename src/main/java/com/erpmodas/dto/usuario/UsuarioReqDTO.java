@@ -19,7 +19,6 @@ public class UsuarioReqDTO {
     @NotNull
     private Boolean status;
     private String senha;
-    private LocalDateTime ultimoAcesso;
     @NotNull
     private Cargo cargo;
 }

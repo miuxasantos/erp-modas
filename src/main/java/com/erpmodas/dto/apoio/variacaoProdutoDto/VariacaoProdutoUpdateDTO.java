@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class VariacaoProdutoUpdateDTO {
     private String sku;
-    private Integer estoque;
     private Long produtoId;
     private BigDecimal precoCusto;
     private BigDecimal precoVenda;
