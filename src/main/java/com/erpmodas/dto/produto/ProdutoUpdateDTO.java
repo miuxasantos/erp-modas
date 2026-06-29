@@ -16,8 +16,8 @@ public class ProdutoUpdateDTO {
     private Boolean ativo;
     private BigDecimal precoCusto;
     private BigDecimal precoVenda;
-    private String tecido;
-    private String marca;
+    private Long tecidoId;
+    private Long marcaId;
     private Long categoriaId;
     private String imagem;
 }

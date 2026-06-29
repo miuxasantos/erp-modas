@@ -13,6 +13,7 @@ public interface ProdutoMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "categoria", ignore = true)
+    @Mapping(target = "tecido", ignore = true)
     Produto toEntity(ProdutoReqDTO dto);
 
     java.util.List<ProdutoResponseDTO> toDTOList(java.util.List<Produto> lista);
@@ -22,5 +23,6 @@ public interface ProdutoMapper {
     @Mapping(target = "categoria", ignore = true)
     @Mapping(target = "dataInclusao", ignore = true)
     @Mapping(target = "dataDesativacao", ignore = true)
+    @Mapping(target = "tecido", ignore = true)
     void updateEntityFromDTO(ProdutoUpdateDTO dto, @MappingTarget Produto entity);
 }

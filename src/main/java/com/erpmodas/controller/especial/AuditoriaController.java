@@ -33,12 +33,6 @@ public class AuditoriaController {
         return ResponseEntity.status(201).body(salvo);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AuditoriaDTO> atualizar(@PathVariable Long id, @RequestBody AuditoriaDTO dto) {
-        AuditoriaDTO atualizado = auditoriaService.atualizar(id, dto);
-        return ResponseEntity.ok(atualizado);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         auditoriaService.deletar(id);

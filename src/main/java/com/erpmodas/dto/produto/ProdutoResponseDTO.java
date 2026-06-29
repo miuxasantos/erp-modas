@@ -1,5 +1,7 @@
 package com.erpmodas.dto.produto;
 
+import com.erpmodas.dto.marca.MarcaDTO;
+import com.erpmodas.dto.apoio.TecidoDTO;
 import com.erpmodas.dto.categoria.CategoriaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,8 +23,8 @@ public class ProdutoResponseDTO {
     private BigDecimal precoVenda;
     private LocalDate dataInclusao;
     private LocalDate dataDesativacao;
-    private String tecido;
-    private String marca;
+    private TecidoDTO tecido;
+    private MarcaDTO marca;
     private CategoriaDTO categoria;
     private String imagem;
 }

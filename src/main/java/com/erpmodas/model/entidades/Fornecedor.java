@@ -22,6 +22,7 @@ public class Fornecedor {
     private String nome;
     @Column(name = "contato", nullable = false)
     private String contato;
-    @Column(name = "assessoria")
-    private String assessoria;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_assessoria")
+    private Assessoria assessoria;
 }

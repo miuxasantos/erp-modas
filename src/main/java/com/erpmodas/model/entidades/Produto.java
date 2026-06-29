@@ -1,10 +1,14 @@
 package com.erpmodas.model.entidades;
 
+import com.erpmodas.model.entidades.apoio.Tecido;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.mapping.Set;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.HashSet;
 
 @Entity
 @Getter
@@ -38,10 +42,12 @@ public class Produto {
     private LocalDate dataInclusao;
     @Column(name = "data_desativacao")
     private LocalDate dataDesativacao;
-    @Column(name = "tecido")
-    private String tecido;
-    @Column(name = "marca")
-    private String marca;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tecido")
+    private Tecido tecido;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_marca")
+    private Marca marca;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;

@@ -1,5 +1,6 @@
 package com.erpmodas.dto.fornecedor;
 
+import com.erpmodas.dto.assessoria.AssessoriaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,5 @@ public class FornecedorResponseDTO {
     private Long id;
     private String nome;
     private String contato;
-    private String assessoria;
+    private AssessoriaDTO assessoriaDTO;
 }

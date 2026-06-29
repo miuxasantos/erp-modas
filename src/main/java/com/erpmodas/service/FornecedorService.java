@@ -18,12 +18,14 @@ public class FornecedorService {
 
     private final FornecedorRepository repository;
     private final FornecedorMapper mapper;
+    private final AssessoriaService assessoriaService;
 
     @Transactional
     public FornecedorResponseDTO salvar(FornecedorReqDTO dto) {
         validarNomeDuplicado(dto.getNome(), null);
 
         Fornecedor entity =  mapper.toEntity(dto);
+        entity.setAssessoria(assessoriaService.buscarEntidadePorId(dto.getAssessoriaId()));
         Fornecedor salvo = repository.save(entity);
         return mapper.toDTO(salvo);
     }

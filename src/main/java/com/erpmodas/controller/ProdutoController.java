@@ -1,6 +1,8 @@
 package com.erpmodas.controller;
 
+import com.erpmodas.dto.produto.ProdutoReqDTO;
 import com.erpmodas.dto.produto.ProdutoResponseDTO;
+import com.erpmodas.dto.produto.ProdutoUpdateDTO;
 import com.erpmodas.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +30,13 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoResponseDTO> salvar(@RequestBody ProdutoResponseDTO dto) {
+    public ResponseEntity<ProdutoResponseDTO> salvar(@RequestBody ProdutoReqDTO dto) {
         ProdutoResponseDTO salvo = produtoService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoResponseDTO dto) {
+    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoUpdateDTO dto) {
         ProdutoResponseDTO atualizado = produtoService.atualizar(id, dto);
         return ResponseEntity.ok(atualizado);
     }

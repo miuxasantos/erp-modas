@@ -6,6 +6,7 @@ import com.erpmodas.dto.produto.ProdutoUpdateDTO;
 import com.erpmodas.mapper.ProdutoMapper;
 import com.erpmodas.model.entidades.Produto;
 import com.erpmodas.repository.ProdutoRepository;
+import com.erpmodas.service.apoio.TecidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,8 @@ public class ProdutoService {
     private final ProdutoRepository repository;
     private final ProdutoMapper mapper;
     private final CategoriaService categoriaService;
+    private final TecidoService tecidoService;
+    private final MarcaService marcaService;
 
     @Transactional
     public ProdutoResponseDTO salvar(ProdutoReqDTO dto) {
@@ -27,6 +30,8 @@ public class ProdutoService {
 
         Produto entity =  mapper.toEntity(dto);
         entity.setCategoria(categoriaService.buscarEntidadePorId(dto.getCategoriaId()));
+        entity.setTecido(tecidoService.buscarEntidadePorId(dto.getTecidoId()));
+        entity.setMarca(marcaService.buscarEntidadePorId(dto.getMarcaId()));
         entity.setDataInclusao(LocalDate.now());
         Produto salvo = repository.save(entity);
         return mapper.toDTO(salvo);

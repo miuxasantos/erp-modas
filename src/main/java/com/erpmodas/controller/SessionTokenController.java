@@ -30,11 +30,6 @@ public class SessionTokenController {
         return ResponseEntity.status(201).body(service.salvar(dto));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SessionTokenDTO> atualizar(@PathVariable Long id, @RequestBody SessionTokenDTO dto) {
-        return ResponseEntity.ok(service.atualizar(id, dto));
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletar(id);

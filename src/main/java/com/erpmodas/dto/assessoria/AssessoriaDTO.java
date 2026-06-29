@@ -1,14 +1,15 @@
-package com.erpmodas.dto.fornecedor;
+package com.erpmodas.dto.assessoria;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class FornecedorUpdateDTO {
+@NoArgsConstructor
+public class AssessoriaDTO {
+
+    private Long id;
     private String nome;
     private String contato;
-    private Long assessoriaId;
 }
