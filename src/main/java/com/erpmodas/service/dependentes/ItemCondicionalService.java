@@ -1,5 +1,6 @@
 package com.erpmodas.service.dependentes;
 
+import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalReqDTO;
 import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalResponseDTO;
 import com.erpmodas.mapper.dependentes.ItemCondicionalMapper;
 import com.erpmodas.model.entidades.Condicional;
@@ -21,7 +22,7 @@ public class ItemCondicionalService {
     private final VariacaoProdutoService variacaoProdutoService;
 
     @Transactional
-    public ItemCondicionalResponseDTO criar(ItemCondicionalResponseDTO dto) {
+    public ItemCondicionalResponseDTO criar(ItemCondicionalReqDTO dto) {
         VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemCondicional item = mapper.toEntity(dto);
@@ -33,7 +34,7 @@ public class ItemCondicionalService {
     }
 
     @Transactional
-    public ItemCondicional criarItemEntidade(ItemCondicionalResponseDTO dto) {
+    public ItemCondicional criarItemEntidade(ItemCondicionalReqDTO dto) {
         VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemCondicional itemCondicional = mapper.toEntity(dto);

@@ -1,5 +1,6 @@
 package com.erpmodas.mapper.dependentes;
 
+import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalReqDTO;
 import com.erpmodas.dto.dependentes.itemCondicional.ItemCondicionalResponseDTO;
 import com.erpmodas.model.entidades.dependentes.ItemCondicional;
 import org.mapstruct.*;
@@ -12,6 +13,10 @@ public interface ItemCondicionalMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "variacaoProduto", ignore = true)
     ItemCondicional toEntity(ItemCondicionalResponseDTO dto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "variacaoProduto", ignore = true)
+    ItemCondicional toEntity(ItemCondicionalReqDTO dto);
 
     java.util.List<ItemCondicionalResponseDTO> toDTOList(java.util.List<ItemCondicional> lista);
 

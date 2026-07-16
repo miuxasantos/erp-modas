@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @Table(name = "sessionToken")
@@ -27,10 +29,22 @@ public class SessionToken {
     @Column(name = "data_criacao", nullable = false)
     @ToString.Include
     private LocalDateTime dataCriacao;
-    @Column(name = "dataExp", nullable = false)
+    @Column(name = "data_exp", nullable = false)
     @ToString.Include
     private LocalDateTime dataExp;
     @Column(name = "ativo")
     @ToString.Include
     private Boolean ativo;
+
+    public boolean estaExpirado() {
+        return LocalDateTime.now().isAfter(dataExp);
+    }
+
+    public void invalidar() {
+        this.ativo = false;
+    }
+
+    public boolean estaValido() {
+        return Boolean.TRUE.equals(ativo) && !estaExpirado();
+    }
 }

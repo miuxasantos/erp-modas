@@ -1,5 +1,6 @@
 package com.erpmodas.mapper.dependentes;
 
+import com.erpmodas.dto.dependentes.itemVenda.ItemVendaReqDTO;
 import com.erpmodas.dto.dependentes.itemVenda.ItemVendaResponseDTO;
 import com.erpmodas.mapper.apoio.VariacaoProdutoMapper;
 import com.erpmodas.model.entidades.dependentes.ItemVenda;
@@ -13,6 +14,10 @@ public interface ItemVendaMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "variacaoProduto", ignore = true)
     ItemVenda toEntity(ItemVendaResponseDTO dto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "variacaoProduto", ignore = true)
+    ItemVenda toEntity(ItemVendaReqDTO dto);
 
     java.util.List<ItemVendaResponseDTO> toDTOList(java.util.List<ItemVenda> lista);
 

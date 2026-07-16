@@ -7,7 +7,10 @@ import lombok.Getter;
 public enum TipoAcaoAud {
     CREATE("Create"),
     UPDATE("Update"),
-    DELETE("Delete");
+    DELETE("Delete"),
+    LOGIN("Login"),
+    LOGIN_FALHA("Falha login");
+
 
     @JsonValue
     private final String descricao;

@@ -7,6 +7,7 @@ import com.erpmodas.mapper.UsuarioMapper;
 import com.erpmodas.model.entidades.Usuario;
 import com.erpmodas.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,12 +19,14 @@ public class UsuarioService {
 
     private final UsuarioRepository repository;
     private final UsuarioMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UsuarioResponseDTO salvar(UsuarioReqDTO dto) {
         validarNomeDuplicado(dto.getNome(), null);
 
         Usuario entity =  mapper.toEntity(dto);
+        entity.setSenha(passwordEncoder.encode((dto.getSenha())));
         Usuario salvo = repository.save(entity);
         return mapper.toDTO(salvo);
     }
@@ -37,6 +40,11 @@ public class UsuarioService {
     public UsuarioResponseDTO buscarPorId(Long id) {
         Usuario usuario = repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
         return mapper.toDTO(usuario);
+    }
+
+    @Transactional
+    public Usuario buscarEntidadePorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Usuario não encontrado."));
     }
 
     @Transactional

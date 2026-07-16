@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
-@Table(name = "Assessoria")
+@Table(name = "assessoria")
 public class Assessoria {
 
     @Id

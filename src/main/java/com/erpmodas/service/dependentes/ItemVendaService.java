@@ -1,5 +1,6 @@
 package com.erpmodas.service.dependentes;
 
+import com.erpmodas.dto.dependentes.itemVenda.ItemVendaReqDTO;
 import com.erpmodas.dto.dependentes.itemVenda.ItemVendaResponseDTO;
 import com.erpmodas.mapper.dependentes.ItemVendaMapper;
 import com.erpmodas.model.entidades.Venda;
@@ -22,7 +23,7 @@ public class ItemVendaService {
     private final VariacaoProdutoService variacaoProdutoService;
 
     @Transactional
-    public ItemVendaResponseDTO criar(ItemVendaResponseDTO dto) {
+    public ItemVendaResponseDTO criar(ItemVendaReqDTO dto) {
         VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemVenda item = mapper.toEntity(dto);
@@ -36,7 +37,7 @@ public class ItemVendaService {
     }
 
     @Transactional
-    public ItemVenda criarItemEntidade(ItemVendaResponseDTO dto) {
+    public ItemVenda criarItemEntidade(ItemVendaReqDTO dto) {
         VariacaoProduto variacaoProduto = variacaoProdutoService.buscarEntidadePorId(dto.getVariacaoProdutoId());
 
         ItemVenda itemVenda = mapper.toEntity(dto);
