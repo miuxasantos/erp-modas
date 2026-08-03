@@ -12,6 +12,10 @@ spring:
     properties:
         hibernate:
           format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
 
 security:
   jwt:
@@ -21,3 +25,12 @@ security:
 server:
   servlet:
     context-path: /api
+
+app:
+  storage:
+    dir: /uploads
+    tamanho-max: 10MB
+    largura-full: 1200
+    largura-thumb: 300
+    qualidade: 0.85
+    limpeza-cron: 0 0 3 * * SUN

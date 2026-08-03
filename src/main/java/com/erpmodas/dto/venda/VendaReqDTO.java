@@ -1,9 +1,6 @@
 package com.erpmodas.dto.venda;
 
-import com.erpmodas.dto.cliente.ClienteResponseDTO;
-import com.erpmodas.dto.dependentes.contasReceber.ContasReceberDTO;
 import com.erpmodas.dto.dependentes.itemVenda.ItemVendaReqDTO;
-import com.erpmodas.dto.dependentes.itemVenda.ItemVendaResponseDTO;
 import com.erpmodas.enums.FormaPagamento;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
