@@ -5,6 +5,10 @@ import com.erpmodas.dto.produto.ProdutoResponseDTO;
 import com.erpmodas.dto.produto.ProdutoUpdateDTO;
 import com.erpmodas.model.entidades.Produto;
 import org.mapstruct.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Query;
 
 @Mapper(componentModel = "spring", uses = {CategoriaMapper.class})
 public interface ProdutoMapper {
@@ -25,4 +29,8 @@ public interface ProdutoMapper {
     @Mapping(target = "dataDesativacao", ignore = true)
     @Mapping(target = "tecido", ignore = true)
     void updateEntityFromDTO(ProdutoUpdateDTO dto, @MappingTarget Produto entity);
+
+    @EntityGraph(attributePaths = {"variacoes", "categoria", "marca"})
+    @Query("SELECT p FROM Produto p WHERE p.ativo = true")
+    Page<Produto> findByAtivoTrueAndPage(Pageable pageable);
 }

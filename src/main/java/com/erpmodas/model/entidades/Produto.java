@@ -1,6 +1,7 @@
 package com.erpmodas.model.entidades;
 
 import com.erpmodas.model.entidades.apoio.Tecido;
+import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.mapping.Set;
@@ -8,7 +9,9 @@ import org.hibernate.mapping.Set;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 @Entity
 @Getter
@@ -53,6 +56,8 @@ public class Produto {
     private Categoria categoria;
     @Column(name = "imagem", length = 400)
     private String imagem;
+    @OneToMany(mappedBy = "produto", fetch = FetchType.LAZY)
+    private List<VariacaoProduto> variacoes = new ArrayList<>();
 
     // mover para o service
     @Transient
