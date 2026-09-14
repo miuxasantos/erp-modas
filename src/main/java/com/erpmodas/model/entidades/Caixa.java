@@ -35,6 +35,7 @@ public class Caixa {
     @Column(name = "saldo_fechamento", precision = 10, scale = 2)
     @ToString.Include
     private BigDecimal saldoFechamento;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status_caixa")
     @ToString.Include
     private StatusCaixa statusCaixa;

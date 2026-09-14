@@ -24,8 +24,10 @@ public class Tecido {
     private String nome;
     @Column(name = "gramatura")
     private Integer gramatura;
+    @Enumerated(EnumType.STRING)
     @Column(name = "caimento")
     private Caimento caimento;
+    @Enumerated(EnumType.STRING)
     @Column(name = "elasticidade")
     private Elasticidade elasticidade;
 }

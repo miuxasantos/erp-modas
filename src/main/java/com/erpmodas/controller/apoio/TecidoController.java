@@ -37,6 +37,7 @@ public class TecidoController {
     @PostMapping
     @Auditar(acao = TipoAcaoAud.CREATE, entidade = "tecido")
     public ResponseEntity<TecidoDTO> salvar(@RequestBody TecidoDTO dto) {
+        System.out.println(">>> ENTROU NO POST DE TECIDO");
         TecidoDTO salvo = tecidoService.salvar(dto);
         return ResponseEntity.status(201).body(salvo);
     }

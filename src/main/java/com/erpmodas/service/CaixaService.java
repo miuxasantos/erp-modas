@@ -53,7 +53,7 @@ public class CaixaService {
     @Transactional(readOnly = true)
     public CaixaResponseDTO buscarCaixaAtual() {
         Caixa caixa = repository.findByDataAberturaAndStatusCaixa(LocalDate.now(), StatusCaixa.ABERTO)
-                .orElseThrow(() -> new RuntimeException("Caixa não encontrado."));
+                .orElseThrow(() -> new RuntimeException("Caixa não encontrado ou não aberto."));
         return toDTOComCalculos(caixa);
     }
 

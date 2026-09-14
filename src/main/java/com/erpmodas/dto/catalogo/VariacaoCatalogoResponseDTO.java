@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class VariacaoCatalogoResponseDTO {
 
     private Long id;
-    private CorDTO corDTO;
-    private TamanhoDTO tamanhoDTO;
+    private CorDTO cor;
+    private TamanhoDTO tamanho;
     private Boolean disponivel;
     private String imagemEsp;
 }

@@ -14,9 +14,7 @@ public class CorsConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Origens permitidas — onde seu front roda
         config.setAllowedOrigins(List.of(
-                "http://localhost:5173",   // Vite (React/Vue)
                 "http://localhost:3000",   // Create React App / Next.js
                 "http://localhost:4200"    // Angular
         ));

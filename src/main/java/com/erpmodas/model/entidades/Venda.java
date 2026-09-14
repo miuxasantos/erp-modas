@@ -35,6 +35,7 @@ public class Venda {
     private LocalDate dataVenda = LocalDate.now();
     @Column(name = "observacoes", length = 400)
     private String observacoes;
+    @Enumerated(EnumType.STRING)
     @Column(name = "forma_pagamento", nullable = false)
     private FormaPagamento formaPagamento;
     @Column(name = "numero_parcelas", nullable = false)

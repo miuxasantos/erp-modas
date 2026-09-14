@@ -4,11 +4,13 @@ import com.erpmodas.model.entidades.Usuario;
 import com.erpmodas.repository.SessionTokenRepository;
 import com.erpmodas.repository.UsuarioRepository;
 import com.erpmodas.service.security.JwtService;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -43,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             if(!jwtService.tokenValido(token)) {
-                filterChain.doFilter(request, response);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
@@ -55,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .orElse(false);
 
             if (!sessaoAtiva) {
-                filterChain.doFilter(request, response);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
@@ -68,11 +71,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         usuario, null, authorities
                 );
                 SecurityContextHolder.getContext().setAuthentication(auth);
+                System.out.println("USUÁRIO: " + usuario.getEmail());
+                System.out.println("CARGO: " + usuario.getCargo());
+                System.out.println(
+                        "AUTENTICADO: " +
+                                SecurityContextHolder.getContext()
+                                        .getAuthentication()
+                                        .isAuthenticated()
+                );
             }
-        } catch (Exception e) {
-
+        } catch (JwtException | IllegalArgumentException exception) {
+            log.error("Erro ao autenticar token JWT", exception);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
-
         filterChain.doFilter(request, response);
     }
 }

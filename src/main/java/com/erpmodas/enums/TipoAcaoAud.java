@@ -5,17 +5,9 @@ import lombok.Getter;
 
 @Getter
 public enum TipoAcaoAud {
-    CREATE("Create"),
-    UPDATE("Update"),
-    DELETE("Delete"),
-    LOGIN("Login"),
-    LOGIN_FALHA("Falha login");
-
-
-    @JsonValue
-    private final String descricao;
-
-    TipoAcaoAud(String descricao) {
-        this.descricao = descricao;
-    }
+    CREATE,
+    UPDATE,
+    DELETE,
+    LOGIN,
+    LOGIN_FALHA
 }

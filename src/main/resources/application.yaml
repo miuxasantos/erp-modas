@@ -22,6 +22,12 @@ security:
     secret: ${SECURITY_KEY}
     expiration-hours: ${SECURITY_KEY_HOURS}
 
+logging:
+  level:
+    org:
+      springframework:
+        security=DEBUG:
+
 server:
   servlet:
     context-path: /api

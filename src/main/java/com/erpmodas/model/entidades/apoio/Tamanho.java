@@ -17,6 +17,7 @@ public class Tamanho {
     @Column(name = "id")
     @EqualsAndHashCode.Include
     private Long id;
+    @Enumerated(EnumType.STRING)
     @Column(name = "tamanho", nullable = false)
     private TamanhoEnum tamanho;
 }

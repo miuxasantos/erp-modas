@@ -17,7 +17,7 @@ public class CatalogoResponseDTO {
     private String nome;
     private BigDecimal precoVenda;
     private String imagem;
-    private CategoriaDTO categoriaDTO;
+    private CategoriaDTO categoria;
     private String tecido;
     private List<VariacaoCatalogoResponseDTO> variacoes;
 }

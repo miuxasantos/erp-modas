@@ -39,6 +39,7 @@ public class ContasReceber {
     private Integer totalParcelas;
     @Column(name = "observacoes", length = 400)
     private String observacoes;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status_conta")
     @ToString.Include
     private StatusConta statusConta;

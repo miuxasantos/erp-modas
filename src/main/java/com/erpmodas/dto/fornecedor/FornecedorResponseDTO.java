@@ -12,5 +12,5 @@ public class FornecedorResponseDTO {
     private Long id;
     private String nome;
     private String contato;
-    private AssessoriaDTO assessoriaDTO;
+    private AssessoriaDTO assessoria;
 }

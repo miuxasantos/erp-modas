@@ -3,6 +3,7 @@ package com.erpmodas.repository;
 import com.erpmodas.model.entidades.Produto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +17,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> findByNomeContainingIgnoreCase(String nome);
     List<Produto> findByAtivoTrue();
     List<Produto> findByCategoriaId(Long categoriaId);
-    List<Produto> findByMarcaContainingIgnoreCase(String marca);
+    List<Produto> findByMarca_NomeContainingIgnoreCase(String marca);
     List<Produto> findByDataInclusaoBetween(LocalDate inicio, LocalDate fim);
 
     Optional<Produto> findProdutoByNome(String nome);
@@ -26,6 +27,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     @Query("SELECT p.imagem FROM Produto p WHERE p.imagem IS NOT NULL AND p.imagem <> ''")
     List<String> findAllCaminhosImagem();
 
+    @EntityGraph(attributePaths = {"variacoes", "categoria", "marca"})
     @Query("SELECT p FROM Produto p WHERE p.ativo = true")
     Page<Produto> findByAtivoTrueAndPage(Pageable pageable);
     Page<Produto> findByCategoriaIdAndAtivoTrue(Long categoriaId, Pageable pageable);

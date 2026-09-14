@@ -30,7 +30,7 @@ public class Auditoria {
     @Column(name = "entidade", nullable = false)
     @ToString.Include
     private String entidade;
-    @Column(name = "entidade_id", nullable = false)
+    @Column(name = "entidade_id", nullable = true)
     private Long entidadeId;
     @Column(name = "data_hora", nullable = false)
     @ToString.Include

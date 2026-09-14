@@ -7,7 +7,7 @@ import com.erpmodas.dto.fornecedor.FornecedorUpdateDTO;
 import com.erpmodas.model.entidades.Fornecedor;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { AssessoriaMapper.class })
 public interface FornecedorMapper {
     FornecedorResponseDTO toDTO(Fornecedor fornecedor);
 

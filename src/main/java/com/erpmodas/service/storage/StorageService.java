@@ -40,7 +40,7 @@ public class StorageService {
     public String salvar(MultipartFile arquivo, String subpasta) {
         validar(arquivo, subpasta);
 
-        String extensao = TIPOS_PERMITIDOS.get(arquivo.getContentType());
+        String extensao = "." + TIPOS_PERMITIDOS.get(arquivo.getContentType());
         String nomeArquivo = UUID.randomUUID() + extensao;
         String caminhoRelativo = subpasta + "/" + nomeArquivo;
 

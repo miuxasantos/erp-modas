@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,7 +88,7 @@ public class VendaService {
 
     private void processarECalcular(Venda venda, List<ItemVendaReqDTO> itensDTO) {
 
-        BigDecimal valorTotal = BigDecimal.ZERO;
+        BigDecimal subTotal = BigDecimal.ZERO;
         List<ItemVenda> itensProcessados = new ArrayList<>();
 
         for (ItemVendaReqDTO itemVendaReqDTO : itensDTO) {
@@ -99,8 +100,24 @@ public class VendaService {
             variacaoProdutoService.decrementarEstoque(variacaoId, itemVendaReqDTO.getQuantidade());
 
             itensProcessados.add(item);
-            valorTotal = valorTotal.add(item.getSubTotal());
+            subTotal = subTotal.add(item.getSubTotal());
         }
+
+        BigDecimal descontoPercentual = venda.getDesconto() != null
+                ? BigDecimal.valueOf(venda.getDesconto())
+                : BigDecimal.ZERO;
+
+        BigDecimal valorDesconto = subTotal
+                .multiply(descontoPercentual)
+                .divide(
+                        BigDecimal.valueOf(100),
+                        2,
+                        RoundingMode.HALF_UP
+                );
+
+        BigDecimal valorTotal = subTotal
+                .subtract(valorDesconto)
+                .setScale(2, RoundingMode.HALF_UP);
 
         venda.setItensVenda(itensProcessados);
         venda.setValorTotal(valorTotal);

@@ -22,7 +22,7 @@ public class CatalogoMapper {
     public CatalogoResponseDTO toDTO(Produto p) {
         List<VariacaoCatalogoResponseDTO> variacoes = p.getVariacoes() == null ? List.of() :
                 p.getVariacoes().stream()
-                .map(this::toDTO)
+                .map(this::toVariacaoDTO)
                 .toList();
 
         return new CatalogoResponseDTO(
@@ -36,7 +36,7 @@ public class CatalogoMapper {
         );
     }
 
-    public VariacaoCatalogoResponseDTO toDTO(VariacaoProduto v) {
+    public VariacaoCatalogoResponseDTO toVariacaoDTO(VariacaoProduto v) {
         return new VariacaoCatalogoResponseDTO(
                 v.getId(),
                 toCor(v.getCor()),

@@ -29,8 +29,4 @@ public interface ProdutoMapper {
     @Mapping(target = "dataDesativacao", ignore = true)
     @Mapping(target = "tecido", ignore = true)
     void updateEntityFromDTO(ProdutoUpdateDTO dto, @MappingTarget Produto entity);
-
-    @EntityGraph(attributePaths = {"variacoes", "categoria", "marca"})
-    @Query("SELECT p FROM Produto p WHERE p.ativo = true")
-    Page<Produto> findByAtivoTrueAndPage(Pageable pageable);
 }

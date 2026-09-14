@@ -16,7 +16,7 @@ public class JwtService {
     @Value("${security.jwt.secret}")
     private String secret;
 
-    @Value("${security.jwt.expiration-hours")
+    @Value("${security.jwt.expiration-hours}")
     private long expirationHours;
 
     private SecretKey getSigningKey() {
@@ -32,7 +32,7 @@ public class JwtService {
                 .subject(usuario.getEmail())
                 .claim("usuarioId", usuario.getId())
                 .claim("nome", usuario.getNome())
-                .claim("cargo", usuario.getCargo())
+                .claim("cargo", usuario.getCargo().name())
                 .issuedAt(now)
                 .expiration(expiration)
                 .signWith(getSigningKey())
@@ -54,7 +54,7 @@ public class JwtService {
 
     public Long obterUsuarioId(String token) {
         Claims claims = extrairClaims(token);
-        return claims.get("id", Long.class);
+        return claims.get("usuarioId", Long.class);
     }
 
     public String extrairEmail(String token) {

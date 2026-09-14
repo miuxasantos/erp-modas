@@ -21,8 +21,6 @@ public class AutenticacaoController {
             @Valid @RequestBody LoginRequestDTO dto,
             HttpServletRequest request) {
 
-        String ip = request.getRemoteAddr();
-        String userAgent = request.getHeader("User-Agent");
 
         return ResponseEntity.ok(service.login(dto));
     }

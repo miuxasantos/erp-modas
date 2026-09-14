@@ -4,6 +4,7 @@ import com.erpmodas.dto.fornecedor.FornecedorReqDTO;
 import com.erpmodas.dto.fornecedor.FornecedorResponseDTO;
 import com.erpmodas.dto.fornecedor.FornecedorUpdateDTO;
 import com.erpmodas.mapper.FornecedorMapper;
+import com.erpmodas.model.entidades.Assessoria;
 import com.erpmodas.model.entidades.Fornecedor;
 import com.erpmodas.repository.FornecedorRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,15 @@ public class FornecedorService {
         validarNomeDuplicado(dto.getNome(), null);
 
         Fornecedor entity =  mapper.toEntity(dto);
-        entity.setAssessoria(assessoriaService.buscarEntidadePorId(dto.getAssessoriaId()));
+        if (dto.getAssessoriaId() != null) {
+
+            Assessoria assessoria =
+                    assessoriaService.buscarEntidadePorId(
+                            dto.getAssessoriaId()
+                    );
+
+            entity.setAssessoria(assessoria);
+        }
         Fornecedor salvo = repository.save(entity);
         return mapper.toDTO(salvo);
     }

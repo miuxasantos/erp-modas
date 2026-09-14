@@ -10,6 +10,6 @@ public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> {
 
     Optional<Fornecedor> findFornecedorById(Long fornecedorId);
     Optional<Fornecedor> findFornecedorByNome(String nome);
-    List<Fornecedor> findByAssessoria(String assessoria);
+    List<Fornecedor> findByAssessoriaId(Long id);
     Optional<Fornecedor> findByContato(String contato);
 }

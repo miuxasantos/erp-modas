@@ -35,6 +35,7 @@ public class Usuario {
     private Boolean status;
     @Column(name = "ultimo_acesso")
     private LocalDateTime ultimoAcesso;
+    @Enumerated(EnumType.STRING)
     @Column(name = "cargo", nullable = false)
     private Cargo cargo;
 }

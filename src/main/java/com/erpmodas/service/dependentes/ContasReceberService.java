@@ -124,6 +124,7 @@ public class ContasReceberService {
 
     private ContasReceber criarContaAVista(Venda venda, BigDecimal valorTotal) {
         ContasReceber conta = new ContasReceber();
+        conta.setVenda(venda);
         conta.setValor(valorTotal);
         conta.setDataVencimento(calcularDataVencimento(venda, 1));
         conta.setStatusConta(StatusConta.PENDENTE);
@@ -140,6 +141,7 @@ public class ContasReceberService {
 
         for(int i = 1; i <= numeroParcelas; i++) {
             ContasReceber conta = new ContasReceber();
+            conta.setVenda(venda);
             conta.setValor(valorParcela);
             conta.setDataVencimento(LocalDate.now().plusDays(30L * i));
             conta.setNumeroParcela(i);

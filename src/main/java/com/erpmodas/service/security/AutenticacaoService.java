@@ -32,8 +32,9 @@ public class AutenticacaoService {
     public LoginResponseDTO login(LoginRequestDTO dto) {
         Usuario usuario = usuarioRepository.findUsuarioByEmail(dto.getEmail())
                 .orElseThrow(() -> new RuntimeException("E-mail ou senha inválidos."));
-
+        System.out.println("1 - USUARIO ENCONTRADO");
         if(!passwordEncoder.matches(dto.getSenha(), usuario.getSenha())) {
+            System.out.println("2 - SENHA INCORRETA");
             auditoriaService.registrar(
                     usuario.getId(),
                     TipoAcaoAud.LOGIN_FALHA,
@@ -41,9 +42,10 @@ public class AutenticacaoService {
                     null
             );
 
-            throw new RuntimeException("E-mail ou inválidos.");
+            throw new RuntimeException("E-mail ou senha inválidos.");
         }
 
+        System.out.println("3 - SENHA CORRETA");
         auditoriaService.registrar(
                 usuario.getId(),
                 TipoAcaoAud.LOGIN,
@@ -51,7 +53,11 @@ public class AutenticacaoService {
                 null
         );
 
+        System.out.println("4 - AUDITORIA REGISTRADA");
+
         String token = jwtService.gerarToken(usuario);
+
+        System.out.println("5 - TOKEN GERADO");
 
         SessionToken sessao = SessionToken.builder()
             .token(token)
@@ -62,6 +68,8 @@ public class AutenticacaoService {
             .build();
 
         sessionTokenRepository.save(sessao);
+
+        System.out.println("6 - SESSAO SALVA");
 
         UsuarioResponseDTO usuarioDTO = usuarioMapper.toDTO(usuario);
         return new LoginResponseDTO(
