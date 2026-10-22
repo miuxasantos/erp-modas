@@ -3,6 +3,7 @@ package com.erpmodas.mapper;
 import com.erpmodas.dto.apoio.CorDTO;
 import com.erpmodas.dto.apoio.TamanhoDTO;
 import com.erpmodas.dto.catalogo.CatalogoResponseDTO;
+import com.erpmodas.dto.catalogo.TecidoCatalogoDTO;
 import com.erpmodas.dto.catalogo.VariacaoCatalogoResponseDTO;
 import com.erpmodas.dto.categoria.CategoriaDTO;
 import com.erpmodas.dto.marca.MarcaDTO;
@@ -11,6 +12,7 @@ import com.erpmodas.model.entidades.Marca;
 import com.erpmodas.model.entidades.Produto;
 import com.erpmodas.model.entidades.apoio.Cor;
 import com.erpmodas.model.entidades.apoio.Tamanho;
+import com.erpmodas.model.entidades.apoio.Tecido;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +33,7 @@ public class CatalogoMapper {
                 p.getPrecoVenda(),
                 p.getImagem(),
                 toCategoria(p.getCategoria()),
-                p.getTecido() != null ? p.getTecido().getNome() : null,
+                toTecido(p.getTecido()),
                 variacoes
         );
     }
@@ -48,6 +50,10 @@ public class CatalogoMapper {
 
     private CategoriaDTO toCategoria(Categoria c) {
         return c == null ? null : new CategoriaDTO(c.getId(), c.getNome());
+    }
+
+    private TecidoCatalogoDTO toTecido(Tecido t) {
+        return t == null ? null : new TecidoCatalogoDTO(t.getNome(), t.getCaimento(), t.getElasticidade());
     }
 
     private CorDTO toCor(Cor c) {

@@ -38,9 +38,14 @@ public class CategoriaService {
         return mapper.toDTO(categoria);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Categoria buscarEntidadePorId(Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoriaDTO> listarComProdutosAtivos() {
+        return mapper.toDTOList(repository.findComProdutosAtivos());
     }
 
     @Transactional

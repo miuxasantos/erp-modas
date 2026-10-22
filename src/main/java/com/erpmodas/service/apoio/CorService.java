@@ -38,8 +38,14 @@ public class CorService {
         return mapper.toDTO(cor);
     }
 
+    @Transactional(readOnly = true)
     public Cor buscarEntidadePorId(Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Cor não encontrada."));
+    }
+
+    @Transactional(readOnly = true)
+    public List<CorDTO> listarComVariacoesAtivas() {
+        return mapper.toDTOList(repository.findComVariacoesAtivas());
     }
 
     @Transactional

@@ -26,7 +26,7 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Void> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             service.logout(authHeader.substring(7));
         }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -39,8 +40,17 @@ public class TamanhoService {
         return mapper.toDTO(Tamanho);
     }
 
+    @Transactional(readOnly = true)
     public Tamanho buscarEntidadePorId(Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Tamanho não encontrado."));
+    }
+
+    @Transactional(readOnly = true)
+    public List<TamanhoDTO> listarComVariacoesAtivas() {
+        List<Tamanho> tamanhos = repository.findComVaricoesAtivas().stream()
+                .sorted(Comparator.comparing(Tamanho::getTamanho))
+                .toList();
+        return mapper.toDTOList(tamanhos);
     }
 
     @Transactional

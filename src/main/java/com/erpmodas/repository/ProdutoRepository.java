@@ -36,8 +36,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
         SELECT DISTINCT p FROM Produto p
         LEFT JOIN p.variacoes v
         WHERE p.ativo = true
-        AND (:q IS NULL OR LOWER(p.nome) LIKE LOWER(CONCAT('%', :q, '%'))
-             OR LOWER(p.descricao) LIKE LOWER(CONCAT('%', :q, '%')))
+        AND (:q IS NULL OR LOWER(p.nome) LIKE LOWER(CONCAT('%', CAST(:q AS string), '%')))
         AND (:categoriaId IS NULL OR p.categoria.id = :categoriaId)
         AND (:corId IS NULL OR v.cor.id = :corId)
         AND (:tamanhoId IS NULL OR v.tamanho.id = :tamanhoId)

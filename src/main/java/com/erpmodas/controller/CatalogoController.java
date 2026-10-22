@@ -1,5 +1,6 @@
 package com.erpmodas.controller;
 
+import com.erpmodas.dto.catalogo.CatalogoFiltrosDTO;
 import com.erpmodas.dto.catalogo.CatalogoResponseDTO;
 import com.erpmodas.service.CatalogoService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,11 @@ public class CatalogoController {
             @RequestParam(required = false) Long tamanhoId,
             @PageableDefault(size = 20, sort = "nome") Pageable pageable) {
         return ResponseEntity.ok(catalogoService.listarPublico(q, categoriaId, corId, tamanhoId, pageable));
+    }
+
+    @GetMapping("/filtros")
+    public ResponseEntity<CatalogoFiltrosDTO> filtros() {
+        return ResponseEntity.ok(catalogoService.carregarFiltros());
     }
 
     @GetMapping("/{id}")

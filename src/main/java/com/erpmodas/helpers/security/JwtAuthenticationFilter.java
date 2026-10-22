@@ -1,6 +1,5 @@
 package com.erpmodas.helpers.security;
 
-import com.erpmodas.model.entidades.Usuario;
 import com.erpmodas.repository.SessionTokenRepository;
 import com.erpmodas.repository.UsuarioRepository;
 import com.erpmodas.service.security.JwtService;
@@ -36,55 +35,48 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
+        SecurityContextHolder.clearContext();
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = authHeader.substring(7);
-
         try {
-            if(!jwtService.tokenValido(token)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
+            autenticar(authHeader.substring(7));
+        } catch (JwtException | IllegalArgumentException e) {
+            SecurityContextHolder.clearContext();
+            log.debug("Token JWT rejeitado: {}", e.getClass().getSimpleName());
+        }
 
-            String email = jwtService.extrairEmail(token);
-            Usuario usuario = usuarioRepository.findUsuarioByEmail(email).orElse(null);
+        filterChain.doFilter(request, response);
+    }
 
-            boolean sessaoAtiva = sessionTokenRepository.findByToken(token)
-                    .map(s -> s.estaValido())
-                    .orElse(false);
-
-            if (!sessaoAtiva) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
-
-            if(usuario != null) {
-                List<SimpleGrantedAuthority> authorities = List.of(
-                        new SimpleGrantedAuthority("ROLE_" + usuario.getCargo().name())
-                );
-
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                        usuario, null, authorities
-                );
-                SecurityContextHolder.getContext().setAuthentication(auth);
-                System.out.println("USUÁRIO: " + usuario.getEmail());
-                System.out.println("CARGO: " + usuario.getCargo());
-                System.out.println(
-                        "AUTENTICADO: " +
-                                SecurityContextHolder.getContext()
-                                        .getAuthentication()
-                                        .isAuthenticated()
-                );
-            }
-        } catch (JwtException | IllegalArgumentException exception) {
-            log.error("Erro ao autenticar token JWT", exception);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    private void autenticar(String token) {
+        if (!jwtService.tokenValido(token)) {
             return;
         }
-        filterChain.doFilter(request, response);
+
+        boolean sessaoAtiva = sessionTokenRepository.findByToken(token)
+                .map(sessao -> sessao.estaValido())
+                .orElse(false);
+
+        if (!sessaoAtiva) {
+            return;
+        }
+
+        String email = jwtService.extrairEmail(token);
+
+        usuarioRepository.findUsuarioByEmail(email).ifPresent(usuario -> {
+            var authorities = List.of(
+                    new SimpleGrantedAuthority("ROLE_" + usuario.getCargo().name())
+            );
+
+            var authentication = new UsernamePasswordAuthenticationToken(
+                    usuario, null, authorities
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        });
     }
 }

@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -53,7 +55,10 @@ public class CaixaService {
     @Transactional(readOnly = true)
     public CaixaResponseDTO buscarCaixaAtual() {
         Caixa caixa = repository.findByDataAberturaAndStatusCaixa(LocalDate.now(), StatusCaixa.ABERTO)
-                .orElseThrow(() -> new RuntimeException("Caixa não encontrado ou não aberto."));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Caixa não encontrado ou não aberto."
+                ));
         return toDTOComCalculos(caixa);
     }
 

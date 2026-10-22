@@ -8,11 +8,14 @@ import com.erpmodas.model.entidades.Produto;
 import com.erpmodas.repository.ProdutoRepository;
 import com.erpmodas.service.apoio.TecidoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +45,8 @@ public class ProdutoService {
         return mapper.toDTOList(repository.findAll());
     }
 
+
+
     @Transactional(readOnly = true)
     public ProdutoResponseDTO buscarPorId(Long id) {
         Produto produto = repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
@@ -51,6 +56,16 @@ public class ProdutoService {
     @Transactional
     public Produto buscarEntidadePorId(Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Produto> buscarAtivos(String q, Long categoriaId, Long corId, Long tamanhoId, Pageable pageable) {
+        return repository.buscarPublico(q, categoriaId, corId, tamanhoId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Produto> buscarAtivoPorId(Long id) {
+        return repository.findByIdAndAtivoTrue(id);
     }
 
     @Transactional
