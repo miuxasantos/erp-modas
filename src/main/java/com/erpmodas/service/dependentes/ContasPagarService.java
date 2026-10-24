@@ -135,6 +135,7 @@ public class ContasPagarService {
         conta.setValor(valorTotal);
         conta.setDataVencimento(calcularDataVencimento(compra, 1));
         conta.setStatusConta(StatusConta.PENDENTE);
+        conta.setFormaPagamento(compra.getFormaPagamento());
         conta.setNumeroParcela(1);
         conta.setTotalParcelas(1);
         return conta;
@@ -154,6 +155,7 @@ public class ContasPagarService {
             conta.setNumeroParcela(i);
             conta.setTotalParcelas(numeroParcelas);
             conta.setStatusConta(StatusConta.PENDENTE);
+            conta.setFormaPagamento(compra.getFormaPagamento());
             contas.add(conta);
         }
         return ajustarUltimaParcela(contas, valorTotal);

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${titulo}">Relatório de Vendas</title>
+    <style th:replace="~{relatorios/fragmentos/base :: estilos}"></style>
+</head>
+<body>
+
+<!-- Cabeçalho e rodapé precisam vir antes do conteúdo para aparecerem já na 1ª página -->
+<div th:replace="~{relatorios/fragmentos/base :: cabecalho(subtitulo=|Período: ${#temporals.format(relatorio.inicio, 'dd/MM/yyyy')} a ${#temporals.format(relatorio.fim, 'dd/MM/yyyy')}|)}"></div>
+<div th:replace="~{relatorios/fragmentos/base :: rodape}"></div>
+
+<table class="resumo">
+    <tr>
+        <td>
+            <div class="rotulo">Vendas</div>
+            <div class="valor" th:text="${relatorio.quantidadeVendas}">0</div>
+        </td>
+        <td>
+            <div class="rotulo">Faturamento</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(relatorio.faturamento)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Ticket médio</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(relatorio.ticketMedio)}">R$ 0,00</div>
+        </td>
+    </tr>
+</table>
+
+<div th:if="${#lists.isEmpty(relatorio.vendas)}" class="vazio">
+    Nenhuma venda registrada no período.
+</div>
+
+<th:block th:unless="${#lists.isEmpty(relatorio.vendas)}">
+
+    <h2>Vendas por dia</h2>
+    <table class="dados">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th class="centro">Quantidade</th>
+            <th class="direita">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="dia : ${relatorio.vendasPorDia}">
+            <td th:text="${#temporals.format(dia.data, 'dd/MM/yyyy')}">01/01/2026</td>
+            <td class="centro" th:text="${dia.quantidade}">0</td>
+            <td class="direita" th:text="${#numbers.formatCurrency(dia.total)}">R$ 0,00</td>
+        </tr>
+        <tr class="total">
+            <td>Total</td>
+            <td class="centro" th:text="${relatorio.quantidadeVendas}">0</td>
+            <td class="direita" th:text="${#numbers.formatCurrency(relatorio.faturamento)}">R$ 0,00</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Vendas no período</h2>
+    <table class="dados">
+        <thead>
+        <tr>
+            <th>Nº</th>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>Forma de pagamento</th>
+            <th class="direita">Valor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="venda : ${relatorio.vendas}">
+            <td th:text="${venda.id}">1</td>
+            <td th:text="${#temporals.format(venda.data, 'dd/MM/yyyy')}">01/01/2026</td>
+            <td th:text="${venda.cliente}">Cliente</td>
+            <td th:text="${venda.formaPagamento?.descricao}">Pix</td>
+            <td class="direita" th:text="${#numbers.formatCurrency(venda.valorTotal)}">R$ 0,00</td>
+        </tr>
+        <tr class="total">
+            <td colspan="4">Total</td>
+            <td class="direita" th:text="${#numbers.formatCurrency(relatorio.faturamento)}">R$ 0,00</td>
+        </tr>
+        </tbody>
+    </table>
+
+</th:block>
+
+</body>
+</html>

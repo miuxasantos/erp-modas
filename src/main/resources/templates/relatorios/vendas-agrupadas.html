@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${titulo}">Vendas agrupadas</title>
+    <style th:replace="~{relatorios/fragmentos/base :: estilos}"></style>
+</head>
+<body>
+
+<div th:replace="~{relatorios/fragmentos/base :: cabecalho(subtitulo=${subtitulo})}"></div>
+<div th:replace="~{relatorios/fragmentos/base :: rodape}"></div>
+
+<div th:if="${#lists.isEmpty(grupos)}" class="vazio">
+    Nenhuma venda registrada no período.
+</div>
+
+<table class="dados" th:unless="${#lists.isEmpty(grupos)}">
+    <thead>
+    <tr>
+        <th th:if="${ranking}" class="centro">#</th>
+        <th th:text="${rotuloGrupo}">Grupo</th>
+        <th class="centro" th:text="${rotuloQuantidade}">Quantidade</th>
+        <th class="direita">Faturamento</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="grupo, iteracao : ${grupos}">
+        <td th:if="${ranking}" class="centro" th:text="${iteracao.count}">1</td>
+        <td th:text="${grupo.nome}">Nome</td>
+        <td class="centro" th:text="${grupo.quantidade}">0</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(grupo.faturamento)}">R$ 0,00</td>
+    </tr>
+    <tr class="total">
+        <td th:colspan="${ranking ? 2 : 1}">Total</td>
+        <td class="centro" th:text="${totalQuantidade}">0</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(totalFaturamento)}">R$ 0,00</td>
+    </tr>
+    </tbody>
+</table>
+
+<p class="nota" th:unless="${#lists.isEmpty(grupos)}">
+    O faturamento considera o desconto de cada venda, distribuído proporcionalmente entre os itens.
+</p>
+
+</body>
+</html>

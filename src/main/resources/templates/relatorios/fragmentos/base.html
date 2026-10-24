@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<!--
+  Fragmentos compartilhados por todos os relatórios em PDF.
+  Este arquivo não é renderizado sozinho: os templates de cada relatório
+  importam os pedaços com th:replace.
+
+  Atenção: o OpenHTMLtoPDF lê o HTML como XML. Feche todas as tags
+  (<meta ... />, <br />) e use &#160; em vez de &nbsp;.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <style th:fragment="estilos">
+        @page {
+            size: A4;
+            margin: 30mm 14mm 18mm 14mm;
+
+            @top-center {
+                content: element(cabecalho);
+            }
+            @bottom-left {
+                content: element(rodape);
+            }
+            @bottom-right {
+                content: "Página " counter(page) " de " counter(pages);
+                font-family: Helvetica, sans-serif;
+                font-size: 8pt;
+                color: #6b7280;
+            }
+        }
+
+        body {
+            font-family: Helvetica, sans-serif;
+            font-size: 9pt;
+            color: #1f2937;
+        }
+
+        /* Elementos "running": saem do fluxo e são repetidos em todas as páginas */
+        .cabecalho {
+            position: running(cabecalho);
+            width: 100%;
+            border-bottom: 2px solid #10b981;
+            padding-bottom: 6px;
+        }
+        .cabecalho .empresa {
+            font-size: 8pt;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .cabecalho .titulo {
+            font-size: 15pt;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+        .cabecalho .subtitulo {
+            font-size: 9pt;
+            color: #4b5563;
+            margin-top: 2px;
+        }
+
+        .rodape {
+            position: running(rodape);
+            font-size: 8pt;
+            color: #6b7280;
+        }
+
+        h2 {
+            font-size: 11pt;
+            margin: 18px 0 6px 0;
+            padding-bottom: 3px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* Cards de resumo feitos com tabela: o OpenHTMLtoPDF não suporta flexbox/grid.
+           table-layout: fixed divide a largura igualmente, seja com 2, 3 ou 4 cards */
+        table.resumo {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: separate;
+            border-spacing: 6px 0;
+            margin: 0 -6px;
+        }
+        table.resumo + table.resumo {
+            margin-top: 6px;
+        }
+        table.resumo td {
+            border: 1px solid #e5e7eb;
+            background-color: #f9fafb;
+            padding: 8px 10px;
+        }
+        table.resumo .rotulo {
+            font-size: 8pt;
+            color: #6b7280;
+            text-transform: uppercase;
+        }
+        table.resumo .valor {
+            font-size: 13pt;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+
+        table.dados {
+            width: 100%;
+            border-collapse: collapse;
+            /* Repete o cabeçalho da tabela quando ela quebra de página */
+            -fs-table-paginate: paginate;
+        }
+        table.dados th {
+            background-color: #f3f4f6;
+            font-size: 8pt;
+            text-transform: uppercase;
+            color: #4b5563;
+            text-align: left;
+            padding: 5px 6px;
+            border-bottom: 1px solid #d1d5db;
+        }
+        table.dados td {
+            padding: 4px 6px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        table.dados tr {
+            page-break-inside: avoid;
+        }
+
+        /* Linha de total fica no tbody, não no tfoot: com -fs-table-paginate o
+           tfoot se repete em toda página e mostraria o total geral no meio da lista */
+        table.dados tr.total td {
+            font-weight: bold;
+            border-top: 1px solid #d1d5db;
+            border-bottom: none;
+            background-color: #f9fafb;
+        }
+
+        /* Precisa do "table.dados" para vencer a regra "table.dados th { text-align: left }" */
+        table.dados .direita { text-align: right; }
+        table.dados .centro { text-align: center; }
+
+        .vazio {
+            margin-top: 24px;
+            padding: 16px;
+            text-align: center;
+            color: #6b7280;
+            border: 1px dashed #d1d5db;
+        }
+
+        .nota {
+            margin-top: 12px;
+            font-size: 8pt;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+
+<div th:fragment="cabecalho(subtitulo)" class="cabecalho">
+    <div class="empresa" th:text="${empresa}">Empresa</div>
+    <div class="titulo" th:text="${titulo}">Título do relatório</div>
+    <div class="subtitulo" th:if="${subtitulo != null}" th:text="${subtitulo}">Subtítulo</div>
+</div>
+
+<div th:fragment="rodape" class="rodape"
+     th:text="|Gerado em ${#temporals.format(geradoEm, 'dd/MM/yyyy HH:mm')}|">
+    Gerado em
+</div>
+
+<!-- Célula de valor que mostra "–" quando é zero: deixa tabelas com muitos zeros mais legíveis -->
+<table>
+    <tr>
+        <td th:fragment="moedaOuTraco(valor)" class="direita"
+            th:text="${valor == null or valor.signum() == 0 ? '–' : #numbers.formatCurrency(valor)}">–</td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,11 +1,14 @@
 package com.erpmodas.controller.relatorios;
 
 import com.erpmodas.dto.relatorios.venda.RelatoriosVendaDTO;
+import com.erpmodas.enums.FormatoExportacao;
 import com.erpmodas.helpers.security.RoleAuthority;
 import com.erpmodas.service.relatorios.RelatorioVendaAgrupadaService;
+import com.erpmodas.service.relatorios.RelatorioVendaExportacaoService;
 import com.erpmodas.service.relatorios.RelatorioVendaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +30,7 @@ import java.time.LocalDate;
 public class RelatoriosVendaController {
     private final RelatorioVendaService relatorioVendaService;
     private final RelatorioVendaAgrupadaService relatorioVendaAgrupadaService;
+    private final RelatorioVendaExportacaoService relatorioVendaExportacaoService;
 
     @GetMapping
     public RelatoriosVendaDTO consultar(
@@ -62,5 +66,43 @@ public class RelatoriosVendaController {
         }
 
         return relatorioVendaAgrupadaService.gerar(tipo, inicio, fim);
+    }
+
+    @GetMapping("/exportar")
+    public ResponseEntity<byte[]> exportar(
+            @RequestParam FormatoExportacao formato,
+
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate inicio,
+
+            @RequestParam
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fim
+    ) {
+        return RespostaArquivo.de(relatorioVendaExportacaoService.exportar(formato, inicio, fim));
+    }
+
+    @GetMapping("/{agrupamento}/exportar")
+    public ResponseEntity<byte[]> exportarAgrupado(
+            @PathVariable String agrupamento,
+            @RequestParam FormatoExportacao formato,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate inicio,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate fim
+    ) {
+        return RespostaArquivo.de(relatorioVendaExportacaoService.exportarAgrupado(
+                converterAgrupamento(agrupamento), formato, inicio, fim
+        ));
+    }
+
+    private Tipo converterAgrupamento(String agrupamento) {
+        Tipo tipo = converterAgrupamento(agrupamento);
+        return tipo;
     }
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- Usado por "Compras por período" (com resumo) e "Compras com mais produtos" (sem resumo) -->
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${titulo}">Relatório de Compras</title>
+    <style th:replace="~{relatorios/fragmentos/base :: estilos}"></style>
+</head>
+<body>
+
+<div th:replace="~{relatorios/fragmentos/base :: cabecalho(subtitulo=${subtitulo})}"></div>
+<div th:replace="~{relatorios/fragmentos/base :: rodape}"></div>
+
+<table class="resumo" th:if="${resumo != null}">
+    <tr>
+        <td>
+            <div class="rotulo">Compras</div>
+            <div class="valor" th:text="${resumo.quantidadeCompras}">0</div>
+        </td>
+        <td>
+            <div class="rotulo">Valor total</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(resumo.valorTotal)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Ticket médio</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(resumo.ticketMedio)}">R$ 0,00</div>
+        </td>
+    </tr>
+</table>
+
+<div th:if="${#lists.isEmpty(compras)}" class="vazio">
+    Nenhuma compra registrada no período.
+</div>
+
+<th:block th:unless="${#lists.isEmpty(compras)}">
+    <h2 th:if="${resumo != null}">Compras no período</h2>
+    <table class="dados">
+        <thead>
+        <tr>
+            <th>Nº</th>
+            <th>Lote</th>
+            <th>Chegada</th>
+            <th>Fornecedor</th>
+            <th class="centro">Unidades</th>
+            <th class="centro">Produtos</th>
+            <th class="direita">Valor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="compra : ${compras}">
+            <td th:text="${compra.id}">1</td>
+            <td th:text="${compra.lote}">Lote</td>
+            <td th:text="${#temporals.format(compra.dataChegada, 'dd/MM/yyyy')}">01/01/2026</td>
+            <td th:text="${compra.fornecedor}">Fornecedor</td>
+            <td class="centro" th:text="${compra.unidadesAdicionadas}">0</td>
+            <td class="centro" th:text="${compra.produtosDistintos}">0</td>
+            <td class="direita" th:text="${#numbers.formatCurrency(compra.valorTotal)}">R$ 0,00</td>
+        </tr>
+        <tr class="total">
+            <td colspan="4">Total</td>
+            <td class="centro" th:text="${totalUnidades}">0</td>
+            <td></td>
+            <td class="direita" th:text="${#numbers.formatCurrency(totalValor)}">R$ 0,00</td>
+        </tr>
+        </tbody>
+    </table>
+</th:block>
+
+</body>
+</html>

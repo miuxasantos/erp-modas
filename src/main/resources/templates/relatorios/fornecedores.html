@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${titulo}">Compras por Fornecedor</title>
+    <style th:replace="~{relatorios/fragmentos/base :: estilos}"></style>
+</head>
+<body>
+
+<div th:replace="~{relatorios/fragmentos/base :: cabecalho(subtitulo=${subtitulo})}"></div>
+<div th:replace="~{relatorios/fragmentos/base :: rodape}"></div>
+
+<div th:if="${#lists.isEmpty(fornecedores)}" class="vazio">
+    Nenhuma compra registrada no período.
+</div>
+
+<table class="dados" th:unless="${#lists.isEmpty(fornecedores)}">
+    <thead>
+    <tr>
+        <th class="centro">#</th>
+        <th>Fornecedor</th>
+        <th class="centro">Compras</th>
+        <th class="centro">Unidades</th>
+        <th class="direita">Valor total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="fornecedor, iteracao : ${fornecedores}">
+        <td class="centro" th:text="${iteracao.count}">1</td>
+        <td th:text="${fornecedor.fornecedor}">Fornecedor</td>
+        <td class="centro" th:text="${fornecedor.quantidadeCompras}">0</td>
+        <td class="centro" th:text="${fornecedor.unidadesAdicionadas}">0</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(fornecedor.valorTotal)}">R$ 0,00</td>
+    </tr>
+    <tr class="total">
+        <td colspan="2">Total</td>
+        <td class="centro" th:text="${totalCompras}">0</td>
+        <td class="centro" th:text="${totalUnidades}">0</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(totalValor)}">R$ 0,00</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

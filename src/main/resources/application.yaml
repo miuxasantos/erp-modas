@@ -40,3 +40,5 @@ app:
     largura-thumb: 300
     qualidade: 0.85
     limpeza-cron: 0 0 3 * * SUN
+  relatorios:
+    empresa: Shirleys Modas

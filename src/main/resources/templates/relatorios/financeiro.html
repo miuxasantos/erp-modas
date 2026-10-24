@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${titulo}">Resumo Financeiro</title>
+    <style th:replace="~{relatorios/fragmentos/base :: estilos}"></style>
+</head>
+<body>
+
+<div th:replace="~{relatorios/fragmentos/base :: cabecalho(subtitulo=${subtitulo})}"></div>
+<div th:replace="~{relatorios/fragmentos/base :: rodape}"></div>
+
+<h2>Vendas</h2>
+<table class="resumo">
+    <tr>
+        <td>
+            <div class="rotulo">Vendas</div>
+            <div class="valor" th:text="${faturamento.quantidadeVendas}">0</div>
+        </td>
+        <td>
+            <div class="rotulo">Faturamento</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(faturamento.faturamento)}">R$ 0,00</div>
+        </td>
+    </tr>
+</table>
+
+<h2>Contas a receber</h2>
+<table class="resumo">
+    <tr>
+        <td>
+            <div class="rotulo">Contas</div>
+            <div class="valor" th:text="${contasReceber.quantidadeContas}">0</div>
+        </td>
+        <td>
+            <div class="rotulo">Valor total</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(contasReceber.valorTotal)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Recebido</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(contasReceber.valorPago)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Em aberto</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(contasReceber.valorEmAberto)}">R$ 0,00</div>
+        </td>
+    </tr>
+</table>
+
+<h2>Contas a pagar</h2>
+<table class="resumo">
+    <tr>
+        <td>
+            <div class="rotulo">Contas</div>
+            <div class="valor" th:text="${contasPagar.quantidadeContas}">0</div>
+        </td>
+        <td>
+            <div class="rotulo">Valor total</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(contasPagar.valorTotal)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Pago</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(contasPagar.valorPago)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Em aberto</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(contasPagar.valorEmAberto)}">R$ 0,00</div>
+        </td>
+    </tr>
+</table>
+
+<p class="nota">
+    Contas consideradas pela data de vencimento dentro do período. Contas canceladas não entram nos valores.
+</p>
+
+</body>
+</html>

@@ -132,6 +132,7 @@ public class ContasReceberService {
         conta.setStatusConta(StatusConta.PENDENTE);
         conta.setNumeroParcela(1);
         conta.setTotalParcelas(1);
+        conta.setFormaPagamento(venda.getFormaPagamento());
         return conta;
     }
 
@@ -149,6 +150,7 @@ public class ContasReceberService {
             conta.setNumeroParcela(i);
             conta.setTotalParcelas(numeroParcelas);
             conta.setStatusConta(StatusConta.PENDENTE);
+            conta.setFormaPagamento(venda.getFormaPagamento());
             contas.add(conta);
         }
         return ajustarUltimaParcela(contas, valorTotal);

@@ -3,10 +3,13 @@ package com.erpmodas.controller.relatorios;
 import com.erpmodas.dto.relatorios.compra.CompraResumoDTO;
 import com.erpmodas.dto.relatorios.compra.ComprasPorPeriodoDTO;
 import com.erpmodas.dto.relatorios.compra.FornecedorMaisComprasDTO;
+import com.erpmodas.enums.FormatoExportacao;
 import com.erpmodas.helpers.security.RoleAuthority;
+import com.erpmodas.service.relatorios.RelatorioCompraExportacaoService;
 import com.erpmodas.service.relatorios.RelatorioCompraService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,7 @@ import java.util.List;
 @PreAuthorize(RoleAuthority.PROPRIETARIO)
 public class RelatoriosCompraController {
         private final RelatorioCompraService relatorioCompraService;
+        private final RelatorioCompraExportacaoService relatorioCompraExportacaoService;
 
         @GetMapping("/periodo")
         public ComprasPorPeriodoDTO porPeriodo(
@@ -60,5 +64,50 @@ public class RelatoriosCompraController {
                 LocalDate fim
         ) {
             return relatorioCompraService.comMaisProdutos(inicio, fim);
+        }
+
+        @GetMapping("/periodo/exportar")
+        public ResponseEntity<byte[]> exportarPorPeriodo(
+                @RequestParam FormatoExportacao formato,
+
+                @RequestParam
+                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                LocalDate inicio,
+
+                @RequestParam
+                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                LocalDate fim
+        ) {
+                return RespostaArquivo.de(relatorioCompraExportacaoService.exportarPorPeriodo(formato, inicio, fim));
+        }
+
+        @GetMapping("/fornecedores/exportar")
+        public ResponseEntity<byte[]> exportarFornecedores(
+                @RequestParam FormatoExportacao formato,
+
+                @RequestParam(required = false)
+                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                LocalDate inicio,
+
+                @RequestParam(required = false)
+                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                LocalDate fim
+        ) {
+                return RespostaArquivo.de(relatorioCompraExportacaoService.exportarFornecedores(formato, inicio, fim));
+        }
+
+        @GetMapping("/mais-produtos/exportar")
+        public ResponseEntity<byte[]> exportarComMaisProdutos(
+                @RequestParam FormatoExportacao formato,
+
+                @RequestParam(required = false)
+                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                LocalDate inicio,
+
+                @RequestParam(required = false)
+                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                LocalDate fim
+        ) {
+                return RespostaArquivo.de(relatorioCompraExportacaoService.exportarComMaisProdutos(formato, inicio, fim));
         }
 }

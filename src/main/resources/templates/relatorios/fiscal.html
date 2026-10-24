@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${titulo}">Relatório Fiscal Mensal</title>
+    <style th:replace="~{relatorios/fragmentos/base :: estilos}"></style>
+    <!-- Vem depois dos estilos base, então sobrescreve só o tamanho da página: 12 colunas não cabem em retrato -->
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 26mm 12mm 16mm 12mm;
+        }
+        table.dados.fiscal td,
+        table.dados.fiscal th {
+            font-size: 7.5pt;
+            padding: 3px 4px;
+        }
+        table.dados.fiscal th.grupo {
+            text-align: center;
+            border-bottom: 1px solid #d1d5db;
+        }
+        table.dados.fiscal td.separador,
+        table.dados.fiscal th.separador {
+            border-left: 1px solid #d1d5db;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{relatorios/fragmentos/base :: cabecalho(subtitulo=${subtitulo})}"></div>
+<div th:replace="~{relatorios/fragmentos/base :: rodape}"></div>
+
+<table class="resumo">
+    <tr>
+        <td>
+            <div class="rotulo">Total de entradas</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(relatorio.totaisMes.totalEntradas)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Total de saídas</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(relatorio.totaisMes.totalSaidas)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Saldo do mês</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(relatorio.totaisMes.saldo)}">R$ 0,00</div>
+        </td>
+    </tr>
+</table>
+
+<h2>Movimento diário</h2>
+<table class="dados fiscal">
+    <thead>
+    <tr>
+        <th rowspan="2">Data</th>
+        <th colspan="5" class="grupo separador">Entradas</th>
+        <th colspan="5" class="grupo separador">Saídas</th>
+        <th rowspan="2" class="direita separador">Saldo</th>
+    </tr>
+    <tr>
+        <th class="direita separador">Dinheiro</th>
+        <th class="direita">Pix</th>
+        <th class="direita">Cartão</th>
+        <th class="direita">Outros</th>
+        <th class="direita">Total</th>
+        <th class="direita separador">Dinheiro</th>
+        <th class="direita">Pix</th>
+        <th class="direita">Cartão</th>
+        <th class="direita">Outros</th>
+        <th class="direita">Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="dia : ${relatorio.dias}">
+        <td th:text="${#temporals.format(dia.data, 'dd/MM')}">01/10</td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.entradaDinheiro})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.entradaPix})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.entradaCartao})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.entradaOutros})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.totalEntradas})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.saidaDinheiro})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.saidaPix})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.saidaCartao})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.saidaOutros})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.totalSaidas})}"></td>
+        <td th:replace="~{relatorios/fragmentos/base :: moedaOuTraco(${dia.saldo})}"></td>
+    </tr>
+    <tr class="total" th:with="t=${relatorio.totaisMes}">
+        <td>Total</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.entradaDinheiro)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.entradaPix)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.entradaCartao)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.entradaOutros)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.totalEntradas)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.saidaDinheiro)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.saidaPix)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.saidaCartao)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.saidaOutros)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.totalSaidas)}">R$ 0,00</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(t.saldo)}">R$ 0,00</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Despesas do mês</h2>
+<div th:if="${#lists.isEmpty(relatorio.despesas)}" class="vazio">
+    Nenhuma despesa paga no mês.
+</div>
+<table class="dados" th:unless="${#lists.isEmpty(relatorio.despesas)}">
+    <thead>
+    <tr>
+        <th>Data</th>
+        <th>Descrição</th>
+        <th>Forma de pagamento</th>
+        <th class="direita">Valor</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="despesa : ${relatorio.despesas}">
+        <td th:text="${#temporals.format(despesa.data, 'dd/MM/yyyy')}">01/01/2026</td>
+        <td th:text="${despesa.descricao}">Descrição</td>
+        <td th:text="${despesa.formaPagamento?.descricao}">Pix</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(despesa.valor)}">R$ 0,00</td>
+    </tr>
+    <tr class="total">
+        <td colspan="3">Total</td>
+        <td class="direita" th:text="${#numbers.formatCurrency(relatorio.totaisMes.totalSaidas)}">R$ 0,00</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

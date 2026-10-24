@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${titulo}">Relatório de Estoque</title>
+    <style th:replace="~{relatorios/fragmentos/base :: estilos}"></style>
+    <style>
+        table.dados tr.produto td {
+            background-color: #f3f4f6;
+            font-weight: bold;
+            border-top: 1px solid #d1d5db;
+        }
+        table.dados td.recuo {
+            padding-left: 16px;
+        }
+        table.dados tr.sem-estoque td {
+            color: #b91c1c;
+        }
+        .inativo {
+            font-size: 7pt;
+            font-weight: normal;
+            color: #b91c1c;
+            text-transform: uppercase;
+        }
+        .categoria {
+            font-weight: normal;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{relatorios/fragmentos/base :: cabecalho(subtitulo=${subtitulo})}"></div>
+<div th:replace="~{relatorios/fragmentos/base :: rodape}"></div>
+
+<table class="resumo">
+    <tr>
+        <td>
+            <div class="rotulo">Produtos</div>
+            <div class="valor" th:text="${geral.quantidadeProdutos}">0</div>
+        </td>
+        <td>
+            <div class="rotulo">Com estoque</div>
+            <div class="valor" th:text="${geral.produtosComEstoque}">0</div>
+        </td>
+        <td>
+            <div class="rotulo">Variações</div>
+            <div class="valor" th:text="${geral.quantidadeVariacoes}">0</div>
+        </td>
+        <td>
+            <div class="rotulo">Variações zeradas</div>
+            <div class="valor" th:text="${geral.variacoesSemEstoque}">0</div>
+        </td>
+    </tr>
+</table>
+<table class="resumo">
+    <tr>
+        <td>
+            <div class="rotulo">Unidades</div>
+            <div class="valor" th:text="${geral.quantidadeUnidades}">0</div>
+        </td>
+        <td>
+            <div class="rotulo">Valor de custo</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(geral.valorEstoqueCusto)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Valor de venda</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(geral.valorEstoqueVenda)}">R$ 0,00</div>
+        </td>
+        <td>
+            <div class="rotulo">Margem potencial</div>
+            <div class="valor" th:text="${#numbers.formatCurrency(geral.valorEstoqueVenda - geral.valorEstoqueCusto)}">R$ 0,00</div>
+        </td>
+    </tr>
+</table>
+
+<div th:if="${#lists.isEmpty(produtos)}" class="vazio">
+    Nenhum produto encontrado.
+</div>
+
+<th:block th:unless="${#lists.isEmpty(produtos)}">
+    <h2>Produtos e variações</h2>
+    <table class="dados">
+        <thead>
+        <tr>
+            <th>SKU</th>
+            <th>Cor</th>
+            <th>Tamanho</th>
+            <th class="centro">Qtd.</th>
+            <th class="direita">Custo un.</th>
+            <th class="direita">Venda un.</th>
+            <th class="direita">Total custo</th>
+            <th class="direita">Total venda</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="produto : ${produtos}">
+            <tr class="produto">
+                <td colspan="3">
+                    <span th:text="|${produto.codigo} - ${produto.nome}|">000 - Produto</span>
+                    <span class="categoria">&#183; <span th:text="${produto.categoria}">Categoria</span></span>
+                    <span class="inativo" th:unless="${produto.ativo}">(inativo)</span>
+                </td>
+                <td class="centro" th:text="${produto.quantidadeUnidades}">0</td>
+                <td></td>
+                <td></td>
+                <td class="direita" th:text="${#numbers.formatCurrency(produto.valorEstoqueCusto)}">R$ 0,00</td>
+                <td class="direita" th:text="${#numbers.formatCurrency(produto.valorEstoqueVenda)}">R$ 0,00</td>
+            </tr>
+            <tr th:each="variacao : ${produto.variacoes}"
+                th:class="${variacao.quantidade <= 0} ? 'variacao sem-estoque' : 'variacao'">
+                <td class="recuo" th:text="${variacao.sku}">SKU</td>
+                <td th:text="${variacao.cor}">Cor</td>
+                <td th:text="${variacao.tamanho}">M</td>
+                <td class="centro" th:text="${variacao.quantidade}">0</td>
+                <td class="direita" th:text="${#numbers.formatCurrency(variacao.precoCusto)}">R$ 0,00</td>
+                <td class="direita" th:text="${#numbers.formatCurrency(variacao.precoVenda)}">R$ 0,00</td>
+                <td class="direita" th:text="${#numbers.formatCurrency(variacao.valorEstoqueCusto)}">R$ 0,00</td>
+                <td class="direita" th:text="${#numbers.formatCurrency(variacao.valorEstoqueVenda)}">R$ 0,00</td>
+            </tr>
+        </th:block>
+        <tr class="total">
+            <td colspan="3">Total</td>
+            <td class="centro" th:text="${geral.quantidadeUnidades}">0</td>
+            <td></td>
+            <td></td>
+            <td class="direita" th:text="${#numbers.formatCurrency(geral.valorEstoqueCusto)}">R$ 0,00</td>
+            <td class="direita" th:text="${#numbers.formatCurrency(geral.valorEstoqueVenda)}">R$ 0,00</td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="nota">Variações em vermelho estão sem estoque.</p>
+</th:block>
+
+</body>
+</html>
