@@ -56,6 +56,8 @@ public class Produto {
     private Categoria categoria;
     @Column(name = "imagem", length = 400)
     private String imagem;
+    @Column(name = "no_catalogo", nullable = false, columnDefinition = "boolean not null default false")
+    private Boolean noCatalogo = false;
     @OneToMany(mappedBy = "produto", fetch = FetchType.LAZY)
     private List<VariacaoProduto> variacoes = new ArrayList<>();
 

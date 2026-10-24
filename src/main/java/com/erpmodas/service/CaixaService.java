@@ -92,6 +92,7 @@ public class CaixaService {
         MovimentacoesCaixa mov = new MovimentacoesCaixa();
         mov.setTipoMovCaixa(TipoMovCaixa.SAIDA);
         mov.setCaixa(caixa);
+        mov.setFormaPagamento(conta.getFormaPagamento());
         mov.setOrigemMov(OrigemMov.COMPRA);
         mov.setOrigemId(conta.getId());
         mov.setValor(conta.getValor());
@@ -111,6 +112,7 @@ public class CaixaService {
         mov.setTipoMovCaixa(TipoMovCaixa.ENTRADA);
         mov.setCaixa(caixa);
         mov.setOrigemMov(OrigemMov.VENDA);
+        mov.setFormaPagamento(conta.getFormaPagamento());
         mov.setOrigemId(conta.getId());
         mov.setValor(conta.getValor());
         mov.setDescricao(montarDescricaoReceber(conta));

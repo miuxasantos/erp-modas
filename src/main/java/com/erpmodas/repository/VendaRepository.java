@@ -28,4 +28,31 @@ public interface VendaRepository extends JpaRepository<Venda, Long> {
     WHERE v.dataVenda BETWEEN :inicio AND :fim
     """)
     BigDecimal faturamentoPeriodo(LocalDate inicio, LocalDate fim);
+
+    @Query("""
+        SELECT v FROM Venda v
+        JOIN FETCH v.cliente
+        WHERE v.dataVenda BETWEEN :inicio AND :fim
+        ORDER BY v.dataVenda, v.id
+        """)
+    List<Venda> buscarParaRelatorio(
+            @Param("inicio") LocalDate inicio,
+            @Param("fim") LocalDate fim
+    );
+
+    @Query("""
+        SELECT DISTINCT v FROM Venda v
+        JOIN FETCH v.cliente
+        LEFT JOIN FETCH v.itensVenda i
+        LEFT JOIN FETCH i.variacaoProduto variacao
+        LEFT JOIN FETCH variacao.produto produto
+        LEFT JOIN FETCH variacao.cor
+        LEFT JOIN FETCH variacao.tamanho
+        LEFT JOIN FETCH produto.categoria
+        WHERE v.dataVenda BETWEEN :inicio AND :fim
+        """)
+    List<Venda> buscarParaRelatoriosAgrupados(
+            @Param("inicio") LocalDate inicio,
+            @Param("fim") LocalDate fim
+    );
 }

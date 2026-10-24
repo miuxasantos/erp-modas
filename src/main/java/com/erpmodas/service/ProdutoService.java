@@ -36,6 +36,7 @@ public class ProdutoService {
         entity.setTecido(tecidoService.buscarEntidadePorId(dto.getTecidoId()));
         entity.setMarca(marcaService.buscarEntidadePorId(dto.getMarcaId()));
         entity.setDataInclusao(LocalDate.now());
+        entity.setNoCatalogo(Boolean.TRUE.equals(dto.getNoCatalogo()));
         Produto salvo = repository.save(entity);
         return mapper.toDTO(salvo);
     }
@@ -65,7 +66,7 @@ public class ProdutoService {
 
     @Transactional(readOnly = true)
     public Optional<Produto> buscarAtivoPorId(Long id) {
-        return repository.findByIdAndAtivoTrue(id);
+        return repository.findByIdAndAtivoTrueAndNoCatalogoTrue(id);
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.erpmodas.dto.dependentes.contasPagar;
 
+import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.enums.StatusConta;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,5 +23,6 @@ public class ContasPagarDTO {
     private Integer numeroParcela;
     private Integer totalParcelas;
     private String observacoes;
+    private FormaPagamento formaPagamento;
     private StatusConta statusConta;
 }

@@ -16,6 +16,7 @@ public interface CorRepository extends JpaRepository<Cor, Long> {
          SELECT DISTINCT c FROM VariacaoProduto v
          JOIN v.cor c
          WHERE v.produto.ativo = true
+         AND v.produto.noCatalogo = true
          ORDER BY c.nome
     """)
     List<Cor> findComVariacoesAtivas();

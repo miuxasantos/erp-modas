@@ -1,5 +1,6 @@
 package com.erpmodas.model.entidades.dependentes;
 
+import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.enums.OrigemMov;
 import com.erpmodas.enums.TipoMovCaixa;
 import com.erpmodas.model.entidades.Caixa;
@@ -39,6 +40,9 @@ public class MovimentacoesCaixa {
     private OrigemMov origemMov;
     @Column(name = "origem_id")
     private Long origemId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "forma_pagamento")
+    private FormaPagamento formaPagamento;
     @ManyToOne
     @JoinColumn(name = "caixa_id")
     private Caixa caixa;

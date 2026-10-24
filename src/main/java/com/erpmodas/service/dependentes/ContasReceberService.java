@@ -66,7 +66,7 @@ public class ContasReceberService {
     }
 
     @Transactional
-    public ContasReceberDTO marcarComoPago(Long id, LocalDate dataRecebimento) {
+    public ContasReceberDTO marcarComoPago(Long id, LocalDate dataRecebimento, FormaPagamento formaPagamento) {
         ContasReceber conta = repository.findById(id).orElseThrow(() -> new RuntimeException("Conta a receber não encontrada."));
 
         if (conta.getStatusConta() == StatusConta.PAGO) {
@@ -79,6 +79,8 @@ public class ContasReceberService {
 
         conta.setStatusConta(StatusConta.PAGO);
         conta.setDataRecebimento(dataRecebimento);
+        conta.setFormaPagamento(formaPagamento);
+
         caixaService.registrarEntrada(conta);
 
         return mapper.toDTO(repository.save(conta));

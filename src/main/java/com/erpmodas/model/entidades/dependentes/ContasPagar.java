@@ -46,6 +46,9 @@ public class ContasPagar {
     @Column(name = "status_conta")
     @ToString.Include
     private StatusConta statusConta;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "forma_pagamento_pagamento")
+    private FormaPagamento formaPagamento;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "compra_id")
     private Compra compra;

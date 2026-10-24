@@ -26,5 +26,6 @@ public class ProdutoResponseDTO {
     private TecidoDTO tecido;
     private MarcaDTO marca;
     private CategoriaDTO categoria;
+    private Boolean noCatalogo;
     private String imagem;
 }

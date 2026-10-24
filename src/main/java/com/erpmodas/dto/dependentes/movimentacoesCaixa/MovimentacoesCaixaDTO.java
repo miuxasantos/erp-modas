@@ -1,5 +1,6 @@
 package com.erpmodas.dto.dependentes.movimentacoesCaixa;
 
+import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.enums.OrigemMov;
 import com.erpmodas.enums.TipoMovCaixa;
 import lombok.AllArgsConstructor;
@@ -20,5 +21,6 @@ public class MovimentacoesCaixaDTO {
     private BigDecimal valor;
     private String descricao;
     private OrigemMov origemMov;
+    private FormaPagamento formaPagamento;
     private Long origemId;
 }

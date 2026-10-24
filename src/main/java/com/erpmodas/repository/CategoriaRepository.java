@@ -15,7 +15,8 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
          SELECT DISTINCT c FROM Produto p
          JOIN p.categoria c
          WHERE p.ativo = true
-         ORDER BY c.nome   
+         AND p.noCatalogo = true
+         ORDER BY c.nome
     """)
     List<Categoria> findComProdutosAtivos();
 }

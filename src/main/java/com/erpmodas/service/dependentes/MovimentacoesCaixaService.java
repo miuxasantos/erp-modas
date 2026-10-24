@@ -1,6 +1,7 @@
 package com.erpmodas.service.dependentes;
 
 import com.erpmodas.dto.dependentes.movimentacoesCaixa.MovimentacoesCaixaDTO;
+import com.erpmodas.enums.OrigemMov;
 import com.erpmodas.enums.StatusCaixa;
 import com.erpmodas.mapper.dependentes.MovimentacoesCaixaMapper;
 import com.erpmodas.model.entidades.Caixa;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -35,7 +37,22 @@ public class MovimentacoesCaixaService {
             throw new RuntimeException("O valor de abertura não pode ser menor do que zero.");
         }
 
+        LocalDate data = dto.getData() != null
+                ? dto.getData()
+                : caixa.getDataAbertura();
+
+        if (!data.equals(caixa.getDataAbertura())) {
+            throw new IllegalArgumentException(
+                    "A movimentação deve ter a data do caixa."
+            );
+        }
+
         MovimentacoesCaixa entity = mapper.toEntity(dto);
+        entity.setId(null);
+        entity.setCaixa(caixa);
+        entity.setData(data);
+        entity.setOrigemMov(OrigemMov.OUTRO);
+        entity.setOrigemId(null);
         return mapper.toDTO(repository.save(entity));
     }
 

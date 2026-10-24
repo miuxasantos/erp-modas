@@ -11,6 +11,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.http.ResponseEntity;
+import org.aspectj.lang.reflect.MethodSignature;
 
 import java.lang.reflect.Method;
 
@@ -45,31 +47,47 @@ public class AuditoriaAspect {
 
     private Long obterUsuarioLogadoId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof Usuario)) {
+        if(auth == null || !auth.isAuthenticated() || !(auth.getPrincipal() instanceof Usuario usuario)) {
             return  null;
         }
-
-        Usuario usuario = (Usuario) auth.getPrincipal();
         return usuario.getId();
     }
 
     private Long extrairIdDoResultado(Object result, JoinPoint joinPoint) {
-        if(result != null) {
-            try {
-                Method getId = result.getClass().getMethod("getId");
-                Object id = getId.invoke(result);
-                if(id instanceof Long) {
-                    return (Long) id;
+        Object corpo = (result instanceof ResponseEntity<?> resposta) ? resposta.getBody() : result;
+
+        Long idDoCorpo = lerIdPorReflexao(corpo);
+        if (idDoCorpo != null) {
+            return idDoCorpo;
+        }
+
+        MethodSignature assinatura = (MethodSignature) joinPoint.getSignature();
+        String[] nomes = assinatura.getParameterNames();
+        Object[] args = joinPoint.getArgs();
+        if (nomes != null) {
+            for (int i = 0; i < nomes.length; i++) {
+                if ("id".equals(nomes[i]) && args[i] instanceof Long id) {
+                    return id;
                 }
-            } catch (Exception ignored) {
             }
         }
-
-        Object[] args = joinPoint.getArgs();
-        if(args.length > 0 && args[0] instanceof Long) {
-            return (Long) args[0];
-        }
-
         return null;
+    }
+
+    private Long lerIdPorReflexao(Object objeto) {
+        if (objeto == null) {
+            return null;
+        }
+        try {
+            Method getId = objeto.getClass().getMethod("getId");
+            Object id = getId.invoke(objeto);
+            return (id instanceof Long valor) ? valor : null;
+        } catch (NoSuchMethodException e) {
+            log.debug("{} não expõe getId(); entidadeId ficará nulo", objeto.getClass().getSimpleName());
+            return null;
+        } catch (ReflectiveOperationException e) {
+            log.warn("Falha ao ler getId() de {}: {}", objeto.getClass().getSimpleName(), e.getMessage());
+            return null;
+        }
     }
 }

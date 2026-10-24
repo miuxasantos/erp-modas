@@ -1,5 +1,6 @@
 package com.erpmodas.model.entidades.dependentes;
 
+import com.erpmodas.enums.FormaPagamento;
 import com.erpmodas.enums.StatusConta;
 import com.erpmodas.model.entidades.Venda;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,7 +44,10 @@ public class ContasReceber {
     @Column(name = "status_conta")
     @ToString.Include
     private StatusConta statusConta;
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    @Column(name = "forma_pagamento_recebimento")
+    private FormaPagamento formaPagamento;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "venda_id")
     private Venda venda;
 

@@ -19,6 +19,7 @@ public interface TamanhoRepository extends JpaRepository<Tamanho, Long> {
         SELECT t FROM VariacaoProduto v
         JOIN v.tamanho t
         WHERE v.produto.ativo = true
+        AND v.produto.noCatalogo = true
     """)
     List<Tamanho> findComVaricoesAtivas();
 }

@@ -19,5 +19,6 @@ public class ProdutoUpdateDTO {
     private Long tecidoId;
     private Long marcaId;
     private Long categoriaId;
+    private Boolean noCatalogo;
     private String imagem;
 }

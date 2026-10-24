@@ -28,4 +28,18 @@ public interface CompraRepository extends JpaRepository<Compra, Long> {
     WHERE c.dataChegada BETWEEN :inicio AND :fim
     """)
     BigDecimal gastosPeriodo(LocalDate inicio, LocalDate fim);
+
+    @Query("""
+        SELECT DISTINCT c FROM Compra c
+        JOIN FETCH c.fornecedor
+        LEFT JOIN FETCH c.itensCompra item
+        LEFT JOIN FETCH item.variacaoProduto variacao
+        LEFT JOIN FETCH variacao.produto
+        WHERE c.dataChegada BETWEEN :inicio AND :fim
+        ORDER BY c.dataChegada, c.id
+        """)
+    List<Compra> buscarParaRelatorio(
+            @Param("inicio") LocalDate inicio,
+            @Param("fim") LocalDate fim
+    );
 }

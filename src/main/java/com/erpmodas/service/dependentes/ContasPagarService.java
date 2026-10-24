@@ -72,7 +72,7 @@ public class ContasPagarService {
     }
 
     @Transactional
-    public ContasPagarDTO marcarComoPago(Long id, LocalDate dataPagamento) {
+    public ContasPagarDTO marcarComoPago(Long id, LocalDate dataPagamento, FormaPagamento formaPagamento) {
         ContasPagar conta = repository.findById(id).orElseThrow(() -> new RuntimeException("Conta a pagar não encontrada."));
 
         if (conta.getStatusConta() == StatusConta.PAGO) {
@@ -85,6 +85,7 @@ public class ContasPagarService {
 
         conta.setStatusConta(StatusConta.PAGO);
         conta.setDataPagamento(dataPagamento);
+        conta.setFormaPagamento(formaPagamento);
         caixaService.registrarSaida(conta);
 
         return mapper.toDTO(repository.save(conta));

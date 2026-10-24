@@ -21,11 +21,26 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> findByDataInclusaoBetween(LocalDate inicio, LocalDate fim);
 
     Optional<Produto> findProdutoByNome(String nome);
-    Optional<Produto> findByIdAndAtivoTrue(Long id);
-
+    Optional<Produto> findByIdAndAtivoTrueAndNoCatalogoTrue(Long id);
 
     @Query("SELECT p.imagem FROM Produto p WHERE p.imagem IS NOT NULL AND p.imagem <> ''")
     List<String> findAllCaminhosImagem();
+
+    @Query("""
+        SELECT DISTINCT p FROM Produto p
+        JOIN FETCH p.categoria
+        LEFT JOIN FETCH p.variacoes variacao
+        LEFT JOIN FETCH variacao.cor
+        LEFT JOIN FETCH variacao.tamanho
+        WHERE (:apenasAtivos = false OR p.ativo = true)
+        AND (:noCatalogo IS NULL OR p.noCatalogo = :noCatalogo)
+        AND (:categoriaId IS NULL OR p.categoria.id = :categoriaId)
+        ORDER BY p.nome
+        """)
+    List<Produto> buscarParaRelatorioEstoque(@Param("apenasAtivos") boolean apenasAtivos,
+                                             @Param("noCatalogo") Boolean noCatalogo,
+                                             @Param("categoriaId") Long categoriaId
+    );
 
     @EntityGraph(attributePaths = {"variacoes", "categoria", "marca"})
     @Query("SELECT p FROM Produto p WHERE p.ativo = true")
@@ -40,6 +55,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
         AND (:categoriaId IS NULL OR p.categoria.id = :categoriaId)
         AND (:corId IS NULL OR v.cor.id = :corId)
         AND (:tamanhoId IS NULL OR v.tamanho.id = :tamanhoId)
+        AND p.noCatalogo = true
     """)
     Page<Produto> buscarPublico(
             @Param("q") String q,

@@ -29,5 +29,6 @@ public class ProdutoReqDTO {
     private Long marcaId;
     @NotNull
     private Long categoriaId;
+    private Boolean noCatalogo;
     private String imagem;
 }
