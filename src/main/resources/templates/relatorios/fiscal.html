@@ -103,7 +103,7 @@
 
 <h2>Despesas do mês</h2>
 <div th:if="${#lists.isEmpty(relatorio.despesas)}" class="vazio">
-    Nenhuma despesa paga no mês.
+    Nenhuma despesa no mês.
 </div>
 <table class="dados" th:unless="${#lists.isEmpty(relatorio.despesas)}">
     <thead>
@@ -127,6 +127,12 @@
     </tr>
     </tbody>
 </table>
+
+<p class="nota">
+    Valores pelo dia da venda ou da compra que gerou a conta, com o valor total (parcelas incluídas),
+    confirmados ou não. Contas canceladas não entram. Lançamentos avulsos do caixa entram pela data do lançamento.
+    Cartão inclui crédito e débito; "Outros" inclui boleto.
+</p>
 
 </body>
 </html>

@@ -12,12 +12,15 @@ import com.erpmodas.repository.dependentes.ContasPagarRepository;
 import com.erpmodas.service.CaixaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +33,8 @@ public class ContasPagarService {
     private final ContasPagarRepository repository;
     private final ContasPagarMapper mapper;
     private final CaixaService caixaService;
+
+    private static final ZoneId FUSO_LOJA = ZoneId.of("America/Sao_Paulo");
 
     @Transactional
     public List<ContasPagarDTO> listar() {
@@ -72,7 +77,7 @@ public class ContasPagarService {
     }
 
     @Transactional
-    public ContasPagarDTO marcarComoPago(Long id, LocalDate dataPagamento, FormaPagamento formaPagamento) {
+    public ContasPagarDTO marcarComoPago(Long id, LocalDate dataPagamento) {
         ContasPagar conta = repository.findById(id).orElseThrow(() -> new RuntimeException("Conta a pagar não encontrada."));
 
         if (conta.getStatusConta() == StatusConta.PAGO) {
@@ -83,11 +88,18 @@ public class ContasPagarService {
             throw new RuntimeException("Essa conta foi cancelada e não pode ser paga.");
         }
 
+        LocalDate hoje = LocalDate.now(FUSO_LOJA);
+        LocalDate data = dataPagamento != null ? dataPagamento : hoje;
+        if (data.isAfter(hoje)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A data do pagamento não pode ser futura.");
+        }
         conta.setStatusConta(StatusConta.PAGO);
-        conta.setDataPagamento(dataPagamento);
-        conta.setFormaPagamento(formaPagamento);
-        caixaService.registrarSaida(conta);
+        conta.setDataPagamento(data);
+        if (conta.getCompra() != null) {
+            conta.setFormaPagamento(conta.getCompra().getFormaPagamento());
+        }
 
+        caixaService.registrarSaida(conta);
         return mapper.toDTO(repository.save(conta));
     }
 

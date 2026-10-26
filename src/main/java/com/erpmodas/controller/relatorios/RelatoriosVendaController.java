@@ -102,7 +102,10 @@ public class RelatoriosVendaController {
     }
 
     private Tipo converterAgrupamento(String agrupamento) {
-        Tipo tipo = converterAgrupamento(agrupamento);
-        return tipo;
+        try {
+            return Tipo.valueOf(agrupamento.toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Agrupamento de vendas inválido.");
+        }
     }
 }

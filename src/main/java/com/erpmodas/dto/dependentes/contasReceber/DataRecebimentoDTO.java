@@ -12,5 +12,4 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class DataRecebimentoDTO {
     private LocalDate dataRecebimento;
-    private FormaPagamento formaPagamento;
 }

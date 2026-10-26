@@ -76,7 +76,7 @@ public class ContasPagarController {
     @PutMapping("/{id}/pagar")
     @Auditar(acao = TipoAcaoAud.UPDATE, entidade = "contas_pagar")
     public ResponseEntity<ContasPagarDTO> pagar(@PathVariable Long id, @RequestBody DataPagamentoDTO dto) {
-        ContasPagarDTO entity = contasPagarService.marcarComoPago(id, dto.getDataPagamento(), dto.getFormaPagamento());
+        ContasPagarDTO entity = contasPagarService.marcarComoPago(id, dto.getDataPagamento());
         return ResponseEntity.ok(entity);
     }
 

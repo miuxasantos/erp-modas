@@ -15,12 +15,15 @@ import com.erpmodas.repository.dependentes.ContasReceberRepository;
 import com.erpmodas.service.CaixaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,8 @@ public class ContasReceberService {
     private final ContasReceberRepository repository;
     private final ContasReceberMapper mapper;
     private final CaixaService caixaService;
+
+    private static final ZoneId FUSO_LOJA = ZoneId.of("America/Sao_Paulo");
 
     @Transactional
     public List<ContasReceberDTO> listar() {
@@ -66,7 +71,7 @@ public class ContasReceberService {
     }
 
     @Transactional
-    public ContasReceberDTO marcarComoPago(Long id, LocalDate dataRecebimento, FormaPagamento formaPagamento) {
+    public ContasReceberDTO marcarComoPago(Long id, LocalDate dataRecebimento) {
         ContasReceber conta = repository.findById(id).orElseThrow(() -> new RuntimeException("Conta a receber não encontrada."));
 
         if (conta.getStatusConta() == StatusConta.PAGO) {
@@ -77,12 +82,19 @@ public class ContasReceberService {
             throw new RuntimeException("Essa conta foi cancelada e não pode ser paga.");
         }
 
+        LocalDate hoje = LocalDate.now(FUSO_LOJA);
+        LocalDate data = dataRecebimento != null ? dataRecebimento : hoje;
+        if (data.isAfter(hoje)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A data do recebimento não pode ser futura.");
+        }
+
         conta.setStatusConta(StatusConta.PAGO);
-        conta.setDataRecebimento(dataRecebimento);
-        conta.setFormaPagamento(formaPagamento);
+        conta.setDataRecebimento(data);
+        if (conta.getVenda() != null) {
+            conta.setFormaPagamento(conta.getVenda().getFormaPagamento());
+        }
 
         caixaService.registrarEntrada(conta);
-
         return mapper.toDTO(repository.save(conta));
     }
 

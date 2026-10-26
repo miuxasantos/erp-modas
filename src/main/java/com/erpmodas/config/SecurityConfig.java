@@ -40,10 +40,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(mvc.pattern("/auth/**")).permitAll()
                         .requestMatchers(mvc.pattern(HttpMethod.GET, "/imagens/**")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.GET, "/catalogo/**")).permitAll()
                         .requestMatchers(mvc.pattern(HttpMethod.OPTIONS, "/**")).permitAll()
                         .requestMatchers(mvc.pattern("/error")).permitAll()
-                        .requestMatchers(mvc.pattern("/catalogo")).permitAll()
+                        .requestMatchers(mvc.pattern("/publico/**")).permitAll()
                         // Libera Swagger
                         .requestMatchers(
                                 mvc.pattern("/swagger-ui/**"),

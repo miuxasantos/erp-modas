@@ -7,6 +7,8 @@ import com.erpmodas.model.entidades.Fornecedor;
 import com.erpmodas.model.entidades.dependentes.ContasPagar;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,8 +25,11 @@ public interface ContasPagarRepository extends JpaRepository<ContasPagar, Long> 
     List<ContasPagar> findByDataVencimentoBeforeAndDataPagamentoIsNull(LocalDate hoje);
     List<ContasPagar> findByStatusConta(StatusConta statusConta);
     List<ContasPagar> findByCompraId(Long compraId);
-    List<ContasPagar> findByCompraFornecedorId(Long fornecedorId);
-    List<ContasPagar> findByCompraFormaPagamento(FormaPagamento formaPagamento);
-    List<ContasPagar> findByCompraFornecedorIdAndDataLancamento(Long id_fornecedor, LocalDate dataLancamento);
 
+    @Query("""
+        SELECT c FROM ContasPagar c
+        LEFT JOIN FETCH c.compra c2
+        WHERE COALESCE(c2.dataChegada, c.dataLancamento) BETWEEN :inicio AND :fim
+        """)
+    List<ContasPagar> buscarPorDataOrigem(@Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 }

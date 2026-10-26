@@ -95,10 +95,6 @@ public class RelatorioFinanceiroExportacaoService {
         );
     }
 
-    /**
-     * Só o livro diário (uma linha por dia). A lista de despesas fica apenas no PDF:
-     * duas tabelas diferentes no mesmo CSV quebram filtro e tabela dinâmica no Excel.
-     */
     private byte[] gerarCsvFiscal(RelatorioFiscalMensalDTO relatorio) {
         CsvBuilder csv = new CsvBuilder()
                 .linha("Data",
@@ -116,6 +112,19 @@ public class RelatorioFinanceiroExportacaoService {
                     dia.getSaldo()
             );
         }
+
+        // Linha em branco antes do total: o Excel considera a "tabela" só até ela
+        // (filtro, Ctrl+T, tabela dinâmica), então o total não é somado junto com os dias.
+        DiaFiscalDTO totais = relatorio.getTotaisMes();
+        csv.linha();
+        csv.linha(
+                "Total do mês",
+                totais.getEntradaDinheiro(), totais.getEntradaPix(), totais.getEntradaCartao(),
+                totais.getEntradaOutros(), totais.getTotalEntradas(),
+                totais.getSaidaDinheiro(), totais.getSaidaPix(), totais.getSaidaCartao(),
+                totais.getSaidaOutros(), totais.getTotalSaidas(),
+                totais.getSaldo()
+        );
         return csv.toBytes();
     }
 }

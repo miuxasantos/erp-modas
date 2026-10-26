@@ -23,10 +23,7 @@ import java.math.BigDecimal;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +56,7 @@ public class RelatorioFinanceiroService {
     ) {
         validarPeriodo(inicio, fim);
         List<ContasPagar> contas = contasPagarRepository
-                .findByDataVencimentoBetween(inicio, fim);
+                .buscarPorDataOrigem(inicio, fim);
 
         BigDecimal total = BigDecimal.ZERO;
         BigDecimal pago = BigDecimal.ZERO;
@@ -88,7 +85,7 @@ public class RelatorioFinanceiroService {
     ) {
         validarPeriodo(inicio, fim);
         List<ContasReceber> contas = contasReceberRepository
-                .findByDataVencimentoBetween(inicio, fim);
+                .buscarPorDataOrigem(inicio, fim);
 
         BigDecimal total = BigDecimal.ZERO;
         BigDecimal recebido = BigDecimal.ZERO;
@@ -134,33 +131,42 @@ public class RelatorioFinanceiroService {
             dias.put(data, dia);
         }
 
-        for (ContasReceber conta : contasReceberRepository
-                .findByDataRecebimentoBetween(inicio, fim)) {
-            if (conta.getStatusConta() == StatusConta.PAGO) {
-                adicionarEntrada(
-                        dias.get(conta.getDataRecebimento()),
-                        conta.getFormaPagamento(),
-                        conta.getValor()
-                );
+        // Contas entram no dia da venda/compra que as gerou (data de origem),
+        // com o valor cheio (todas as parcelas), confirmadas ou não.
+        // Só as canceladas ficam de fora. Assim um mês fechado não muda depois de uma baixa.
+        for (ContasReceber conta : contasReceberRepository.buscarPorDataOrigem(inicio, fim)) {
+            if (conta.getStatusConta() == StatusConta.CANCELADO) {
+                continue;
             }
+            adicionarEntrada(
+                    dias.get(dataOrigem(conta)),
+                    formaDaVenda(conta),
+                    conta.getValor()
+            );
         }
 
-        for (ContasPagar conta : contasPagarRepository
-                .findByDataPagamentoBetween(inicio, fim)) {
-            if (conta.getStatusConta() == StatusConta.PAGO) {
-                adicionarSaida(
-                        dias.get(conta.getDataPagamento()),
-                        conta.getFormaPagamento(),
-                        conta.getValor()
-                );
-                despesas.add(new DespesaFiscalDTO(
-                        conta.getDataPagamento(),
-                        "Conta a pagar #" + conta.getId(),
-                        conta.getFormaPagamento(),
-                        conta.getValor()
-                ));
+        // Parcelas da mesma compra viram uma linha só na lista de despesas
+        Map<String, DespesaFiscalDTO> despesasPorCompra = new LinkedHashMap<>();
+
+        for (ContasPagar conta : contasPagarRepository.buscarPorDataOrigem(inicio, fim)) {
+            if (conta.getStatusConta() == StatusConta.CANCELADO) {
+                continue;
             }
+            LocalDate data = dataOrigem(conta);
+            FormaPagamento forma = formaDaCompra(conta);
+
+            adicionarSaida(dias.get(data), forma, conta.getValor());
+
+            String chave = conta.getCompra() != null
+                    ? "compra-" + conta.getCompra().getId()
+                    : "conta-" + conta.getId();
+            DespesaFiscalDTO despesa = despesasPorCompra.computeIfAbsent(
+                    chave,
+                    ignorada -> new DespesaFiscalDTO(data, descreverDespesa(conta), forma, BigDecimal.ZERO)
+            );
+            despesa.setValor(despesa.getValor().add(conta.getValor()));
         }
+        despesas.addAll(despesasPorCompra.values());
 
         for (MovimentacoesCaixa mov : movimentacoesRepository
                 .findByDataBetween(inicio, fim)) {
@@ -189,6 +195,8 @@ public class RelatorioFinanceiroService {
                 ));
             }
         }
+
+        despesas.sort(Comparator.comparing(DespesaFiscalDTO::getData));
 
         DiaFiscalDTO totais = new DiaFiscalDTO();
         for (DiaFiscalDTO dia : dias.values()) {
@@ -294,5 +302,44 @@ public class RelatorioFinanceiroService {
                     "Informe um período válido."
             );
         }
+    }
+
+    private LocalDate dataOrigem(ContasReceber conta) {
+        return conta.getVenda() != null ? conta.getVenda().getDataVenda() : conta.getDataLancamento();
+    }
+
+    private LocalDate dataOrigem(ContasPagar conta) {
+        return conta.getCompra() != null ? conta.getCompra().getDataChegada() : conta.getDataLancamento();
+    }
+
+    private FormaPagamento formaDaVenda(ContasReceber conta) {
+        if (conta.getVenda() != null && conta.getVenda().getFormaPagamento() != null) {
+            return conta.getVenda().getFormaPagamento();
+        }
+        return conta.getFormaPagamento();
+    }
+
+    private FormaPagamento formaDaCompra(ContasPagar conta) {
+        if (conta.getCompra() != null && conta.getCompra().getFormaPagamento() != null) {
+            return conta.getCompra().getFormaPagamento();
+        }
+        return conta.getFormaPagamento();
+    }
+
+    private String descreverDespesa(ContasPagar conta) {
+        if (conta.getCompra() == null) {
+            return conta.getObservacoes() != null && !conta.getObservacoes().isBlank()
+                    ? conta.getObservacoes()
+                    : "Conta a pagar #" + conta.getId();
+        }
+
+        String descricao = "Compra #" + conta.getCompra().getId();
+        if (conta.getCompra().getFornecedor() != null) {
+            descricao += " - " + conta.getCompra().getFornecedor().getNome();
+        }
+        if (conta.getTotalParcelas() != null && conta.getTotalParcelas() > 1) {
+            descricao += " (" + conta.getTotalParcelas() + "x)";
+        }
+        return descricao;
     }
 }

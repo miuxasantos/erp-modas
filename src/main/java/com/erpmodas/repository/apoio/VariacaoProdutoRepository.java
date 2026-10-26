@@ -3,7 +3,9 @@ package com.erpmodas.repository.apoio;
 import com.erpmodas.model.entidades.apoio.VariacaoProduto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,4 +21,11 @@ public interface VariacaoProdutoRepository extends JpaRepository<VariacaoProduto
 
     @Query("SELECT v.imagemEsp FROM VariacaoProduto v WHERE v.imagemEsp IS NOT NULL AND v.imagemEsp <> ''")
     List<String> findAllCaminhosImagem();
+
+    @Query("""
+        SELECT v FROM VariacaoProduto v
+        JOIN FETCH v.produto
+        WHERE v.id IN :ids
+        """)
+    List<VariacaoProduto> buscarComProduto(@Param("ids") Collection<Long> ids);
 }
